@@ -6,15 +6,18 @@
  */
 
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import { SafeAreaView, Text, View } from 'react-native';
 
 function App() {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Test</Text>
-      </View>
-    </SafeAreaView>
+    <RecoilRoot>
+      <SafeAreaView>
+        <View>
+          <Text>Test</Text>
+        </View>
+      </SafeAreaView>
+    </RecoilRoot>
   );
 }
 
