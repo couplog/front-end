@@ -5,6 +5,7 @@ module.exports = {
     'prettier/prettier': 0,
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx', '.jsx'] }],
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'no-unused-vars': 'off',
     'react/function-component-definition': [2, { namedComponents: ['arrow-function', 'function-declaration'] }],
     'no-use-before-define': 'off', // style err fixed
     'import/extensions': [
