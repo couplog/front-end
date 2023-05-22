@@ -15,6 +15,7 @@ function App() {
       <SafeAreaView>
         <View>
           <Text>Test</Text>
+          <Text>Test 2</Text>
         </View>
       </SafeAreaView>
     </RecoilRoot>
