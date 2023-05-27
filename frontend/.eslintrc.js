@@ -35,5 +35,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
+    "import/core-modules": ["react-hook-form"] //import/no-extraneous-dependencies react hook form 에러 해결
   },
 };

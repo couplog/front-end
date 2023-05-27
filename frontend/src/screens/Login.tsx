@@ -1,14 +1,23 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-const Test = () => {
+
+const Login = () => {
   return (
-    <View>
-      <Text>Test</Text>
-    </View>
+    <View style={styles.rootContainer}>
+      <Text>test</Text>
+     </View>
+    
   );
 };
 
-export default Test;
+export default Login;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rootContainer: {
+    // flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
