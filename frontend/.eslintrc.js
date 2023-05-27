@@ -27,6 +27,7 @@ module.exports = {
     'react/require-default-props': 0,
     'no-plusplus': 'off',
     'react-native/no-inline-styles': 0,
+    'no-nested-ternary': 'off',
   },
   settings: {
     'import/resolver': {
