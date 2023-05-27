@@ -35,6 +35,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
-    "import/core-modules": ["react-hook-form"] //import/no-extraneous-dependencies react hook form 에러 해결
+    "import/core-modules": ["react-hook-form","react-native-bouncy-checkbox"] //import/no-extraneous-dependencies react hook form 에러 해결
   },
 };
