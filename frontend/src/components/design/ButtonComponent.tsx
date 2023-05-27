@@ -5,16 +5,24 @@ interface ButtonProps {
   text: string;
   disabled: boolean;
   onPress: () => void;
+  font: 'bold' | 'regular' | 'medium';
 }
 
-const ButtonComponent = ({ disabled, text, onPress }: ButtonProps) => {
+const ButtonComponent = ({ disabled, text, onPress, font }: ButtonProps) => {
+  // 버튼 스타일 분기처리
   const buttonStyle = {
     ...styles.buttonContainer,
     ...(disabled ? styles.disabledButtonContainer : {}),
     ...(text === '시작하기' ? styles.onboardingButtonContainer : {}),
+    ...(text === '코드 복사하기' ? styles.copyButtonContainer : {}),
   };
 
-  const textStyle = disabled ? styles.disabledText : styles.text;
+  // 텍스트 스타일 분기처리
+  const textStyle = {
+    fontFamily: font === 'bold' ? 'Pretendard-Bold' : font === 'regular' ? 'Pretendard-Regular' : 'Pretendard-Medium',
+    fontSize: font === 'bold' ? 16 : font === 'regular' ? 14 : 12,
+    color: disabled ? '#CCCCCC' : '#000000',
+  };
 
   return (
     <View style={styles.container}>
@@ -32,7 +40,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  // 버튼 분기처리
   buttonContainer: {
     width: 327,
     height: 60,
@@ -46,24 +53,22 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     borderWidth: 2,
   },
-  // 텍스트 분기처리
-  text: {
-    color: '#000000',
-  },
-  disabledText: {
-    color: '#CCCCCC',
-  },
 
   // 온보딩
   onboardingButtonContainer: {
     backgroundColor: '#FFFFFF',
     borderColor: '#000000',
-    borderRadius: 8,
     borderWidth: 1,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 7,
     elevation: 5,
+  },
+
+  // 코드 복사하기
+  copyButtonContainer: {
+    width: 280,
+    height: 44,
   },
 });
