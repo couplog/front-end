@@ -1,13 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 
-interface ButtonProps {
-  text: string;
-  disabled: boolean;
-  onPress: () => void;
-  font: 'bold' | 'regular' | 'medium';
-}
-
 const ButtonComponent = ({ disabled, text, onPress, font }: ButtonProps) => {
   // 버튼 스타일 분기처리
   const buttonStyle = {
