@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import DragIcon from '../assets/images/delete.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 
@@ -29,6 +30,7 @@ const Register = () => {
           <View style={styles.boxView}>
             <Checkbox />
             <Text style={styles.checkFont}>본인 확인을 위한 약관 모두 동의</Text>
+            <DragIcon />
           </View>
           <View style={{ marginTop: 25 }}>
             <Text>휴대폰 인증</Text>
