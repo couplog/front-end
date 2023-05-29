@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
-import DragIcon from '../assets/images/delete.svg';
+import DragIcon from '../assets/images/drag.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 
