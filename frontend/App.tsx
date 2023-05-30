@@ -1,31 +1,46 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegisterPhoneNum from './src/screens/RegisterPhoneNum';
 import RegisterUserInfo from './src/screens/RegisterUserInfo';
 import Login from './src/screens/Login';
 
 export enum RouteScreens {
-  RegisterPhone = 'RegisterPhone',
-  RegisterInfo = 'RegisterInfo',
-  LoginScreen = 'Login',
+  RegisterPhoneScreen = 'RegisterPhoneScreen',
+  RegisterInfoScreen = 'RegisterInfoScreen',
+  LoginScreen = 'LoginScreen',
 }
 
-function App() {
-  const Stack = createStackNavigator();
+// 필요한 파라미터가 없는 상태
+export type StackParamList = {
+  RegisterPhoneScreen: undefined;
+  RegisterInfoScreen: undefined;
+  LoginScreen: undefined;
+};
 
+const Stack = createStackNavigator<StackParamList>();
+
+const navTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+  },
+};
+
+function App() {
   return (
     <RecoilRoot>
-      <NavigationContainer>
+      <NavigationContainer theme={navTheme}>
         <Stack.Navigator>
           <Stack.Screen
-            name={RouteScreens.RegisterPhone}
+            name={RouteScreens.RegisterPhoneScreen}
             component={RegisterPhoneNum}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name={RouteScreens.RegisterInfo}
+            name={RouteScreens.RegisterInfoScreen}
             component={RegisterUserInfo}
             options={{ headerShown: false }}
           />
