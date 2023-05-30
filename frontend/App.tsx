@@ -5,19 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RegisterPhoneNum from './src/screens/RegisterPhoneNum';
 import RegisterUserInfo from './src/screens/RegisterUserInfo';
 import Login from './src/screens/Login';
-
-export enum RouteScreens {
-  RegisterPhoneScreen = 'RegisterPhoneScreen',
-  RegisterInfoScreen = 'RegisterInfoScreen',
-  LoginScreen = 'LoginScreen',
-}
-
-// 필요한 파라미터가 없는 상태
-export type StackParamList = {
-  RegisterPhoneScreen: undefined;
-  RegisterInfoScreen: undefined;
-  LoginScreen: undefined;
-};
+import { RouteScreens, StackParamList } from './src/types/navigationType';
 
 const Stack = createStackNavigator<StackParamList>();
 
