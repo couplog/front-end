@@ -7,12 +7,18 @@
 
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import Register from './src/screens/Register';
+import { SafeAreaView, Text, View } from 'react-native';
+import ButtonComponent from './src/components/design/ButtonComponent';
+import Login from './src/screens/Login';
 
 function App() {
   return (
     <RecoilRoot>
-      <Register />
+      <SafeAreaView>
+        <View>
+          <Login/>
+        </View>
+      </SafeAreaView>
     </RecoilRoot>
   );
 }
