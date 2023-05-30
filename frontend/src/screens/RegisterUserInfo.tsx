@@ -9,10 +9,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import OffEye from '../assets/images/off_eye.svg';
+import OnEye from '../assets/images/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 
 const RegisterUserInfo = () => {
+  const [eyeClick, setEyeClick] = useState(false);
   const [userInfo, setUserInfo] = useState([
     { title: '이름', placeholder: '2-10자 한글', value: '' },
     { title: '닉네임', placeholder: '2-10자 한글', value: '' },
@@ -74,6 +77,7 @@ const RegisterUserInfo = () => {
           <Text style={styles.headFont}>회원정보를 입력해주세요</Text>
           <View style={styles.inputView}>
             <FlatList data={userInfo} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
+            {eyeClick ? <OnEye /> : <OffEye />}
           </View>
         </SafeAreaView>
         <View style={styles.buttonView}>
