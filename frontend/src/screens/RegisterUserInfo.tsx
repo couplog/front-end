@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import OffEye from '../assets/images/off_eye.svg';
 import OnEye from '../assets/images/on_eye.svg';
@@ -77,7 +78,13 @@ const RegisterUserInfo = () => {
           <Text style={styles.headFont}>회원정보를 입력해주세요</Text>
           <View style={styles.inputView}>
             <FlatList data={userInfo} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
-            {eyeClick ? <OnEye /> : <OffEye />}
+            <TouchableOpacity
+              activeOpacity={1.0}
+              onPress={() => setEyeClick((prev) => !prev)}
+              style={styles.eyeIconView}
+            >
+              {eyeClick ? <OnEye /> : <OffEye />}
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
         <View style={styles.buttonView}>
@@ -101,6 +108,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
+  },
+  eyeIconView: {
+    position: 'absolute',
+    right: 0,
+    bottom: -25,
   },
   headFont: {
     marginTop: 30,
