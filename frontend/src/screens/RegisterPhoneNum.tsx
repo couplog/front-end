@@ -11,7 +11,7 @@ import {
 import React, { useState } from 'react';
 import ButtonComponent from '../components/design/ButtonComponent';
 
-const Register = () => {
+const RegisterPhoneNum = () => {
   // 폰번호, 코드 data type 확인하기
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
@@ -68,7 +68,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPhoneNum;
 
 const styles = StyleSheet.create({
   container: {
