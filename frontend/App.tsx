@@ -29,7 +29,11 @@ function App() {
             component={RegisterUserInfo}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name={RouteScreens.LoginScreen} component={Login} options={{ headerShown: false }} />
+          <Stack.Screen
+            name={RouteScreens.LoginScreen}
+            component={Login}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>
