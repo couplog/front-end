@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
   },
   inputView: {
     width:"100%",
-    height:230,
+    height:200,
     justifyContent: 'center',
     marginTop:32,
-    marginBottom:200
+    marginBottom:150
   },
   label: {
     color: '#000000',
