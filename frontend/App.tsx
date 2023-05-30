@@ -8,11 +8,12 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 import RegisterPhoneNum from './src/screens/RegisterPhoneNum';
+import RegisterUserInfo from './src/screens/RegisterUserInfo';
 
 function App() {
   return (
     <RecoilRoot>
-      <RegisterPhoneNum />
+      <RegisterUserInfo />
     </RecoilRoot>
   );
 }
