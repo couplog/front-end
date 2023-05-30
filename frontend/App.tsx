@@ -13,7 +13,7 @@ import RegisterUserInfo from './src/screens/RegisterUserInfo';
 function App() {
   return (
     <RecoilRoot>
-      <RegisterUserInfo />
+      <RegisterPhoneNum />
     </RecoilRoot>
   );
 }

@@ -15,7 +15,6 @@ const RegisterPhoneNum = () => {
   // 폰번호, 코드 data type 확인하기
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
-  const [disabled, setDisabled] = useState(true);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -61,7 +60,7 @@ const RegisterPhoneNum = () => {
 
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
-          <ButtonComponent disabled={disabled} text="인증완료" font="bold" onPress={() => console.log('인증완료')} />
+          <ButtonComponent disabled={false} text="인증완료" font="bold" onPress={() => console.log('인증완료')} />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -91,7 +90,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
   },
   buttonView: {
-    marginBottom: 50,
+    marginBottom: 40,
     marginLeft: 25,
     marginRight: 25,
   },
