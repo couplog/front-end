@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
 const Checkbox = () => {
-  // 디자인 팀에서 체크박스 활성화 부분 디자인 나오기 전까지 임시 구현!
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxToggle = () => {
@@ -15,24 +14,23 @@ const Checkbox = () => {
         style={{
           width: 24,
           height: 24,
+          borderRadius: 12,
           borderWidth: 2,
-          borderRadius: 4,
-          borderColor: isChecked ? '#000000' : '#A0A0A0',
-          backgroundColor: isChecked ? '#000000' : 'transparent',
+          borderColor: '#EDF0F3',
+          backgroundColor: '#FFFFFF',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         {isChecked && (
-          <Text
+          <View
             style={{
-              color: '#FFFFFF',
-              fontWeight: 'bold',
-              fontSize: 14,
+              width: '80%',
+              height: '80%',
+              borderRadius: 12,
+              backgroundColor: '#000000',
             }}
-          >
-            ✓
-          </Text>
+          />
         )}
       </View>
     </TouchableOpacity>
