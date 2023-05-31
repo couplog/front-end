@@ -5,6 +5,7 @@ import { RouteScreens, StackParamList } from '../types/navigationType';
 import RegisterPhoneNum from '../screens/RegisterPhoneNum';
 import RegisterUserInfo from '../screens/RegisterUserInfo';
 import Login from '../screens/Login';
+import Onboarding from '../screens/Onboarding';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -20,6 +21,11 @@ const MainRoute = () => {
   return (
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator>
+        <Stack.Screen
+          name={RouteScreens.OnboardingScreen}
+          component={Onboarding}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name={RouteScreens.RegisterPhoneScreen}
           component={RegisterPhoneNum}
