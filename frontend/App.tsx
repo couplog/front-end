@@ -10,12 +10,14 @@ import { RecoilRoot } from 'recoil';
 import RegisterPhoneNum from './src/screens/RegisterPhoneNum';
 import RegisterUserInfo from './src/screens/RegisterUserInfo';
 import Login from './src/screens/Login';
+import ConnectPartner from './src/screens/ConnectPartner';
 
 function App() {
   return (
     <RecoilRoot>
       {/* <RegisterPhoneNum /> */}
-      <Login/>
+      {/* <Login/> */}
+      <ConnectPartner/>
     </RecoilRoot>
   );
 }
