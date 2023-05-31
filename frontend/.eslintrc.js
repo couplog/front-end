@@ -1,12 +1,21 @@
 module.exports = {
   root: true,
-  extends: ['eslint:recommended', '@react-native-community', 'airbnb', 'airbnb/hooks', 'plugin:prettier/recommended'],
+  extends: [
+    'eslint:recommended',
+    '@react-native-community',
+    'airbnb',
+    'airbnb/hooks',
+    'plugin:prettier/recommended',
+  ],
   rules: {
     'prettier/prettier': 0,
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx', '.jsx'] }],
     '@typescript-eslint/no-unused-vars': ['warn'],
     'no-unused-vars': 'off',
-    'react/function-component-definition': [2, { namedComponents: ['arrow-function', 'function-declaration'] }],
+    'react/function-component-definition': [
+      2,
+      { namedComponents: ['arrow-function', 'function-declaration'] },
+    ],
     'no-use-before-define': 'off', // style err fixed
     'import/extensions': [
       'error',
@@ -28,6 +37,7 @@ module.exports = {
     'no-plusplus': 'off',
     'react-native/no-inline-styles': 0,
     'no-nested-ternary': 'off',
+    'no-shadow': 'off',
   },
   settings: {
     'import/resolver': {
@@ -35,6 +45,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
-    "import/core-modules": ["react-hook-form","react-native-bouncy-checkbox"] //import/no-extraneous-dependencies react hook form 에러 해결
+    'import/core-modules': ['react-hook-form', 'react-native-bouncy-checkbox', '@react-navigation/stack'], //import/no-extraneous-dependencies 에러 해결
   },
 };
