@@ -15,6 +15,12 @@ const RegisterPhoneNum = () => {
   // 폰번호, 코드 data type 확인하기
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
+  const [request, setRequest] = useState(false);
+
+  const handleRequest = () => {
+    setRequest(true);
+    // 추후 서버 올라오면 번호 인증 API 추가
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -25,7 +31,9 @@ const RegisterPhoneNum = () => {
             회원가입을 위해{'\n'}
             휴대폰 번호를 인증해주세요
           </Text>
-          <Text style={styles.subFont}>본인인증을 하시면 휴대폰 번호로{'\n'}로그인을 할 수 있어요</Text>
+          <Text style={styles.subFont}>
+            본인인증을 하시면 휴대폰 번호로{'\n'}로그인을 할 수 있어요
+          </Text>
 
           {/* 인증 UI */}
           <View style={styles.inputView}>
@@ -39,9 +47,14 @@ const RegisterPhoneNum = () => {
                 value={phoneNumber}
                 onChangeText={(text) => setPhoneNumber(text)}
               />
-              <TouchableOpacity activeOpacity={1.0} style={styles.sendButton}>
-                {/* API 구현할때 인증요청 - 재요청 텍스트 분기처리 */}
-                <Text style={styles.sendFont}>인증요청</Text>
+              <TouchableOpacity
+                activeOpacity={1.0}
+                style={styles.sendButton}
+                onPress={handleRequest}
+              >
+                <Text style={styles.sendFont}>
+                  {request ? '재전송' : '인증요청'}
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={{ marginTop: 15 }}>
@@ -60,7 +73,12 @@ const RegisterPhoneNum = () => {
 
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
-          <ButtonComponent disabled={false} text="인증완료" font="bold" onPress={() => console.log('인증완료')} />
+          <ButtonComponent
+            disabled={false}
+            text="인증완료"
+            font="bold"
+            onPress={() => console.log('인증완료')}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>
