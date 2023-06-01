@@ -1,3 +1,3 @@
-export interface userState {
+export interface userProps {
   phone: string;
 }

@@ -9,16 +9,18 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
+import { userState } from '../state/atoms/userAtom';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
 const RegisterPhoneNum = ({ navigation }: Props) => {
   // 폰번호, 코드 data type 확인하기
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useRecoilState(userState);
   const [codeNumber, setCodeNumber] = useState('');
   const [resetTimer, setResetTimer] = useState(false);
   const [request, setRequest] = useState(false);
@@ -59,8 +61,8 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                 placeholder="휴대폰 11자리"
                 keyboardType="phone-pad"
                 placeholderTextColor="#909090"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                value={phoneNumber.phone}
+                onChangeText={(value) => setPhoneNumber({ phone: value })}
               />
               <TouchableOpacity
                 activeOpacity={1.0}
