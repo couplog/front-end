@@ -16,19 +16,21 @@ const RegisterPhoneNum = () => {
   // 폰번호, 코드 data type 확인하기
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
-  const [request, setRequest] = useState(false);
   const [resetTimer, setResetTimer] = useState(false);
+  const [request, setRequest] = useState(false);
 
+  // 요청 & 재전송 버튼 기능
   const handleRequest = () => {
-    setRequest(true);
-    setResetTimer(true);
+    // 최초 클릭시
+    if (!request) setRequest(true);
+    // 재전송 클릭시
+    else {
+      setResetTimer(true);
+      setCodeNumber('');
+    }
+
     // 추후 서버 올라오면 번호 인증 API 추가
     console.log('번호 인증');
-  };
-
-  // 재요청시 타이머 초기화 완료 시 콜백 처리
-  const handleTimerReset = () => {
-    setResetTimer(false);
   };
 
   return (
@@ -54,7 +56,7 @@ const RegisterPhoneNum = () => {
                 keyboardType="phone-pad"
                 placeholderTextColor="#909090"
                 value={phoneNumber}
-                onChangeText={(text) => setPhoneNumber(text)}
+                onChangeText={setPhoneNumber}
               />
               <TouchableOpacity
                 activeOpacity={1.0}
@@ -75,14 +77,15 @@ const RegisterPhoneNum = () => {
                   placeholder="인증번호 6자리"
                   placeholderTextColor="#909090"
                   value={codeNumber}
-                  onChangeText={(code) => setCodeNumber(code)}
+                  onChangeText={setCodeNumber}
                 />
                 {request ? (
                   <View style={styles.timerContainer}>
                     <TimerComponent
                       resetTimer={resetTimer}
-                      onReset={handleTimerReset}
-                      onComplete={() => console.log('시간 만료')}
+                      onReset={() => setResetTimer(false)}
+                      // 타이머 만료시 기능(예정)
+                      handleComplete={() => console.log('시간 만료')}
                     />
                   </View>
                 ) : null}

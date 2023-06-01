@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 interface TimerProps {
-  onComplete: () => void;
+  handleComplete: () => void;
   onReset: () => void;
   resetTimer: boolean;
 }
 
-const TimerComponent = ({ onComplete, resetTimer, onReset }: TimerProps) => {
+const TimerComponent = ({
+  handleComplete,
+  resetTimer,
+  onReset,
+}: TimerProps) => {
   const [remainingTime, setRemainingTime] = useState(180); // 3분을 초로 변환
+  const [timerCompleted, setTimerCompleted] = useState(false); // 타이머 완료시 완료 기능을 한번만 실행하기 위한 state 설정
   const [timerId, setTimerId] = useState<number | null>(null);
-  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     let id: number;
@@ -18,9 +22,9 @@ const TimerComponent = ({ onComplete, resetTimer, onReset }: TimerProps) => {
     const decrementTime = () => {
       setRemainingTime((prevTime) => {
         if (prevTime <= 0) {
-          if (!isCompleted) {
-            setIsCompleted(true); // 타이머 완료 시 완료 여부 상태 변경
-            onComplete(); // 타이머 완료 시 콜백 함수 호출
+          if (!timerCompleted) {
+            setTimerCompleted(true); // 타이머 완료 시 완료 여부 상태 변경
+            handleComplete(); // 타이머 완료 시 콜백 함수 호출
           }
           return 0;
         }
@@ -35,7 +39,7 @@ const TimerComponent = ({ onComplete, resetTimer, onReset }: TimerProps) => {
         setTimerId(null);
       }
       setRemainingTime(180); // resetTimer 상태가 변경되면 타이머 초기화
-      setIsCompleted(false);
+      setTimerCompleted(false); // complete 초기화
       onReset(); // 초기화 완료 시 콜백 함수 호출
     } else if (timerId === null) {
       id = setInterval(decrementTime, 1000);
@@ -48,7 +52,8 @@ const TimerComponent = ({ onComplete, resetTimer, onReset }: TimerProps) => {
         clearInterval(timerId);
       }
     };
-  }, [onComplete, resetTimer, timerId, onReset, isCompleted]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetTimer, timerId, timerCompleted]);
 
   // 타이머 형식을 (분 : 초)로 나타내기 위한 포맷팅
   const formatTime = (time: number) => {
