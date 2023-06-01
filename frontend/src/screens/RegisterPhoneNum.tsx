@@ -20,10 +20,12 @@ type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
 const RegisterPhoneNum = ({ navigation }: Props) => {
   // 폰번호, 코드 data type 확인하기
-  const [phoneNumber, setPhoneNumber] = useRecoilState(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [codeNumber, setCodeNumber] = useState('');
+  const [errorText, setErrorText] = useState('');
   const [resetTimer, setResetTimer] = useState(false);
   const [request, setRequest] = useState(false);
+  const [disable, setDisable] = useState(true);
 
   // 요청 & 재전송 버튼 기능
   const handleRequest = () => {
@@ -33,11 +35,25 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     else {
       setResetTimer(true);
       setCodeNumber('');
+      setDisable(true);
     }
 
     // 추후 서버 올라오면 번호 인증 API 추가
     console.log('번호 인증');
   };
+
+  // 인증번호 입력 기능(상태관리 & 유효성 검사)
+  const handleCodeNumberChange = (code: string) => {
+    if (code.length !== 6 && code.length !== 0) {
+      setErrorText('올바르지 않은 인증번호 형식입니다. 6자 숫자');
+      setDisable(true);
+    } else {
+      setErrorText('');
+      if (code.length === 6) setDisable(false);
+    }
+    setCodeNumber(code);
+  };
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -61,8 +77,8 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                 placeholder="휴대폰 11자리"
                 keyboardType="phone-pad"
                 placeholderTextColor="#909090"
-                value={phoneNumber.phone}
-                onChangeText={(value) => setPhoneNumber({ phone: value })}
+                value={userInfo.phone}
+                onChangeText={(value) => setUserInfo({ phone: value })}
               />
               <TouchableOpacity
                 activeOpacity={1.0}
@@ -79,12 +95,17 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
               <Text>인증번호</Text>
               <View style={styles.inputContainer}>
                 <TextInput
-                  style={{ ...styles.numberInput, marginTop: 5, width: '100%' }}
+                  style={{
+                    ...styles.numberInput,
+                    marginTop: 5,
+                    width: '100%',
+                    borderColor: errorText ? '#E53C3C' : '#EDF0F3',
+                  }}
                   placeholder="인증번호 6자리"
                   placeholderTextColor="#909090"
                   autoComplete="off"
                   value={codeNumber}
-                  onChangeText={setCodeNumber}
+                  onChangeText={(code) => handleCodeNumberChange(code)}
                 />
                 {request ? (
                   <View style={styles.timerContainer}>
@@ -97,6 +118,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                   </View>
                 ) : null}
               </View>
+              {errorText && <Text style={styles.errorFont}>{errorText}</Text>}
             </View>
           </View>
         </SafeAreaView>
@@ -104,7 +126,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={false}
+            disabled={disable}
             text="인증완료"
             font="bold"
             onPress={() => navigation.navigate('RegisterInfoScreen')}
@@ -169,6 +191,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
+  },
+  errorFont: {
+    fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
+    color: '#E53C3C',
+    marginTop: 5,
   },
   numberInput: {
     width: '75%',
