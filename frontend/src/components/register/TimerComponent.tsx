@@ -3,11 +3,14 @@ import { StyleSheet, Text } from 'react-native';
 
 interface TimerProps {
   onComplete: () => void;
+  onReset: () => void;
+  resetTimer: boolean;
 }
 
-const TimerComponent = ({ onComplete }: TimerProps) => {
+const TimerComponent = ({ onComplete, resetTimer, onReset }: TimerProps) => {
   const [remainingTime, setRemainingTime] = useState(180); // 3분을 초로 변환
   const [timerId, setTimerId] = useState<number | null>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     let id: number;
@@ -15,26 +18,39 @@ const TimerComponent = ({ onComplete }: TimerProps) => {
     const decrementTime = () => {
       setRemainingTime((prevTime) => {
         if (prevTime <= 0) {
-          onComplete(); // 타이머 완료 시 콜백 함수 호출
+          if (!isCompleted) {
+            setIsCompleted(true); // 타이머 완료 시 완료 여부 상태 변경
+            onComplete(); // 타이머 완료 시 콜백 함수 호출
+          }
           return 0;
         }
         return prevTime - 1; // 1초씩 감소
       });
     };
 
-    if (timerId == null) {
+    // 타이머 리셋
+    if (resetTimer) {
+      if (timerId) {
+        clearInterval(timerId);
+        setTimerId(null);
+      }
+      setRemainingTime(180); // resetTimer 상태가 변경되면 타이머 초기화
+      setIsCompleted(false);
+      onReset(); // 초기화 완료 시 콜백 함수 호출
+    } else if (timerId === null) {
       id = setInterval(decrementTime, 1000);
       setTimerId(id);
     }
 
+    // 페이지 언마운트시 timerId clear
     return () => {
       if (timerId) {
         clearInterval(timerId);
       }
     };
-  }, [onComplete, timerId]);
+  }, [onComplete, resetTimer, timerId, onReset, isCompleted]);
 
-  // 타이머 형식을 분 : 초로 나타내기 위한 포맷팅
+  // 타이머 형식을 (분 : 초)로 나타내기 위한 포맷팅
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;

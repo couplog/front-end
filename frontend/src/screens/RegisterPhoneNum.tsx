@@ -17,11 +17,18 @@ const RegisterPhoneNum = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
   const [request, setRequest] = useState(false);
+  const [resetTimer, setResetTimer] = useState(false);
 
   const handleRequest = () => {
     setRequest(true);
+    setResetTimer(true);
     // 추후 서버 올라오면 번호 인증 API 추가
-    console.log('pressed');
+    console.log('번호 인증');
+  };
+
+  // 재요청시 타이머 초기화 완료 시 콜백 처리
+  const handleTimerReset = () => {
+    setResetTimer(false);
   };
 
   return (
@@ -39,7 +46,7 @@ const RegisterPhoneNum = () => {
 
           {/* 인증 UI */}
           <View style={styles.inputView}>
-            <Text>휴대폰 번호</Text>
+            <Text>휴대폰 인증</Text>
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
               <TextInput
                 style={styles.numberInput}
@@ -62,16 +69,24 @@ const RegisterPhoneNum = () => {
             <View style={{ marginTop: 15 }}>
               {/* 인증번호 정규식 불일치 -> border red, 3분 타이머 */}
               <Text>인증번호</Text>
-              <TextInput
-                style={{ ...styles.numberInput, marginTop: 5, width: '100%' }}
-                placeholder="인증번호 6자리"
-                placeholderTextColor="#909090"
-                value={codeNumber}
-                onChangeText={(code) => setCodeNumber(code)}
-              />
-              {request ? (
-                <TimerComponent onComplete={() => '시간 만료'} />
-              ) : null}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={{ ...styles.numberInput, marginTop: 5, width: '100%' }}
+                  placeholder="인증번호 6자리"
+                  placeholderTextColor="#909090"
+                  value={codeNumber}
+                  onChangeText={(code) => setCodeNumber(code)}
+                />
+                {request ? (
+                  <View style={styles.timerContainer}>
+                    <TimerComponent
+                      resetTimer={resetTimer}
+                      onReset={handleTimerReset}
+                      onComplete={() => console.log('시간 만료')}
+                    />
+                  </View>
+                ) : null}
+              </View>
             </View>
           </View>
         </SafeAreaView>
@@ -97,6 +112,14 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     flex: 1,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  timerContainer: {
+    position: 'absolute',
+    right: 15,
   },
   boxView: {
     marginTop: 25,
