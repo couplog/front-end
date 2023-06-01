@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text } from 'react-native';
-
-interface TimerProps {
-  handleComplete: () => void;
-  onReset: () => void;
-  resetTimer: boolean;
-}
+import { TimerProps } from '../../types/timerType';
 
 const TimerComponent = ({
   handleComplete,
