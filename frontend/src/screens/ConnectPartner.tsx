@@ -1,7 +1,8 @@
 import {Linking, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ButtonComponent from '../components/design/ButtonComponent';
+import ModalComponent from '../components/design/ModalComponent';
 
 const ConnectPartner = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -11,6 +12,7 @@ const ConnectPartner = () => {
     }
   });
   const onSubmit = (data: any) => console.log(data);
+  const [visible, setModalVisible]=useState(false);
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -37,14 +39,15 @@ const ConnectPartner = () => {
       />
       {errors.phoneNumber && <Text style={styles.errorFont}>This is required.</Text>}
     </View>
+    <ModalComponent visible={visible} setModalVisible={setModalVisible}/>
     <View style={styles.checkCodeView}>
       <Text 
-      style={styles.signupText}
-      onPress={() => Linking.openURL('')}>나의 초대코드 확인하기
+      style={styles.checkCodeFont}
+      onPress={() => setModalVisible(true)}>나의 초대코드 확인하기
       </Text>
     </View>
     <View style={styles.buttonView}>
-      <ButtonComponent disabled={false} text='로그인' font='bold' onPress={handleSubmit(onSubmit)}/>
+      <ButtonComponent disabled={false} text='연결하기' font='bold' onPress={handleSubmit(onSubmit)}/>
     </View>
   </SafeAreaView>
     
@@ -105,9 +108,9 @@ const styles = StyleSheet.create({
   },
   checkCodeView:{
   },
-  signupText:{
+  checkCodeFont:{
     textAlign:'center',
-    color: "#909090",
+    color: "#000000",
     textDecorationLine:'underline',
     fontSize:14,
     marginBottom:23
