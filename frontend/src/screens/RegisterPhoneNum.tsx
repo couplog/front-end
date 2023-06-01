@@ -9,10 +9,14 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 
-const RegisterPhoneNum = () => {
+type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
+
+const RegisterPhoneNum = ({ navigation }: Props) => {
   // 폰번호, 코드 data type 확인하기
   const [phoneNumber, setPhoneNumber] = useState('');
   const [codeNumber, setCodeNumber] = useState('');
@@ -76,6 +80,7 @@ const RegisterPhoneNum = () => {
                   style={{ ...styles.numberInput, marginTop: 5, width: '100%' }}
                   placeholder="인증번호 6자리"
                   placeholderTextColor="#909090"
+                  autoComplete="off"
                   value={codeNumber}
                   onChangeText={setCodeNumber}
                 />
@@ -100,7 +105,7 @@ const RegisterPhoneNum = () => {
             disabled={false}
             text="인증완료"
             font="bold"
-            onPress={() => console.log('인증완료')}
+            onPress={() => navigation.navigate('RegisterInfoScreen')}
           />
         </View>
       </View>
