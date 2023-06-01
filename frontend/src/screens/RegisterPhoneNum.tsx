@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import ButtonComponent from '../components/design/ButtonComponent';
+import TimerComponent from '../components/register/TimerComponent';
 
 const RegisterPhoneNum = () => {
   // 폰번호, 코드 data type 확인하기
@@ -20,6 +21,7 @@ const RegisterPhoneNum = () => {
   const handleRequest = () => {
     setRequest(true);
     // 추후 서버 올라오면 번호 인증 API 추가
+    console.log('pressed');
   };
 
   return (
@@ -67,6 +69,9 @@ const RegisterPhoneNum = () => {
                 value={codeNumber}
                 onChangeText={(code) => setCodeNumber(code)}
               />
+              {request ? (
+                <TimerComponent onComplete={() => '시간 만료'} />
+              ) : null}
             </View>
           </View>
         </SafeAreaView>
