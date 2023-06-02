@@ -1,18 +1,23 @@
-import {Linking, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import ButtonComponent from '../components/design/ButtonComponent';
 import ModalComponent from '../components/design/ModalComponent';
 
 const ConnectPartner = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      phoneNumber: '',
-      password: ''
-    }
-  });
-  const onSubmit = (data: any) => console.log(data);
   const [visible, setModalVisible]=useState(false);
+  const [inviteCode, setInviteCode] = useState('');
+  const [error, setError] = useState(false)
+
+  const reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/
+  const validCheck = ()=>{
+    if(reg.test(inviteCode)){
+      console.log(true)
+      setError(false)
+    }else{
+      console.log(false)
+      setError(true)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -21,24 +26,15 @@ const ConnectPartner = () => {
         <Text style={styles.headFont}>초대 코드를 입력해주세요</Text>
       </View> 
       <View style={styles.inputView}> 
-        <Controller
-        control={control}
-        rules={{
-        required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
+      <TextInput
             style={styles.input}
             placeholder="숫자, 문자 6자리"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            onChangeText={(code)=>setInviteCode(code)}
+            value={inviteCode}
           />
-        )}
-        name="phoneNumber"
-      />
-      {errors.phoneNumber && <Text style={styles.errorFont}>This is required.</Text>}
+          {error && <Text style={styles.errorFont}>잘못된 코드 형식입니다. 6자리 숫자, 문자</Text>}
     </View>
+    
     <ModalComponent visible={visible} setModalVisible={setModalVisible}/>
     <View style={styles.checkCodeView}>
       <Text 
@@ -47,7 +43,7 @@ const ConnectPartner = () => {
       </Text>
     </View>
     <View style={styles.buttonView}>
-      <ButtonComponent disabled={false} text='연결하기' font='bold' onPress={handleSubmit(onSubmit)}/>
+      <ButtonComponent disabled={false} text='연결하기' font='bold' onPress={validCheck}/>
     </View>
   </SafeAreaView>
     
