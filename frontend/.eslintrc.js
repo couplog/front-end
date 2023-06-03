@@ -38,6 +38,7 @@ module.exports = {
     'react-native/no-inline-styles': 0,
     'no-nested-ternary': 'off',
     'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
   },
   settings: {
     'import/resolver': {
