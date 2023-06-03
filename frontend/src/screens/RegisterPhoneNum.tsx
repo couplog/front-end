@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   SafeAreaView,
   StyleSheet,
@@ -27,6 +28,16 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
   const [request, setRequest] = useState(false);
   const [disable, setDisable] = useState(true);
 
+  // 휴대폰 번호 기능
+  const handleChangePhone = (value: string) => {
+    setUserInfo((prevUserInfo) => {
+      return {
+        ...prevUserInfo,
+        phone: value,
+      };
+    });
+  };
+
   // 요청 & 재전송 버튼 기능
   const handleRequest = () => {
     // 최초 클릭시
@@ -54,6 +65,12 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     setCodeNumber(code);
   };
 
+  // 인증 완료 기능 (API 예정)
+  const handleComplete = () => {
+    navigation.navigate('RegisterInfoScreen');
+    setRequest(false); // timer clear을 위해
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
@@ -77,7 +94,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                 keyboardType="phone-pad"
                 placeholderTextColor="#909090"
                 value={userInfo.phone}
-                onChangeText={(value) => setUserInfo({ phone: value })}
+                onChangeText={(value) => handleChangePhone(value)}
               />
               <TouchableOpacity
                 activeOpacity={1.0}
@@ -111,7 +128,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                       resetTimer={resetTimer}
                       onReset={() => setResetTimer(false)}
                       // 타이머 만료시 기능(예정)
-                      handleComplete={() => console.log('시간 만료')}
+                      handleComplete={() => Alert.alert('시간 만료')}
                     />
                   </View>
                 ) : null}
@@ -127,7 +144,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
             disabled={disable}
             text="인증완료"
             font="bold"
-            onPress={() => navigation.navigate('RegisterInfoScreen')}
+            onPress={handleComplete}
           />
         </View>
       </View>
