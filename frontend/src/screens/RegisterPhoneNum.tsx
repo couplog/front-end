@@ -54,7 +54,6 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     setCodeNumber(code);
   };
 
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
@@ -91,7 +90,6 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
               </TouchableOpacity>
             </View>
             <View style={{ marginTop: 15 }}>
-              {/* 인증번호 정규식 불일치 -> border red, 3분 타이머 */}
               <Text>인증번호</Text>
               <View style={styles.inputContainer}>
                 <TextInput
@@ -103,7 +101,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                   }}
                   placeholder="인증번호 6자리"
                   placeholderTextColor="#909090"
-                  autoComplete="off"
+                  keyboardType="phone-pad"
                   value={codeNumber}
                   onChangeText={(code) => handleCodeNumberChange(code)}
                 />
