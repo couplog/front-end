@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
 import OffEye from '../assets/images/off_eye.svg';
@@ -19,14 +19,10 @@ import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 import { userState } from '../state/atoms/userAtom';
 import { validateNameWrapper, validatePassword } from '../utils/validation';
+import { SignupFormData } from '../types/signupFormType';
 
-interface SignupFormData {
-  name: string;
-  nickname: string;
-  password: string;
-}
 const RegisterUserInfo = () => {
-  const userInfo = useRecoilValue(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
   const [eyeClick, setEyeClick] = useState(false);
   const [disable, setDisable] = useState(true);
@@ -35,20 +31,37 @@ const RegisterUserInfo = () => {
   const [date, setDate] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
 
+  console.log(userInfo);
+
   const {
     control,
-    handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<SignupFormData>({ mode: 'onChange' });
 
-  const onSubmit = (data: SignupFormData) => {
-    console.log('가입 정보:', data);
+  const handleSubmit = (data: SignupFormData) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      name: data.name,
+      nickname: data.nickname,
+      birth: formattedDate,
+      gender: selectedGender,
+      password: data.password,
+    }));
   };
 
+  // 생년월일 기능
+  // 생년월일 포맷
   const year = date?.getFullYear();
   const month = date ? String(date.getMonth() + 1).padStart(2, '0') : '';
   const day = date ? String(date.getDate()).padStart(2, '0') : '';
   const formattedDate = date ? `${year}-${month}-${day}` : '';
+
+  // 생년월일 함수
+  const handleBirthConfirm = (date: Date) => {
+    setOpen(false);
+    setDate(date);
+  };
 
   // 성별 선택 기능
   const handleCheckboxPress = (gender: '남자' | '여자') => {
@@ -126,7 +139,7 @@ const RegisterUserInfo = () => {
             <Text style={styles.titleTextMargin}>생년월일</Text>
             <TextInput
               onPressIn={() => setOpen(true)}
-              value={date ? formattedDate : 'YYYY-MM-DD'}
+              value={date ? formattedDate : undefined}
               style={styles.textInput}
               placeholder="YYYY-MM-DD"
               placeholderTextColor="#909090"
@@ -137,11 +150,7 @@ const RegisterUserInfo = () => {
               mode="date"
               date={date || new Date()}
               locale="ko"
-              onConfirm={(date) => {
-                setOpen(false);
-                setDate(date);
-                console.log('confirm');
-              }}
+              onConfirm={(date) => handleBirthConfirm(date)}
               onCancel={() => {
                 setOpen(false);
               }}
@@ -201,10 +210,10 @@ const RegisterUserInfo = () => {
         {/* 가입하기 버튼 UI */}
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={disable}
+            disabled={false}
             text="가입하기"
             font="bold"
-            onPress={() => console.log('상대방과 연결하기 navigate')}
+            onPress={() => handleSubmit(getValues())}
           />
         </View>
       </View>

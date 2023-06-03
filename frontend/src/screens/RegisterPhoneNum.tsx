@@ -42,11 +42,12 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
   const handleRequest = () => {
     // 최초 클릭시
     if (!request) setRequest(true);
-    // 재전송 클릭시
+    // 재전송 클릭시 리셋 요청 & state 초기화
     else {
       setResetTimer(true);
-      setCodeNumber('');
       setDisable(true);
+      setErrorText('');
+      setCodeNumber('');
     }
 
     // 추후 서버 올라오면 번호 인증 API 추가
