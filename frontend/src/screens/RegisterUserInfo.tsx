@@ -10,74 +10,122 @@ import {
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
+import { useRecoilValue } from 'recoil';
+import { Controller, useForm } from 'react-hook-form';
 import OffEye from '../assets/images/off_eye.svg';
 import OnEye from '../assets/images/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
+import { userState } from '../state/atoms/userAtom';
 
+interface SignupFormData {
+  name: string;
+  nickname: string;
+  birth: string;
+}
 const RegisterUserInfo = () => {
   const [eyeClick, setEyeClick] = useState(false);
-  const [userInfo, setUserInfo] = useState([
-    { title: '이름', placeholder: '2-10자 한글', value: '' },
-    { title: '닉네임', placeholder: '2-10자 한글', value: '' },
-    { title: '전화번호', placeholder: '010-xxxx-xxxx', value: '' },
-    { title: '생년월일', placeholder: 'YYYY-MM-DD', value: '' },
-    { title: '성별', placeholder: '', value: '' },
-    { title: '비밀번호', placeholder: '5-20자 영문, 숫자 조합', value: '' },
-  ]);
+  const [disable, setDisable] = useState(true);
+  const userInfo = useRecoilValue(userState);
 
-  const handleInputChange = (text: string, index: number) => {
-    const updatedUserInfo = [...userInfo];
-    updatedUserInfo[index].value = text;
-    setUserInfo(updatedUserInfo);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({ mode: 'onChange' });
+
+  const onSubmit = (data: SignupFormData) => {
+    console.log('가입 정보:', data);
   };
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: { title: string; placeholder: string; value: string };
-    index: number;
-  }) => {
-    if (item.title === '성별') {
-      return (
-        <View style={{ marginTop: 28 }}>
-          <Text style={styles.titleText}>{item.title}</Text>
-          <View style={styles.checkBoxView}>
-            <View style={{ ...styles.option, marginRight: 50 }}>
-              <Checkbox />
-              <Text style={{ ...styles.titleText, marginLeft: 10 }}>남</Text>
-            </View>
-            <View style={styles.option}>
-              <Checkbox />
-              <Text style={{ ...styles.titleText, marginLeft: 10 }}>여</Text>
-            </View>
-          </View>
-        </View>
-      );
+  // 이름, 닉네임 정규식
+  const validateName = (value: string, fieldName: string) => {
+    if (value.length === 0) {
+      return '';
     }
+    if (value.length < 2 || value.length > 10 || !/^[가-힣]+$/.test(value)) {
+      return `잘못된 ${fieldName} 형식입니다. 2-10자 한글`;
+    }
+    return true;
+  };
 
-    return (
-      <View style={{ marginTop: 28 }}>
-        <Text style={styles.titleText}>{item.title}</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder={item.placeholder}
-          placeholderTextColor="#909090"
-          value={item.value}
-          onChangeText={(text) => handleInputChange(text, index)}
-        />
-      </View>
-    );
+  const validateNameWrapper = (fieldName: string) => (value: string) => {
+    const validation = validateName(value, fieldName);
+    return typeof validation === 'string' ? validation : undefined;
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.headFont}>회원정보를 입력해주세요</Text>
+          {/* 헤더 UI */}
+          <Text style={styles.headText}>회원정보를 입력해주세요</Text>
+
+          {/* Input UI */}
           <View style={styles.inputView}>
-            <FlatList data={userInfo} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
+            <Text style={styles.inputTitleText}>이름</Text>
+            <Controller
+              control={control}
+              rules={{ validate: validateNameWrapper('이름') }}
+              name="name"
+              defaultValue=""
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  value={value}
+                  onChangeText={onChange}
+                  style={styles.textInput}
+                  placeholder="2-10자 한글"
+                  placeholderTextColor="#909090"
+                />
+              )}
+            />
+            {errors.name && (
+              <Text style={styles.errorText}>{errors.name.message}</Text>
+            )}
+
+            <Text style={styles.titleTextMargin}>닉네임</Text>
+            <Controller
+              control={control}
+              rules={{ validate: validateNameWrapper('닉네임') }}
+              name="nickname"
+              defaultValue=""
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  value={value}
+                  onChangeText={onChange}
+                  style={styles.textInput}
+                  placeholder="2-10자 한글"
+                  placeholderTextColor="#909090"
+                />
+              )}
+            />
+            {errors.nickname && (
+              <Text style={styles.errorText}>{errors.nickname.message}</Text>
+            )}
+
+            <Text style={styles.titleTextMargin}>전화번호</Text>
+            <TextInput value={userInfo.phone} style={styles.textInput} />
+
+            <Text style={styles.titleTextMargin}>생년월일</Text>
+            <Controller
+              control={control}
+              rules={{ validate: validateNameWrapper('닉네임') }}
+              name="nickname"
+              defaultValue=""
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  value={value}
+                  onChangeText={onChange}
+                  style={styles.textInput}
+                  placeholder="2-10자 한글"
+                  placeholderTextColor="#909090"
+                />
+              )}
+            />
+            {errors.nickname && (
+              <Text style={styles.errorText}>{errors.nickname.message}</Text>
+            )}
+
             <TouchableOpacity
               activeOpacity={1.0}
               onPress={() => setEyeClick((prev) => !prev)}
@@ -87,8 +135,15 @@ const RegisterUserInfo = () => {
             </TouchableOpacity>
           </View>
         </SafeAreaView>
+
+        {/* 가입하기 버튼 UI */}
         <View style={styles.buttonView}>
-          <ButtonComponent disabled={false} text="가입하기" font="bold" onPress={() => console.log('가입하기')} />
+          <ButtonComponent
+            disabled={disable}
+            text="가입하기"
+            font="bold"
+            onPress={() => console.log('상대방과 연결하기 navigate')}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -114,12 +169,29 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: -25,
   },
-  headFont: {
+  headText: {
     marginTop: 30,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     fontSize: 24,
     color: '#000000',
+  },
+  errorText: {
+    marginTop: 5,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 12,
+    color: '#E53C3C',
+  },
+  inputTitleText: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+  },
+  titleTextMargin: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+    marginTop: 20,
   },
   textInput: {
     width: '100%',
@@ -136,11 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 20,
-  },
-  titleText: {
-    color: '#000000',
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 14,
   },
   buttonView: {
     marginBottom: 40,
