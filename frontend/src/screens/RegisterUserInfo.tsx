@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import {
   View,
   Text,
@@ -12,21 +12,28 @@ import {
 } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
+import DatePicker from 'react-native-date-picker';
 import OffEye from '../assets/images/off_eye.svg';
 import OnEye from '../assets/images/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 import { userState } from '../state/atoms/userAtom';
+import { validateNameWrapper, validatePassword } from '../utils/validation';
 
 interface SignupFormData {
   name: string;
   nickname: string;
-  birth: string;
+  password: string;
 }
 const RegisterUserInfo = () => {
+  const userInfo = useRecoilValue(userState);
+
   const [eyeClick, setEyeClick] = useState(false);
   const [disable, setDisable] = useState(true);
-  const userInfo = useRecoilValue(userState);
+  const [checked, setChecked] = useState(false);
+  const [selectedGender, setSelectedGender] = useState('');
+  const [date, setDate] = useState<Date | null>(null);
+  const [open, setOpen] = useState(false);
 
   const {
     control,
@@ -38,20 +45,15 @@ const RegisterUserInfo = () => {
     console.log('가입 정보:', data);
   };
 
-  // 이름, 닉네임 정규식
-  const validateName = (value: string, fieldName: string) => {
-    if (value.length === 0) {
-      return '';
-    }
-    if (value.length < 2 || value.length > 10 || !/^[가-힣]+$/.test(value)) {
-      return `잘못된 ${fieldName} 형식입니다. 2-10자 한글`;
-    }
-    return true;
-  };
+  const year = date?.getFullYear();
+  const month = date ? String(date.getMonth() + 1).padStart(2, '0') : '';
+  const day = date ? String(date.getDate()).padStart(2, '0') : '';
+  const formattedDate = date ? `${year}-${month}-${day}` : '';
 
-  const validateNameWrapper = (fieldName: string) => (value: string) => {
-    const validation = validateName(value, fieldName);
-    return typeof validation === 'string' ? validation : undefined;
+  // 성별 선택 기능
+  const handleCheckboxPress = (gender: '남자' | '여자') => {
+    setChecked((prevChecked) => !prevChecked);
+    setSelectedGender(gender);
   };
 
   return (
@@ -73,7 +75,11 @@ const RegisterUserInfo = () => {
                 <TextInput
                   value={value}
                   onChangeText={onChange}
-                  style={styles.textInput}
+                  style={{
+                    ...styles.textInput,
+                    borderColor:
+                      errors.name && value.length !== 0 ? '#E53C3C' : '#EDF0F3',
+                  }}
                   placeholder="2-10자 한글"
                   placeholderTextColor="#909090"
                 />
@@ -93,7 +99,13 @@ const RegisterUserInfo = () => {
                 <TextInput
                   value={value}
                   onChangeText={onChange}
-                  style={styles.textInput}
+                  style={{
+                    ...styles.textInput,
+                    borderColor:
+                      errors.nickname && value.length !== 0
+                        ? '#E53C3C'
+                        : '#EDF0F3',
+                  }}
                   placeholder="2-10자 한글"
                   placeholderTextColor="#909090"
                 />
@@ -104,26 +116,76 @@ const RegisterUserInfo = () => {
             )}
 
             <Text style={styles.titleTextMargin}>전화번호</Text>
-            <TextInput value={userInfo.phone} style={styles.textInput} />
+            <TextInput
+              editable={false}
+              selectTextOnFocus={false}
+              value={userInfo.phone}
+              style={styles.textInput}
+            />
 
             <Text style={styles.titleTextMargin}>생년월일</Text>
+            <TextInput
+              onPressIn={() => setOpen(true)}
+              value={date ? formattedDate : 'YYYY-MM-DD'}
+              style={styles.textInput}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#909090"
+            />
+            <DatePicker
+              modal
+              open={open}
+              mode="date"
+              date={date || new Date()}
+              locale="ko"
+              onConfirm={(date) => {
+                setOpen(false);
+                setDate(date);
+                console.log('confirm');
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+
+            <Text style={styles.titleTextMargin}>성별</Text>
+            <View style={styles.checkBoxView}>
+              <Checkbox
+                checked={selectedGender === '남자'}
+                label="남"
+                onPress={() => handleCheckboxPress('남자')}
+              />
+              <Checkbox
+                checked={selectedGender === '여자'}
+                label="여"
+                onPress={() => handleCheckboxPress('여자')}
+              />
+            </View>
+
+            <Text style={styles.titleTextMargin}>비밀번호</Text>
             <Controller
               control={control}
-              rules={{ validate: validateNameWrapper('닉네임') }}
-              name="nickname"
+              rules={{ validate: validatePassword }}
+              name="password"
               defaultValue=""
               render={({ field: { onChange, value } }) => (
                 <TextInput
                   value={value}
                   onChangeText={onChange}
-                  style={styles.textInput}
-                  placeholder="2-10자 한글"
+                  style={{
+                    ...styles.textInput,
+                    borderColor:
+                      errors.password && value.length !== 0
+                        ? '#E53C3C'
+                        : '#EDF0F3',
+                  }}
+                  secureTextEntry={!eyeClick}
+                  placeholder="5-20자 영문, 숫자 조합"
                   placeholderTextColor="#909090"
                 />
               )}
             />
-            {errors.nickname && (
-              <Text style={styles.errorText}>{errors.nickname.message}</Text>
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password.message}</Text>
             )}
 
             <TouchableOpacity
@@ -161,8 +223,10 @@ const styles = StyleSheet.create({
   },
   checkBoxView: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginRight: 210,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 15,
   },
   eyeIconView: {
     position: 'absolute',
@@ -191,7 +255,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
-    marginTop: 20,
+    marginTop: 15,
   },
   textInput: {
     width: '100%',
@@ -203,11 +267,6 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 14,
     marginTop: 5,
-  },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 20,
   },
   buttonView: {
     marginBottom: 40,
