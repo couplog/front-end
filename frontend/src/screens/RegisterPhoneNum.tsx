@@ -25,7 +25,9 @@ const RegisterPhoneNum = () => {
             회원가입을 위해{'\n'}
             휴대폰 번호를 인증해주세요
           </Text>
-          <Text style={styles.subFont}>본인인증을 하시면 휴대폰 번호로{'\n'}로그인을 할 수 있어요</Text>
+          <Text style={styles.subFont}>
+            본인인증을 하시면 휴대폰 번호로{'\n'}로그인을 할 수 있어요
+          </Text>
 
           {/* 인증 UI */}
           <View style={styles.inputView}>
@@ -60,7 +62,12 @@ const RegisterPhoneNum = () => {
 
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
-          <ButtonComponent disabled={false} text="인증완료" font="bold" onPress={() => console.log('인증완료')} />
+          <ButtonComponent
+            disabled={false}
+            text="인증완료"
+            font="bold"
+            onPress={() => console.log('인증완료')}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>

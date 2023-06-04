@@ -77,7 +77,11 @@ const RegisterUserInfo = () => {
         <SafeAreaView style={styles.container}>
           <Text style={styles.headFont}>회원정보를 입력해주세요</Text>
           <View style={styles.inputView}>
-            <FlatList data={userInfo} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} />
+            <FlatList
+              data={userInfo}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+            />
             <TouchableOpacity
               activeOpacity={1.0}
               onPress={() => setEyeClick((prev) => !prev)}
@@ -88,7 +92,12 @@ const RegisterUserInfo = () => {
           </View>
         </SafeAreaView>
         <View style={styles.buttonView}>
-          <ButtonComponent disabled={false} text="가입하기" font="bold" onPress={() => console.log('가입하기')} />
+          <ButtonComponent
+            disabled={false}
+            text="가입하기"
+            font="bold"
+            onPress={() => console.log('가입하기')}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>

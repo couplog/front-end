@@ -6,6 +6,7 @@ import RegisterPhoneNum from '../screens/RegisterPhoneNum';
 import RegisterUserInfo from '../screens/RegisterUserInfo';
 import Login from '../screens/Login';
 import Onboarding from '../screens/Onboarding';
+import ConnectPartner from '../screens/ConnectPartner';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -39,6 +40,11 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.LoginScreen}
           component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={RouteScreens.ConnectPartnerScreen}
+          component={ConnectPartner}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
