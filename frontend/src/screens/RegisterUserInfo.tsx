@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRecoilState } from 'recoil';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Controller, useForm } from 'react-hook-form';
 import DatePicker from 'react-native-date-picker';
 import OffEye from '../assets/images/off_eye.svg';
@@ -69,13 +70,22 @@ const RegisterUserInfo = () => {
     setSelectedGender(gender);
   };
 
+  // ios 기기별 KeyboardAvoidingView Height 계산
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios') {
+  //     StatusBarManager.getHeight((statusBarFrameData: any) => {
+  //       setStatusBarHeight(statusBarFrameData.height);
+  //     });
+  //   }
+  // }, []);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1 }}>
+      {/* 추후에 기기별 height 안맞을 경우 extraScrollHeight 계산해서 적용  */}
+      <KeyboardAwareScrollView enableOnAndroid extraScrollHeight={90}>
         <SafeAreaView style={styles.container}>
           {/* 헤더 UI */}
           <Text style={styles.headText}>회원정보를 입력해주세요</Text>
-
           {/* Input UI */}
           <View style={styles.inputView}>
             <Text style={styles.inputTitleText}>이름</Text>
@@ -101,7 +111,6 @@ const RegisterUserInfo = () => {
             {errors.name && (
               <Text style={styles.errorText}>{errors.name.message}</Text>
             )}
-
             <Text style={styles.titleTextMargin}>닉네임</Text>
             <Controller
               control={control}
@@ -210,13 +219,13 @@ const RegisterUserInfo = () => {
         {/* 가입하기 버튼 UI */}
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={false}
+            disabled={disable}
             text="가입하기"
             font="bold"
             onPress={() => handleSubmit(getValues())}
           />
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </TouchableWithoutFeedback>
   );
 };
@@ -225,7 +234,6 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 25,
     marginRight: 25,
-    flex: 1,
   },
   inputView: {
     marginTop: 35,
@@ -269,16 +277,16 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
     color: '#000000',
-    height: 44,
+    height: 46,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
     padding: 15,
     fontSize: 14,
-    marginTop: 5,
+    marginTop: 15,
   },
   buttonView: {
-    marginBottom: 40,
+    marginTop: 50,
     marginLeft: 25,
     marginRight: 25,
   },
