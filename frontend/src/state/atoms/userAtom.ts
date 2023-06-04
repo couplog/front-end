@@ -9,7 +9,7 @@ export const userState = atom<userProps>({
     nickname: '',
     phone: '',
     birth: '',
-    gender: '',
+    gender: null,
     password: '', // 패스워드는 민감 정보이기 때문에 추후 다시 구현 예정
   },
 });
