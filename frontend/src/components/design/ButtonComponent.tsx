@@ -13,14 +13,24 @@ const ButtonComponent = ({ disabled, text, onPress, font }: ButtonProps) => {
 
   // 텍스트 스타일 분기처리
   const textStyle = {
-    fontFamily: font === 'bold' ? 'Pretendard-Bold' : font === 'regular' ? 'Pretendard-Regular' : 'Pretendard-Medium',
+    fontFamily:
+      font === 'bold'
+        ? 'Pretendard-Bold'
+        : font === 'regular'
+        ? 'Pretendard-Regular'
+        : 'Pretendard-Medium',
     fontSize: font === 'bold' ? 16 : font === 'regular' ? 14 : 12,
     color: disabled ? '#CCCCCC' : '#000000',
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={1.0} disabled={disabled} onPress={onPress} style={buttonStyle}>
+      <TouchableOpacity
+        activeOpacity={1.0}
+        disabled={disabled}
+        onPress={onPress}
+        style={buttonStyle}
+      >
         <Text style={textStyle}>{text}</Text>
       </TouchableOpacity>
     </View>
