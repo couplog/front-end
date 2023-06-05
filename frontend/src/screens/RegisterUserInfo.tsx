@@ -4,102 +4,203 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  FlatList,
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
-import OffEye from '../assets/images/off_eye.svg';
-import OnEye from '../assets/images/on_eye.svg';
+import { useRecoilState } from 'recoil';
+import { Controller, useForm } from 'react-hook-form';
+import DatePicker from 'react-native-date-picker';
+import OffEye from '../assets/images/register/off_eye.svg';
+import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
+import { userState } from '../state/atoms/userAtom';
+import { validateNameWrapper, validatePassword } from '../utils/validation';
+import { SignupFormData } from '../types/signupFormType';
+import { getFormattedDate } from '../utils/formattedDate';
+import { formFields } from '../utils/registerFormText';
 
 const RegisterUserInfo = () => {
-  const [eyeClick, setEyeClick] = useState(false);
-  const [userInfo, setUserInfo] = useState([
-    { title: '이름', placeholder: '2-10자 한글', value: '' },
-    { title: '닉네임', placeholder: '2-10자 한글', value: '' },
-    { title: '전화번호', placeholder: '010-xxxx-xxxx', value: '' },
-    { title: '생년월일', placeholder: 'YYYY-MM-DD', value: '' },
-    { title: '성별', placeholder: '', value: '' },
-    { title: '비밀번호', placeholder: '5-20자 영문, 숫자 조합', value: '' },
-  ]);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
-  const handleInputChange = (text: string, index: number) => {
-    const updatedUserInfo = [...userInfo];
-    updatedUserInfo[index].value = text;
-    setUserInfo(updatedUserInfo);
+  const [eyeClick, setEyeClick] = useState(false);
+  const [checkedGender, setCheckedGender] = useState<'남자' | '여자' | null>(
+    null
+  );
+  const [date, setDate] = useState<Date | ''>('');
+  const [formattedDate, setFormattedDate] = useState<string>('');
+  const [open, setOpen] = useState(false);
+
+  console.log(userInfo);
+
+  const {
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm<SignupFormData>({ mode: 'onChange' });
+
+  // 가입하기 버튼 충족조건
+  const disableButton =
+    Object.keys(errors).length > 0 ||
+    Object.values(getValues()).some((value) => value === '') ||
+    date === '' ||
+    checkedGender === null;
+
+  // 생년월일 함수
+  const handleBirthConfirm = (date: Date) => {
+    setOpen(false);
+    setDate(date);
+    const formattedDate = getFormattedDate(date);
+    setFormattedDate(formattedDate);
   };
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: { title: string; placeholder: string; value: string };
-    index: number;
-  }) => {
-    if (item.title === '성별') {
-      return (
-        <View style={{ marginTop: 28 }}>
-          <Text style={styles.titleText}>{item.title}</Text>
-          <View style={styles.checkBoxView}>
-            <View style={{ ...styles.option, marginRight: 50 }}>
-              <Checkbox />
-              <Text style={{ ...styles.titleText, marginLeft: 10 }}>남</Text>
-            </View>
-            <View style={styles.option}>
-              <Checkbox />
-              <Text style={{ ...styles.titleText, marginLeft: 10 }}>여</Text>
-            </View>
-          </View>
-        </View>
-      );
-    }
+  // 성별 선택 기능
+  const handleCheckboxPress = (gender: '남자' | '여자') => {
+    setCheckedGender(gender);
+  };
 
-    return (
-      <View style={{ marginTop: 28 }}>
-        <Text style={styles.titleText}>{item.title}</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder={item.placeholder}
-          placeholderTextColor="#909090"
-          value={item.value}
-          onChangeText={(text) => handleInputChange(text, index)}
-        />
-      </View>
-    );
+  // 가입하기 버튼 기능 (API 추가해야함)
+  const handleSubmit = (data: SignupFormData) => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      name: data.name,
+      nickname: data.nickname,
+      birth: formattedDate,
+      gender: checkedGender,
+      password: data.password,
+    }));
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.headFont}>회원정보를 입력해주세요</Text>
+          {/* 헤더 UI */}
+          <Text style={styles.headText}>회원정보를 입력해주세요</Text>
+
+          {/* Input UI */}
           <View style={styles.inputView}>
             <FlatList
-              data={userInfo}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
+              data={formFields}
+              renderItem={({ item }) => (
+                <>
+                  <Text style={{ ...styles.inputTitleText, marginTop: 15 }}>
+                    {item.title}
+                  </Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      validate:
+                        item.key === 'password'
+                          ? validatePassword
+                          : validateNameWrapper(item.title),
+                    }}
+                    name={item.key as keyof SignupFormData}
+                    defaultValue=""
+                    render={({ field: { onChange, value } }) => (
+                      <TextInput
+                        value={value}
+                        onChangeText={onChange}
+                        secureTextEntry={
+                          item.key === 'password' ? !eyeClick : undefined
+                        }
+                        style={{
+                          ...styles.textInput,
+                          borderColor:
+                            errors[item.key as keyof SignupFormData] &&
+                            value.length !== 0
+                              ? '#E53C3C'
+                              : '#EDF0F3',
+                        }}
+                        placeholder={item.placeholder}
+                        placeholderTextColor="#909090"
+                      />
+                    )}
+                  />
+                  {errors[item.key as keyof SignupFormData]?.message && (
+                    <Text style={styles.errorText}>
+                      {errors[item.key as keyof SignupFormData]?.message}
+                    </Text>
+                  )}
+                  {item.key === 'password' ? (
+                    <TouchableOpacity
+                      activeOpacity={1.0}
+                      onPress={() => setEyeClick((prev) => !prev)}
+                      style={{
+                        ...styles.eyeIconView,
+                        bottom: errors.password ? 33 : 0,
+                      }}
+                    >
+                      {eyeClick ? <OnEye /> : <OffEye />}
+                    </TouchableOpacity>
+                  ) : null}
+                </>
+              )}
+              keyExtractor={(item) => item.key}
             />
-            <TouchableOpacity
-              activeOpacity={1.0}
-              onPress={() => setEyeClick((prev) => !prev)}
-              style={styles.eyeIconView}
-            >
-              {eyeClick ? <OnEye /> : <OffEye />}
-            </TouchableOpacity>
+
+            {/* 전화 번호 입력 필드(값 넘어옴) */}
+            <Text style={styles.titleTextMargin}>전화번호</Text>
+            <TextInput
+              editable={false}
+              selectTextOnFocus={false}
+              value={userInfo.phone}
+              style={styles.textInput}
+            />
+
+            {/* 생년월일 입력 필드 */}
+            <Text style={styles.titleTextMargin}>생년월일</Text>
+            <TextInput
+              onPressIn={() => setOpen(true)}
+              value={date ? formattedDate : undefined}
+              style={styles.textInput}
+              editable={false}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#909090"
+            />
+            <DatePicker
+              modal
+              open={open}
+              mode="date"
+              date={date || new Date()}
+              locale="ko"
+              onConfirm={(date) => handleBirthConfirm(date)}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+
+            {/* 성별 입력 필드 */}
+            <Text style={styles.titleTextMargin}>성별</Text>
+            <View style={styles.checkBoxView}>
+              <Checkbox
+                checked={checkedGender === '남자'}
+                label="남"
+                onPress={() => handleCheckboxPress('남자')}
+              />
+              <Checkbox
+                checked={checkedGender === '여자'}
+                label="여"
+                onPress={() => handleCheckboxPress('여자')}
+              />
+            </View>
           </View>
         </SafeAreaView>
+
+        {/* 가입하기 버튼 UI */}
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={false}
+            disabled={disableButton as boolean}
             text="가입하기"
             font="bold"
-            onPress={() => console.log('가입하기')}
+            onPress={() => handleSubmit(getValues())}
           />
         </View>
       </View>
+      {/* </KeyboardAwareScrollView> */}
     </TouchableWithoutFeedback>
   );
 };
@@ -108,51 +209,59 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 25,
     marginRight: 25,
-    flex: 1,
   },
   inputView: {
     marginTop: 35,
   },
   checkBoxView: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginRight: 210,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 15,
   },
   eyeIconView: {
     position: 'absolute',
-    right: 0,
-    bottom: -25,
+    right: 15,
+    top: 60,
   },
-  headFont: {
+  headText: {
     marginTop: 30,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     fontSize: 24,
     color: '#000000',
   },
+  errorText: {
+    marginTop: 5,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 12,
+    color: '#E53C3C',
+  },
+  inputTitleText: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+  },
+  titleTextMargin: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+    marginTop: 15,
+  },
   textInput: {
     width: '100%',
     color: '#000000',
-    height: 44,
+    height: 46,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
     padding: 15,
     fontSize: 14,
-    marginTop: 5,
-  },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 20,
-  },
-  titleText: {
-    color: '#000000',
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 14,
+    marginTop: 15,
   },
   buttonView: {
-    marginBottom: 40,
+    marginTop: 50,
     marginLeft: 25,
     marginRight: 25,
   },
