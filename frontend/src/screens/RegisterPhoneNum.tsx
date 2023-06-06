@@ -11,7 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
@@ -19,22 +19,18 @@ import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 import { userState } from '../state/atoms/userAtom';
 import { phoneFileds } from '../utils/registerFormText';
+import {
+  handleCheckedCode,
+  handleVerify,
+} from '../api/register/verifyPhoneNumber';
+import { PhoneVerifyData } from '../types/signupFormType';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
-interface PhoneVerifyData {
-  phoneNumber: string;
-  code: string;
-}
-
 const RegisterPhoneNum = ({ navigation }: Props) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  // const [codeNumber, setCodeNumber] = useState('');
-  // const [errorText, setErrorText] = useState('');
-  // const [codeErrorText, setCodeErrorText] = useState('');
+  const setUserInfo = useSetRecoilState(userState);
   const [resetTimer, setResetTimer] = useState(false);
   const [request, setRequest] = useState(false);
-  // const [disable, setDisable] = useState(true);
 
   const {
     control,
@@ -50,23 +46,13 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
   const isPhoneNumberValid =
     !!errors.phoneNumber || getValues().phoneNumber.length === 0;
 
-  // 가입하기 버튼 충족조건
+  // 인증완료 버튼 충족조건
   const disableButton =
     Object.keys(errors).length > 0 ||
     Object.values(getValues()).some((value) => value === '');
 
-  // // 휴대폰 번호 기능
-  // const handleChangePhone = (value: string) => {
-  //   setUserInfo((prevUserInfo) => {
-  //     return {
-  //       ...prevUserInfo,
-  //       phone: value,
-  //     };
-  //   });
-  // };
-
   // 요청 & 재전송 버튼 기능
-  const handleRequest = () => {
+  const handleRequest = (phone: string) => {
     // 최초 클릭시
     if (!request) setRequest(true);
     // 재전송 클릭시 리셋 요청 & state 초기화
@@ -74,14 +60,27 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       setResetTimer(true);
       setValue('code', '');
     }
-
-    // 추후 서버 올라오면 번호 인증 API 추가
-    console.log('번호 인증');
+    // 휴대폰 인증 번호 발송
+    handleVerify(phone);
   };
 
-  // 인증 완료 기능 (API 예정)
-  const handleComplete = () => {
+  // 인증 성공시 기능
+  const handleCodeSuccess = () => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      phone: getValues().phoneNumber,
+    }));
     navigation.navigate('RegisterInfoScreen');
+  };
+
+  // 인증 완료 버튼 기능
+  const handleComplete = async (phone: string, code: string) => {
+    try {
+      await handleCheckedCode(phone, code);
+      handleCodeSuccess();
+    } catch (error) {
+      Alert.alert('인증번호를 확인해주세요'); // 임시 alert
+    }
     setRequest(false); // timer clear을 위해
   };
 
@@ -144,7 +143,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                           ...styles.sendButton,
                           opacity: isPhoneNumberValid ? 0.3 : 1.0,
                         }}
-                        onPress={handleRequest}
+                        onPress={() => handleRequest(getValues().phoneNumber)}
                       >
                         <Text style={styles.sendText}>
                           {request ? '재전송' : '인증요청'}
@@ -179,7 +178,9 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
             disabled={disableButton}
             text="인증완료"
             font="bold"
-            onPress={handleComplete}
+            onPress={() =>
+              handleComplete(getValues().phoneNumber, getValues().code)
+            }
           />
         </View>
       </View>
