@@ -18,7 +18,7 @@ import { StackParamList } from '../types/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 import { userState } from '../state/atoms/userAtom';
-import { phoneFileds } from '../utils/registerFormText';
+import { phoneFileds } from '../utils/register/registerFormText';
 import {
   handleCheckedCode,
   handleVerify,
@@ -70,6 +70,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       ...prevUserInfo,
       phone: getValues().phoneNumber,
     }));
+    setRequest(false); // timer clear을 위해
     navigation.navigate('RegisterInfoScreen');
   };
 
@@ -81,7 +82,6 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     } catch (error) {
       Alert.alert('인증번호를 확인해주세요'); // 임시 alert
     }
-    setRequest(false); // timer clear을 위해
   };
 
   return (
@@ -129,7 +129,6 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                                 ? '#E53C3C'
                                 : '#EDF0F3',
                           }}
-                          keyboardType="phone-pad"
                           placeholder={item.placeholder}
                           placeholderTextColor="#909090"
                         />
