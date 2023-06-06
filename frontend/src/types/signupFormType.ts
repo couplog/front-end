@@ -1,3 +1,10 @@
+// 휴대폰 인증
+export interface PhoneVerifyData {
+  phoneNumber: string;
+  code: string;
+}
+
+// 회원정보
 export interface SignupFormData {
   name: string;
   nickname: string;
