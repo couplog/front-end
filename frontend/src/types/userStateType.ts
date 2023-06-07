@@ -3,6 +3,6 @@ export interface userProps {
   nickname: string;
   phone: string;
   birth: string;
-  gender: '남자' | '여자' | null;
+  gender: 'male' | 'female' | null;
   password: string;
 }

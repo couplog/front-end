@@ -10,31 +10,34 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import { useRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
-import DatePicker from 'react-native-date-picker';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/navigationType';
 import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
 import { userState } from '../state/atoms/userAtom';
-import { validateNameWrapper, validatePassword } from '../utils/validation';
 import { SignupFormData } from '../types/signupFormType';
 import { getFormattedDate } from '../utils/formattedDate';
-import { formFields } from '../utils/registerFormText';
+import { formFields } from '../utils/register/registerFormText';
 
-const RegisterUserInfo = () => {
+import { handleLogin } from '../api/login/login';
+
+type Props = StackScreenProps<StackParamList, 'RegisterInfoScreen'>;
+
+const RegisterUserInfo = ({ navigation }: Props) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
   const [eyeClick, setEyeClick] = useState(false);
-  const [checkedGender, setCheckedGender] = useState<'남자' | '여자' | null>(
+  const [checkedGender, setCheckedGender] = useState<'male' | 'female' | null>(
     null
   );
   const [date, setDate] = useState<Date | ''>('');
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [open, setOpen] = useState(false);
-
-  console.log(userInfo);
 
   const {
     control,
@@ -58,7 +61,7 @@ const RegisterUserInfo = () => {
   };
 
   // 성별 선택 기능
-  const handleCheckboxPress = (gender: '남자' | '여자') => {
+  const handleCheckboxPress = (gender: 'male' | 'female') => {
     setCheckedGender(gender);
   };
 
@@ -72,6 +75,10 @@ const RegisterUserInfo = () => {
       gender: checkedGender,
       password: data.password,
     }));
+    handleLogin(userInfo)
+      .then((res) => console.log(res))
+      .catch((err) => console.log('err: '));
+    // navigation.navigate('ConnectPartnerScreen');
   };
 
   return (
@@ -93,10 +100,7 @@ const RegisterUserInfo = () => {
                   <Controller
                     control={control}
                     rules={{
-                      validate:
-                        item.key === 'password'
-                          ? validatePassword
-                          : validateNameWrapper(item.title),
+                      validate: item.validate,
                     }}
                     name={item.key as keyof SignupFormData}
                     defaultValue=""
@@ -177,14 +181,14 @@ const RegisterUserInfo = () => {
             <Text style={styles.titleTextMargin}>성별</Text>
             <View style={styles.checkBoxView}>
               <Checkbox
-                checked={checkedGender === '남자'}
+                checked={checkedGender === 'male'}
                 label="남"
-                onPress={() => handleCheckboxPress('남자')}
+                onPress={() => handleCheckboxPress('male')}
               />
               <Checkbox
-                checked={checkedGender === '여자'}
+                checked={checkedGender === 'female'}
                 label="여"
-                onPress={() => handleCheckboxPress('여자')}
+                onPress={() => handleCheckboxPress('female')}
               />
             </View>
           </View>
@@ -200,7 +204,6 @@ const RegisterUserInfo = () => {
           />
         </View>
       </View>
-      {/* </KeyboardAwareScrollView> */}
     </TouchableWithoutFeedback>
   );
 };
@@ -211,7 +214,7 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   inputView: {
-    marginTop: 35,
+    marginTop: 25,
   },
   checkBoxView: {
     flexDirection: 'row',
@@ -224,6 +227,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 60,
+  },
+  buttonView: {
+    marginTop: 50,
+    marginLeft: 25,
+    marginRight: 25,
   },
   headText: {
     marginTop: 30,
@@ -259,11 +267,6 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 14,
     marginTop: 15,
-  },
-  buttonView: {
-    marginTop: 50,
-    marginLeft: 25,
-    marginRight: 25,
   },
 });
 
