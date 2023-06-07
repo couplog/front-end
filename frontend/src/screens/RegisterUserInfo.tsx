@@ -65,20 +65,26 @@ const RegisterUserInfo = ({ navigation }: Props) => {
     setCheckedGender(gender);
   };
 
-  // 가입하기 버튼 기능 (API 추가해야함)
+  // 가입하기 버튼 기능
   const handleSubmit = (data: SignupFormData) => {
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
+    const updatedUserInfo = {
+      ...userInfo,
       name: data.name,
       nickname: data.nickname,
       birth: formattedDate,
       gender: checkedGender,
       password: data.password,
-    }));
-    handleLogin(userInfo)
-      .then((res) => console.log(res))
-      .catch((err) => console.log('err: '));
-    // navigation.navigate('ConnectPartnerScreen');
+    };
+
+    setUserInfo(updatedUserInfo);
+
+    try {
+      handleLogin(updatedUserInfo);
+      console.log('회원가입 성공');
+      navigation.navigate('ConnectPartnerScreen');
+    } catch (err) {
+      console.log('err 확인 : ', err);
+    }
   };
 
   return (
