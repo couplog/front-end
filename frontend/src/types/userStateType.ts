@@ -5,4 +5,5 @@ export interface userProps {
   birth: string;
   gender: 'male' | 'female' | null;
   password: string;
+  // 상대방과의 인증 코드 추가?
 }
