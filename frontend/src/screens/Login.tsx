@@ -6,10 +6,12 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import ButtonComponent from '../components/design/ButtonComponent';
 import Checkbox from '../components/design/CheckBoxComponent';
+import { LoginFormData } from '../types/loginFormType';
+import { handleLogin } from '../api/login/login';
 
 const Login = () => {
   const {
@@ -18,11 +20,18 @@ const Login = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      phoneNumber: '',
+      phone: '',
       password: '',
     },
   });
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: LoginFormData) => {
+    try {
+      handleLogin(data);
+    } catch (err) {
+      console.log('err 확인 : ', err);
+    }
+  };
+  const [checked, setChecked] = useState(false);
 
   return (
     <SafeAreaView style={styles.rootContainer}>
@@ -45,9 +54,9 @@ const Login = () => {
               value={value}
             />
           )}
-          name="phoneNumber"
+          name="phone"
         />
-        {errors.phoneNumber && (
+        {errors.phone && (
           <Text style={styles.errorFont}>This is required.</Text>
         )}
         <Text style={styles.label}>비밀번호</Text>
@@ -71,8 +80,11 @@ const Login = () => {
           <Text style={styles.errorFont}>This is required.</Text>
         )}
         <View style={styles.checkboxView}>
-          <Checkbox />
-          <Text style={styles.autoLoginFont}>자동 로그인</Text>
+          <Checkbox
+            checked={checked}
+            onPress={() => setChecked(!checked)}
+            label="자동 로그인"
+          />
         </View>
       </View>
       <View style={styles.signupView}>
@@ -141,9 +153,6 @@ const styles = StyleSheet.create({
   checkboxView: {
     flexDirection: 'row',
     marginTop: 40,
-  },
-  autoLoginFont: {
-    marginLeft: 12,
   },
   signupView: {},
   signupText: {
