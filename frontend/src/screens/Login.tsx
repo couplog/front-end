@@ -70,7 +70,7 @@ const Login = ({ navigation }: Props) => {
             name="phone"
           />
           {errors.phone && (
-            <Text style={styles.errorFont}>This is required.</Text>
+            <Text style={styles.errorText}>This is required.</Text>
           )}
           <Text style={styles.label}>비밀번호</Text>
           <Controller
@@ -102,7 +102,7 @@ const Login = ({ navigation }: Props) => {
             {eyeClick ? <OnEye /> : <OffEye />}
           </TouchableOpacity>
           {errors.password && (
-            <Text style={styles.errorFont}>This is required.</Text>
+            <Text style={styles.errorText}>This is required.</Text>
           )}
           <View style={styles.checkboxView}>
             <Checkbox
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 12,
   },
-  errorFont: {
+  errorText: {
     color: 'red',
     marginTop: 2,
   },
