@@ -1,3 +1,29 @@
+// # RegisterPhoneNum
+
+// 휴대폰 번호 11자리 정규식
+export const validatePhoneNumber = (value: string) => {
+  if (value.length === 0) {
+    return '';
+  }
+  if (!/^\d{11}$/.test(value)) {
+    return '올바르지 않은 전화번호 형식입니다. 11자 숫자';
+  }
+  return true;
+};
+
+// 코드 6자리 숫자 정규식
+export const validateCode = (value: string) => {
+  if (value.length === 0) {
+    return '';
+  }
+  if (!/^\d{6}$/.test(value)) {
+    return '올바르지 않은 인증번호 형식입니다. 6자 숫자';
+  }
+  return true;
+};
+
+// # ResgisterUserInfo
+
 // 이름, 닉네임 정규식
 const validateName = (value: string, fieldName: string) => {
   if (value.length === 0) {

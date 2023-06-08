@@ -3,6 +3,7 @@ export interface userProps {
   nickname: string;
   phone: string;
   birth: string;
-  gender: '남자' | '여자' | null;
+  gender: 'male' | 'female' | null;
   password: string;
+  // 상대방과의 인증 코드 추가?
 }

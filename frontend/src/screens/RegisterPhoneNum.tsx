@@ -8,68 +8,80 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
+import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 import { userState } from '../state/atoms/userAtom';
+import { phoneFileds } from '../utils/register/registerFormText';
+import {
+  handleCheckedCode,
+  handleVerify,
+} from '../api/register/verifyPhoneNumber';
+import { PhoneVerifyData } from '../types/signupFormType';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
 const RegisterPhoneNum = ({ navigation }: Props) => {
-  // 폰번호, 코드 data type 확인하기
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [codeNumber, setCodeNumber] = useState('');
-  const [errorText, setErrorText] = useState('');
+  const setUserInfo = useSetRecoilState(userState);
   const [resetTimer, setResetTimer] = useState(false);
   const [request, setRequest] = useState(false);
-  const [disable, setDisable] = useState(true);
 
-  // 휴대폰 번호 기능
-  const handleChangePhone = (value: string) => {
-    setUserInfo((prevUserInfo) => {
-      return {
-        ...prevUserInfo,
-        phone: value,
-      };
-    });
-  };
+  const {
+    control,
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useForm<PhoneVerifyData>({
+    mode: 'onChange',
+    defaultValues: { phoneNumber: '', code: '' },
+  });
+
+  // 폰 번호 입력값이 유효한지 확인하는 조건식
+  const isPhoneNumberValid =
+    !!errors.phoneNumber || getValues().phoneNumber.length === 0;
+
+  // 인증완료 버튼 충족조건
+  const disableButton =
+    Object.keys(errors).length > 0 ||
+    Object.values(getValues()).some((value) => value === '');
 
   // 요청 & 재전송 버튼 기능
-  const handleRequest = () => {
+  const handleRequest = (phone: string) => {
     // 최초 클릭시
     if (!request) setRequest(true);
     // 재전송 클릭시 리셋 요청 & state 초기화
     else {
       setResetTimer(true);
-      setDisable(true);
-      setErrorText('');
-      setCodeNumber('');
+      setValue('code', '');
     }
-
-    // 추후 서버 올라오면 번호 인증 API 추가
-    console.log('번호 인증');
+    // 휴대폰 인증 번호 발송
+    handleVerify(phone);
   };
 
-  // 인증번호 입력 기능(상태관리 & 유효성 검사)
-  const handleCodeNumberChange = (code: string) => {
-    if (code.length !== 6 && code.length !== 0) {
-      setErrorText('올바르지 않은 인증번호 형식입니다. 6자 숫자');
-      setDisable(true);
-    } else {
-      setErrorText('');
-      if (code.length === 6) setDisable(false);
-    }
-    setCodeNumber(code);
-  };
-
-  // 인증 완료 기능 (API 예정)
-  const handleComplete = () => {
-    navigation.navigate('RegisterInfoScreen');
+  // 인증 성공시 기능
+  const handleCodeSuccess = () => {
+    setUserInfo((prevUserInfo) => ({
+      ...prevUserInfo,
+      phone: getValues().phoneNumber,
+    }));
     setRequest(false); // timer clear을 위해
+    navigation.navigate('RegisterInfoScreen');
+  };
+
+  // 인증 완료 버튼 기능
+  const handleComplete = async (phone: string, code: string) => {
+    try {
+      await handleCheckedCode(phone, code);
+      handleCodeSuccess();
+    } catch (error) {
+      Alert.alert('인증번호를 확인해주세요'); // 임시 alert
+    }
   };
 
   return (
@@ -77,75 +89,97 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
           {/* 헤더 UI */}
-          <Text style={styles.headFont}>
+          <Text style={styles.headText}>
             회원가입을 위해{'\n'}
             휴대폰 번호를 인증해주세요
-          </Text>
-          <Text style={styles.subFont}>
-            본인인증을 하시면 휴대폰 번호로{'\n'}로그인을 할 수 있어요
           </Text>
 
           {/* 인증 UI */}
           <View style={styles.inputView}>
-            <Text>휴대폰 인증</Text>
-            <View style={{ flexDirection: 'row', marginTop: 5 }}>
-              <TextInput
-                style={styles.numberInput}
-                placeholder="휴대폰 11자리"
-                keyboardType="phone-pad"
-                placeholderTextColor="#909090"
-                value={userInfo.phone}
-                onChangeText={(value) => handleChangePhone(value)}
-              />
-              <TouchableOpacity
-                activeOpacity={1.0}
-                style={styles.sendButton}
-                onPress={handleRequest}
-              >
-                <Text style={styles.sendFont}>
-                  {request ? '재전송' : '인증요청'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ marginTop: 15 }}>
-              <Text>인증번호</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={{
-                    ...styles.numberInput,
-                    marginTop: 5,
-                    width: '100%',
-                    borderColor: errorText ? '#E53C3C' : '#EDF0F3',
-                  }}
-                  placeholder="인증번호 6자리"
-                  placeholderTextColor="#909090"
-                  keyboardType="phone-pad"
-                  value={codeNumber}
-                  onChangeText={(code) => handleCodeNumberChange(code)}
-                />
-                {request ? (
-                  <View style={styles.timerContainer}>
-                    <TimerComponent
-                      resetTimer={resetTimer}
-                      onReset={() => setResetTimer(false)}
-                      // 타이머 만료시 기능(예정)
-                      handleComplete={() => Alert.alert('시간 만료')}
+            <FlatList
+              data={phoneFileds}
+              renderItem={({ item }) => (
+                <>
+                  <Text style={{ ...styles.inputTitleText, marginTop: 15 }}>
+                    {item.title}
+                  </Text>
+                  <View
+                    style={{
+                      ...styles.inputContainer,
+                      alignItems: item.key === 'code' ? 'center' : undefined,
+                    }}
+                  >
+                    <Controller
+                      control={control}
+                      rules={{
+                        validate: item.validate,
+                      }}
+                      name={item.key as keyof PhoneVerifyData}
+                      defaultValue=""
+                      render={({ field: { onChange, value } }) => (
+                        <TextInput
+                          value={value}
+                          onChangeText={onChange}
+                          style={{
+                            ...styles.numberInput,
+                            width: item.key === 'phoneNumber' ? '75%' : '100%',
+                            borderColor:
+                              errors[item.key as keyof PhoneVerifyData] &&
+                              value.length !== 0
+                                ? '#E53C3C'
+                                : '#EDF0F3',
+                          }}
+                          placeholder={item.placeholder}
+                          placeholderTextColor="#909090"
+                        />
+                      )}
                     />
+                    {item.key === 'phoneNumber' ? (
+                      <TouchableOpacity
+                        disabled={isPhoneNumberValid}
+                        activeOpacity={1.0}
+                        style={{
+                          ...styles.sendButton,
+                          opacity: isPhoneNumberValid ? 0.3 : 1.0,
+                        }}
+                        onPress={() => handleRequest(getValues().phoneNumber)}
+                      >
+                        <Text style={styles.sendText}>
+                          {request ? '재전송' : '인증요청'}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : request ? (
+                      <View style={styles.timerContainer}>
+                        <TimerComponent
+                          resetTimer={resetTimer}
+                          onReset={() => setResetTimer(false)}
+                          // 타이머 만료시 기능(UI 예정)
+                          handleComplete={() => Alert.alert('시간 만료')}
+                        />
+                      </View>
+                    ) : null}
                   </View>
-                ) : null}
-              </View>
-              {errorText && <Text style={styles.errorFont}>{errorText}</Text>}
-            </View>
+                  {errors[item.key as keyof PhoneVerifyData]?.message && (
+                    <Text style={styles.errorText}>
+                      {errors[item.key as keyof PhoneVerifyData]?.message}
+                    </Text>
+                  )}
+                </>
+              )}
+              keyExtractor={(item) => item.key}
+            />
           </View>
         </SafeAreaView>
 
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={disable}
+            disabled={disableButton}
             text="인증완료"
             font="bold"
-            onPress={handleComplete}
+            onPress={() =>
+              handleComplete(getValues().phoneNumber, getValues().code)
+            }
           />
         </View>
       </View>
@@ -163,32 +197,21 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    marginTop: 5,
   },
   timerContainer: {
     position: 'absolute',
     right: 15,
   },
-  boxView: {
-    marginTop: 25,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#000000',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    width: '100%',
-    height: 54,
-  },
   inputView: {
-    marginTop: 35,
+    marginTop: 20,
   },
   buttonView: {
     marginBottom: 40,
     marginLeft: 25,
     marginRight: 25,
   },
-  headFont: {
+  headText: {
     marginTop: 70,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
@@ -196,19 +219,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#000000',
   },
-  subFont: {
-    fontFamily: 'Pretendard-Medium',
+  inputTitleText: {
     color: '#000000',
-    fontSize: 16,
-    lineHeight: 20,
-    marginTop: 15,
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
   },
-  sendFont: {
+  sendText: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
     color: '#000000',
   },
-  errorFont: {
+  errorText: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
     color: '#E53C3C',
