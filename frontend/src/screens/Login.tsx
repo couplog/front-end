@@ -8,12 +8,16 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
 import { handleLogin } from '../api/login/login';
 
-const Login = () => {
+type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
+
+const Login = ({ navigation }: Props) => {
   const {
     control,
     handleSubmit,
@@ -27,6 +31,8 @@ const Login = () => {
   const onSubmit = (data: LoginFormData) => {
     try {
       handleLogin(data);
+      // 메인페이지대신 임시 네비게이션 구현
+      navigation.navigate('OnboardingScreen');
     } catch (err) {
       console.log('err 확인 : ', err);
     }
