@@ -46,7 +46,7 @@ const ConnectPartner = () => {
             onChangeText={(code) => setInviteCode(code)}
             value={inviteCode}
             onBlur={validCheck}
-            keyboardType="phone-pad"
+            keyboardType="name-phone-pad"
           />
           {error && (
             <Text style={styles.errorText}>
