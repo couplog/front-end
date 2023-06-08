@@ -1,6 +1,6 @@
 import {
+  Alert,
   Keyboard,
-  Linking,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -19,10 +19,15 @@ import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
 import { handleLogin } from '../api/login/login';
+import { LoginError } from '../components/design/ErrorMessageComponent';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
 const Login = ({ navigation }: Props) => {
+  const [checked, setChecked] = useState(false);
+  const [eyeClick, setEyeClick] = useState(true);
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const {
     control,
     handleSubmit,
@@ -34,19 +39,27 @@ const Login = ({ navigation }: Props) => {
     },
   });
   const handleComplete = (data: LoginFormData) => {
-    try {
-      handleLogin(data);
-      // 메인페이지대신 임시 네비게이션 구현
-      navigation.navigate('OnboardingScreen');
-    } catch (err) {
-      console.log('err 확인 : ', err);
-    }
+    handleLogin(data)
+      .then((res) => {
+        console.log(res);
+        // 메인페이지대신 임시 네비게이션 구현
+        navigation.navigate('OnboardingScreen');
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        if (err.response.data.code === 'C006') {
+          console.log(err.response.data.message);
+          setPhoneNumberError(true);
+        } else if (err.response.data.code === 'C009') {
+          setPasswordError(true);
+        } else {
+          Alert.alert(err.response.data.message);
+        }
+      });
   };
   const handleNavigation = () => {
     navigation.navigate('RegisterInfoScreen');
   };
-  const [checked, setChecked] = useState(false);
-  const [eyeClick, setEyeClick] = useState(false);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -67,45 +80,51 @@ const Login = ({ navigation }: Props) => {
                 placeholder="전화번호를 입력해주세요"
                 onBlur={onBlur}
                 onChangeText={onChange}
+                onChange={() => setPhoneNumberError(false)}
                 value={value}
               />
             )}
             name="phone"
           />
-          {errors.phone && (
-            <Text style={styles.errorText}>This is required.</Text>
+          <LoginError errors={errors.phone?.type} />
+          {phoneNumberError && !errors.phone?.type && (
+            <LoginError errors="phone" />
           )}
           <Text style={styles.label}>비밀번호</Text>
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="비밀번호를 입력해주세요"
-                secureTextEntry={!eyeClick}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                autoCapitalize="none"
-              />
-            )}
-            name="password"
-          />
-          <TouchableOpacity
-            activeOpacity={1.0}
-            onPress={() => setEyeClick((prev) => !prev)}
-            style={{
-              ...styles.eyeIconView,
-              bottom: errors.password ? 33 : 0,
-            }}
-          >
-            {eyeClick ? <OnEye /> : <OffEye />}
-          </TouchableOpacity>
-          {errors.password && (
-            <Text style={styles.errorText}>This is required.</Text>
+          <View style={styles.passwordView}>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="비밀번호를 입력해주세요"
+                  secureTextEntry={eyeClick}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  onChange={() => setPasswordError(false)}
+                  value={value}
+                  autoCapitalize="none"
+                />
+              )}
+              name="password"
+            />
+            <TouchableOpacity
+              activeOpacity={1.0}
+              onPress={() => setEyeClick((prev) => !prev)}
+              style={{
+                ...styles.eyeIconView,
+                bottom: errors.password ? 33 : 0,
+              }}
+            >
+              {eyeClick ? <OnEye /> : <OffEye />}
+            </TouchableOpacity>
+          </View>
+          <LoginError errors={errors.password?.type} />
+          {passwordError && !errors.password?.type && (
+            <LoginError errors="password" />
           )}
           <View style={styles.checkboxView}>
             <Checkbox
@@ -175,14 +194,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 12,
   },
-  errorText: {
-    color: '#E53C3C',
-    marginTop: 2,
+  passwordView: {
+    position: 'relative',
   },
   eyeIconView: {
     position: 'absolute',
     right: 15,
-    top: 137,
+    top: 12,
   },
   checkboxView: {
     flexDirection: 'row',
