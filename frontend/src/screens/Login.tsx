@@ -38,6 +38,7 @@ const Login = ({ navigation }: Props) => {
       password: '',
     },
   });
+
   const handleComplete = (data: LoginFormData) => {
     handleLogin(data)
       .then((res) => {
@@ -57,6 +58,7 @@ const Login = ({ navigation }: Props) => {
         }
       });
   };
+
   const handleNavigation = () => {
     navigation.navigate('RegisterInfoScreen');
   };
