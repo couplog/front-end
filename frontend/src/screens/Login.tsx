@@ -33,7 +33,7 @@ const Login = ({ navigation }: Props) => {
       password: '',
     },
   });
-  const onSubmit = (data: LoginFormData) => {
+  const handleComplete = (data: LoginFormData) => {
     try {
       handleLogin(data);
       // 메인페이지대신 임시 네비게이션 구현
@@ -41,6 +41,9 @@ const Login = ({ navigation }: Props) => {
     } catch (err) {
       console.log('err 확인 : ', err);
     }
+  };
+  const handleNavigation = () => {
+    navigation.navigate('RegisterInfoScreen');
   };
   const [checked, setChecked] = useState(false);
   const [eyeClick, setEyeClick] = useState(false);
@@ -113,7 +116,7 @@ const Login = ({ navigation }: Props) => {
           </View>
         </View>
         <View style={styles.signupView}>
-          <Text style={styles.signupText} onPress={() => Linking.openURL('')}>
+          <Text style={styles.signupText} onPress={handleNavigation}>
             회원가입하기
           </Text>
         </View>
@@ -122,7 +125,7 @@ const Login = ({ navigation }: Props) => {
             disabled={false}
             text="로그인"
             font="bold"
-            onPress={handleSubmit(onSubmit)}
+            onPress={handleSubmit(handleComplete)}
           />
         </View>
       </SafeAreaView>
