@@ -24,7 +24,7 @@ import { SignupFormData } from '../types/signupFormType';
 import { getFormattedDate } from '../utils/formattedDate';
 import { formFields } from '../utils/register/registerFormText';
 
-import { handleLogin } from '../api/login/login';
+import { handleLogin } from '../api/signup/signup';
 
 type Props = StackScreenProps<StackParamList, 'RegisterInfoScreen'>;
 

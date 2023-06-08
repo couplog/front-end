@@ -3,7 +3,7 @@
 
 import axios from 'axios';
 
-const API = 'http://43.201.45.157';
+const API = 'http://3.34.196.59';
 
 const request = axios.create({
   baseURL: API,
