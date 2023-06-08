@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   errorText: {
-    color: 'red',
+    color: '#E53C3C',
     marginTop: 2,
   },
   checkboxView: {
