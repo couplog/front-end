@@ -19,7 +19,7 @@ import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
 import { handleLogin } from '../api/login/login';
-import { LoginError } from '../components/design/ErrorMessageComponent';
+import { LoginError } from '../components/error/ErrorMessageComponent';
 import { storeData } from '../utils/storage';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
