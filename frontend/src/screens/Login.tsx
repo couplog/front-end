@@ -20,6 +20,7 @@ import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
 import { handleLogin } from '../api/login/login';
 import { LoginError } from '../components/design/ErrorMessageComponent';
+import { storeData } from '../utils/storage';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
@@ -39,24 +40,35 @@ const Login = ({ navigation }: Props) => {
     },
   });
 
-  const handleComplete = (data: LoginFormData) => {
-    handleLogin(data)
-      .then((res) => {
-        console.log(res);
+  const handleComplete = async (data: LoginFormData) => {
+    try {
+      const res = await handleLogin(data);
+      const connection = res.data.data.isConnected;
+      const token = res.headers.authorization;
+
+      await storeData('token', token);
+
+      if (connection) {
         // 메인페이지대신 임시 네비게이션 구현
         navigation.navigate('OnboardingScreen');
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        if (err.response.data.code === 'C006') {
-          console.log(err.response.data.message);
-          setPhoneNumberError(true);
-        } else if (err.response.data.code === 'C009') {
-          setPasswordError(true);
-        } else {
-          Alert.alert(err.response.data.message);
-        }
-      });
+      } else if (!connection) {
+        navigation.navigate('ConnectPartnerScreen');
+      }
+    } catch (err: any) {
+      const errorCode = err.response.data.code;
+      handleErrorResponse(errorCode);
+    }
+  };
+
+  const handleErrorResponse = (errorCode: string) => {
+    console.log(errorCode);
+    if (errorCode === 'C006') {
+      setPhoneNumberError(true);
+    } else if (errorCode === 'C009') {
+      setPasswordError(true);
+    } else {
+      Alert.alert('에러 메시지를 처리하는 로직');
+    }
   };
 
   const handleNavigation = () => {
