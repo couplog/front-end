@@ -45,8 +45,10 @@ const Login = ({ navigation }: Props) => {
       const res = await handleLogin(data);
       const connection = res.data.data.isConnected;
       const token = res.headers.authorization;
+      const refreshToken = res.headers.refreshtoken;
 
       await storeData('token', token);
+      await storeData('refreshToken', refreshToken);
 
       if (connection) {
         // 메인페이지대신 임시 네비게이션 구현
