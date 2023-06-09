@@ -60,7 +60,7 @@ const Login = ({ navigation }: Props) => {
   };
 
   const handleNavigation = () => {
-    navigation.navigate('RegisterInfoScreen');
+    navigation.navigate('RegisterPhoneScreen');
   };
 
   return (
