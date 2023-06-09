@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import ButtonComponent from '../components/design/ButtonComponent';
-import ModalComponent from '../components/design/ModalComponent';
+import ModalComponent from '../components/modal/ModalComponent';
 
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);

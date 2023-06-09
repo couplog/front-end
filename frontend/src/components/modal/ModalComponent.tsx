@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { ModalProps } from '../../types/modalType';
-import ButtonComponent from './ButtonComponent';
+import ButtonComponent from '../design/ButtonComponent';
 import Close from '../../assets/images/close.svg';
 
 const ModalComponent = ({ visible, setModalVisible }: ModalProps) => {
