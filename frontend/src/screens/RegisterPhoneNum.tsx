@@ -11,6 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { useSetRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -24,6 +25,7 @@ import {
   handleVerify,
 } from '../api/register/verifyPhoneNumber';
 import { PhoneVerifyData } from '../types/signupFormType';
+import { toastConfig } from '../components/design/ToastComponent';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
@@ -36,6 +38,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     control,
     getValues,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<PhoneVerifyData>({
     mode: 'onChange',
@@ -58,6 +61,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     // 재전송 클릭시 리셋 요청 & state 초기화
     else {
       setResetTimer(true);
+      clearErrors();
       setValue('code', '');
     }
     // 휴대폰 인증 번호 발송
@@ -80,8 +84,20 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       await handleCheckedCode(phone, code);
       handleCodeSuccess();
     } catch (error) {
-      Alert.alert('인증번호를 확인해주세요'); // 임시 alert
+      Alert.alert('인증 번호가 일치하지 않습니다. 다시 시도해주세요.');
     }
+  };
+
+  // 토스트 메세지
+  const showToast = () => {
+    setValue('code', '');
+    clearErrors();
+    Toast.show({
+      position: 'bottom',
+      bottomOffset: 140,
+      visibilityTime: 2000,
+      type: 'codeToast',
+    });
   };
 
   return (
@@ -119,6 +135,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                       render={({ field: { onChange, value } }) => (
                         <TextInput
                           value={value}
+                          keyboardType="phone-pad"
                           onChangeText={onChange}
                           style={{
                             ...styles.numberInput,
@@ -153,8 +170,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                         <TimerComponent
                           resetTimer={resetTimer}
                           onReset={() => setResetTimer(false)}
-                          // 타이머 만료시 기능(UI 예정)
-                          handleComplete={() => Alert.alert('시간 만료')}
+                          handleComplete={showToast}
                         />
                       </View>
                     ) : null}
@@ -169,7 +185,12 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
               keyExtractor={(item) => item.key}
             />
           </View>
+          <Text style={styles.infoText}>
+            ∙ 3분 이내로 인증번호를 입력해 주세요.{'\n'}∙ 인증번호가 전송되지
+            않을경우 &quot;재전송&quot; 버튼을 눌러주세요.
+          </Text>
         </SafeAreaView>
+        <Toast config={toastConfig} />
 
         {/* 하단 버튼 UI */}
         <View style={styles.buttonView}>
@@ -226,14 +247,20 @@ const styles = StyleSheet.create({
   },
   sendText: {
     fontSize: 12,
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Regular',
     color: '#000000',
   },
   errorText: {
     fontSize: 12,
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Regular',
     color: '#E53C3C',
     marginTop: 5,
+  },
+  infoText: {
+    marginTop: 10,
+    fontSize: 12,
+    fontFamily: 'Pretendard-Regular',
+    color: '#909090',
   },
   numberInput: {
     width: '75%',
