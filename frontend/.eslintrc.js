@@ -50,6 +50,7 @@ module.exports = {
       'react-hook-form',
       'react-native-bouncy-checkbox',
       '@react-navigation/stack',
+      '@react-native-async-storage/async-storage',
     ], //import/no-extraneous-dependencies 에러 해결
   },
 };

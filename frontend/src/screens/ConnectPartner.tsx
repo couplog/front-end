@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import ButtonComponent from '../components/design/ButtonComponent';
-import ModalComponent from '../components/design/ModalComponent';
+import ModalComponent from '../components/modal/ModalComponent';
 
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);
@@ -35,9 +35,9 @@ const ConnectPartner = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.rootContainer}>
-        <View style={styles.headFontView}>
-          <Text style={styles.headFont}>연결할 상대방의</Text>
-          <Text style={styles.headFont}>초대 코드를 입력해주세요</Text>
+        <View style={styles.headTextView}>
+          <Text style={styles.headText}>연결할 상대방의</Text>
+          <Text style={styles.headText}>초대 코드를 입력해주세요</Text>
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -46,10 +46,10 @@ const ConnectPartner = () => {
             onChangeText={(code) => setInviteCode(code)}
             value={inviteCode}
             onBlur={validCheck}
-            keyboardType="phone-pad"
+            keyboardType="name-phone-pad"
           />
           {error && (
-            <Text style={styles.errorFont}>
+            <Text style={styles.errorText}>
               잘못된 코드 형식입니다. 6자리 숫자, 문자
             </Text>
           )}
@@ -86,10 +86,10 @@ const styles = StyleSheet.create({
     marginRight: 25,
     justifyContent: 'space-between',
   },
-  headFontView: {
+  headTextView: {
     marginTop: 32,
   },
-  headFont: {
+  headText: {
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     lineHeight: 32,
@@ -118,15 +118,15 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 12,
   },
-  errorFont: {
-    color: 'red',
+  errorText: {
+    color: '#E53C3C',
     marginTop: 2,
   },
   checkboxView: {
     flexDirection: 'row',
     marginTop: 40,
   },
-  autoLoginFont: {
+  autoLoginText: {
     marginLeft: 12,
   },
   checkCodeView: {},
