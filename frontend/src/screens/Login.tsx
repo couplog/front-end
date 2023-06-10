@@ -19,7 +19,6 @@ import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
 import { handleLogin } from '../api/login/login';
-import { LoginError } from '../components/error/ErrorMessageComponent';
 import { storeData } from '../utils/storage';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
@@ -27,10 +26,10 @@ type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 const Login = ({ navigation }: Props) => {
   const [checked, setChecked] = useState(false);
   const [eyeClick, setEyeClick] = useState(true);
-  const [phoneNumberError, setPhoneNumberError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+
   const {
     control,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -39,6 +38,10 @@ const Login = ({ navigation }: Props) => {
       password: '',
     },
   });
+
+  // 가입하기 버튼 충족조건
+  const disableButton =
+    watch('phone').length < 11 || !watch('phone') || !watch('password');
 
   const handleComplete = async (data: LoginFormData) => {
     try {
@@ -65,9 +68,9 @@ const Login = ({ navigation }: Props) => {
   const handleErrorResponse = (errorCode: string) => {
     console.log(errorCode);
     if (errorCode === 'C006') {
-      setPhoneNumberError(true);
+      Alert.alert('에러 메시지를 처리하는 로직');
     } else if (errorCode === 'C009') {
-      setPasswordError(true);
+      Alert.alert('에러 메시지를 처리하는 로직');
     } else {
       Alert.alert('에러 메시지를 처리하는 로직');
     }
@@ -89,23 +92,18 @@ const Login = ({ navigation }: Props) => {
             control={control}
             rules={{
               required: true,
+              minLength: 11,
             }}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <TextInput
                 style={styles.input}
                 placeholder="전화번호를 입력해주세요"
-                onBlur={onBlur}
                 onChangeText={onChange}
-                onChange={() => setPhoneNumberError(false)}
                 value={value}
               />
             )}
             name="phone"
           />
-          <LoginError errors={errors.phone?.type} />
-          {phoneNumberError && !errors.phone?.type && (
-            <LoginError errors="phone" />
-          )}
           <Text style={styles.label}>비밀번호</Text>
           <View style={styles.passwordView}>
             <Controller
@@ -113,14 +111,12 @@ const Login = ({ navigation }: Props) => {
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
+              render={({ field: { onChange, value } }) => (
                 <TextInput
                   style={styles.input}
                   placeholder="비밀번호를 입력해주세요"
                   secureTextEntry={eyeClick}
-                  onBlur={onBlur}
                   onChangeText={onChange}
-                  onChange={() => setPasswordError(false)}
                   value={value}
                   autoCapitalize="none"
                 />
@@ -138,10 +134,6 @@ const Login = ({ navigation }: Props) => {
               {eyeClick ? <OnEye /> : <OffEye />}
             </TouchableOpacity>
           </View>
-          <LoginError errors={errors.password?.type} />
-          {passwordError && !errors.password?.type && (
-            <LoginError errors="password" />
-          )}
           <View style={styles.checkboxView}>
             <Checkbox
               checked={checked}
@@ -157,7 +149,7 @@ const Login = ({ navigation }: Props) => {
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={false}
+            disabled={disableButton as boolean}
             text="로그인"
             font="bold"
             onPress={handleSubmit(handleComplete)}
