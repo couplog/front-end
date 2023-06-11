@@ -56,16 +56,24 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
 
   // 요청 & 재전송 버튼 기능
   const handleRequest = (phone: string) => {
-    // 최초 클릭시
-    if (!request) setRequest(true);
-    // 재전송 클릭시 리셋 요청 & state 초기화
-    else {
-      setResetTimer(true);
-      clearErrors();
-      setValue('code', '');
-    }
     // 휴대폰 인증 번호 발송
-    handleVerify(phone);
+    handleVerify(phone)
+      .then(() => {
+        // 요청이 성공한 경우 처리할 로직
+        // 최초 클릭시
+        if (!request) setRequest(true);
+        // 재전송 클릭시 리셋 요청 & state 초기화
+        else {
+          setResetTimer(true);
+          clearErrors();
+          setValue('code', '');
+        }
+      })
+      .catch((error) => {
+        // 요청이 실패한 경우 처리할 로직
+        const errorMessage = `${error.response?.data?.message} 번호를 확인해주세요.`;
+        Alert.alert(errorMessage);
+      });
   };
 
   // 인증 성공시 기능
