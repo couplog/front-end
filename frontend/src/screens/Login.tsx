@@ -181,12 +181,14 @@ const styles = StyleSheet.create({
     height: 140,
   },
   logo: {
-    color: '#000000',
     fontFamily: 'Pretendard-Regular',
+    color: '#000000',
     fontSize: 30,
     paddingTop: 76,
   },
   errorText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
     color: '#E53C3C',
     marginTop: 20,
   },
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 10,
   },
   signupView: {},
   signupText: {
