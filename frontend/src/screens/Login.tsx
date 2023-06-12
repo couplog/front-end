@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
@@ -18,14 +19,17 @@ import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
-import { handleLogin } from '../api/login/login';
+import { handleLogin, handleMemberInfo } from '../api/login/login';
 import { storeData } from '../utils/storage';
+import { userState } from '../state/atoms/userAtom';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
 const Login = ({ navigation }: Props) => {
   const [checked, setChecked] = useState(false);
   const [eyeClick, setEyeClick] = useState(true);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [error, setError] = useState(false);
 
   const {
     control,
@@ -45,34 +49,28 @@ const Login = ({ navigation }: Props) => {
 
   const handleComplete = async (data: LoginFormData) => {
     try {
+      // 로그인 API 호출
       const res = await handleLogin(data);
-      const connection = res.data.data.isConnected;
-      const token = res.headers.authorization;
-      const refreshToken = res.headers.refreshtoken;
+      const connection = res?.data.data.isConnected;
+      const token = res?.headers.authorization;
+      const refreshToken = res?.headers.refreshtoken;
 
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
 
-      if (connection) {
-        // 메인페이지대신 임시 네비게이션 구현
-        navigation.navigate('OnboardingScreen');
-      } else if (!connection) {
-        navigation.navigate('ConnectPartnerScreen');
-      }
-    } catch (err: any) {
-      const errorCode = err.response.data.code;
-      handleErrorResponse(errorCode);
-    }
-  };
+      // 현재 로그인 회원의 MemberId 조회 및 저장
+      const memberRes = await handleMemberInfo();
+      const updateUserInfo = {
+        ...userInfo,
+        memberId: memberRes?.data.data.memberId,
+      };
+      setUserInfo(updateUserInfo);
 
-  const handleErrorResponse = (errorCode: string) => {
-    console.log(errorCode);
-    if (errorCode === 'C006') {
-      Alert.alert('에러 메시지를 처리하는 로직');
-    } else if (errorCode === 'C009') {
-      Alert.alert('에러 메시지를 처리하는 로직');
-    } else {
-      Alert.alert('에러 메시지를 처리하는 로직');
+      connection
+        ? navigation.navigate('OnboardingScreen')
+        : navigation.navigate('ConnectPartnerScreen');
+    } catch (err: any) {
+      setError(true);
     }
   };
 
@@ -141,6 +139,12 @@ const Login = ({ navigation }: Props) => {
               label="자동 로그인"
             />
           </View>
+          {error && (
+            <Text style={styles.errorText}>
+              유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
+              내용을 다시 확인해주세요.
+            </Text>
+          )}
         </View>
         <View style={styles.signupView}>
           <Text style={styles.signupText} onPress={handleNavigation}>
@@ -174,10 +178,16 @@ const styles = StyleSheet.create({
     height: 140,
   },
   logo: {
-    color: '#000000',
     fontFamily: 'Pretendard-Regular',
+    color: '#000000',
     fontSize: 30,
     paddingTop: 76,
+  },
+  errorText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 14,
+    color: '#E53C3C',
+    marginTop: 20,
   },
   inputView: {
     width: '100%',
@@ -212,7 +222,7 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 10,
   },
   signupView: {},
   signupText: {

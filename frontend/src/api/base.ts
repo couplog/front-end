@@ -2,8 +2,9 @@
 // 추후 .env 처리
 
 import axios from 'axios';
+import { getData } from '../utils/storage';
 
-const API = 'http://54.180.131.224';
+const API = 'http://15.165.57.110';
 
 const request = axios.create({
   baseURL: API,
@@ -14,8 +15,14 @@ const request = axios.create({
 });
 
 request.interceptors.request.use(
-  (config) => {
-    return config;
+  async (request) => {
+    const token = await getData('token');
+
+    if (token) {
+      request.headers.authorization = token;
+    }
+
+    return request;
   },
   (error) => {
     return Promise.reject(error);
