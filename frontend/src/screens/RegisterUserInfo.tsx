@@ -79,9 +79,10 @@ const RegisterUserInfo = ({ navigation }: Props) => {
     setUserInfo(updatedUserInfo);
 
     try {
-      handleLogin(updatedUserInfo);
-      console.log('회원가입 성공');
-      navigation.navigate('ConnectPartnerScreen');
+      handleLogin(updatedUserInfo)
+        .then((res) => console.log(res))
+        .catch((err) => console.log('err', err.response.data.code));
+      // navigation.navigate('ConnectPartnerScreen');
     } catch (err) {
       console.log('err 확인 : ', err);
     }

@@ -1,4 +1,5 @@
 export interface userProps {
+  memberID: number;
   name: string;
   nickname: string;
   phone: string;

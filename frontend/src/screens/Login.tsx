@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
@@ -18,14 +19,16 @@ import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/loginFormType';
-import { handleLogin } from '../api/login/login';
+import { handleLogin, handleMemberInfo } from '../api/login/login';
 import { storeData } from '../utils/storage';
+import { userState } from '../state/atoms/userAtom';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
 const Login = ({ navigation }: Props) => {
   const [checked, setChecked] = useState(false);
   const [eyeClick, setEyeClick] = useState(true);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
   const {
     control,
@@ -45,13 +48,22 @@ const Login = ({ navigation }: Props) => {
 
   const handleComplete = async (data: LoginFormData) => {
     try {
+      // 로그인 API 호출
       const res = await handleLogin(data);
-      const connection = res.data.data.isConnected;
-      const token = res.headers.authorization;
-      const refreshToken = res.headers.refreshtoken;
+      const connection = res?.data.data.isConnected;
+      const token = res?.headers.authorization;
+      const refreshToken = res?.headers.refreshtoken;
 
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
+
+      // 현재 로그인 회원의 MemberId 조회 및 저장
+      const memberRes = await handleMemberInfo();
+      const updateUserInfo = {
+        ...userInfo,
+        memberId: memberRes?.data.data.memberId,
+      };
+      setUserInfo(updateUserInfo);
 
       if (connection) {
         // 메인페이지대신 임시 네비게이션 구현
