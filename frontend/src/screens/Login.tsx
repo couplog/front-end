@@ -29,6 +29,7 @@ const Login = ({ navigation }: Props) => {
   const [checked, setChecked] = useState(false);
   const [eyeClick, setEyeClick] = useState(true);
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [error, setError] = useState(false);
 
   const {
     control,
@@ -72,19 +73,7 @@ const Login = ({ navigation }: Props) => {
         navigation.navigate('ConnectPartnerScreen');
       }
     } catch (err: any) {
-      const errorCode = err.response.data.code;
-      handleErrorResponse(errorCode);
-    }
-  };
-
-  const handleErrorResponse = (errorCode: string) => {
-    console.log(errorCode);
-    if (errorCode === 'C006') {
-      Alert.alert('에러 메시지를 처리하는 로직');
-    } else if (errorCode === 'C009') {
-      Alert.alert('에러 메시지를 처리하는 로직');
-    } else {
-      Alert.alert('에러 메시지를 처리하는 로직');
+      setError(true);
     }
   };
 
@@ -153,6 +142,12 @@ const Login = ({ navigation }: Props) => {
               label="자동 로그인"
             />
           </View>
+          {error && (
+            <Text style={styles.errorText}>
+              유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
+              내용을 다시 확인해주세요.
+            </Text>
+          )}
         </View>
         <View style={styles.signupView}>
           <Text style={styles.signupText} onPress={handleNavigation}>
@@ -190,6 +185,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     fontSize: 30,
     paddingTop: 76,
+  },
+  errorText: {
+    color: '#E53C3C',
+    marginTop: 20,
   },
   inputView: {
     width: '100%',
