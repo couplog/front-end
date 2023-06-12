@@ -66,12 +66,9 @@ const Login = ({ navigation }: Props) => {
       };
       setUserInfo(updateUserInfo);
 
-      if (connection) {
-        // 메인페이지대신 임시 네비게이션 구현
-        navigation.navigate('OnboardingScreen');
-      } else if (!connection) {
-        navigation.navigate('ConnectPartnerScreen');
-      }
+      connection
+        ? navigation.navigate('OnboardingScreen')
+        : navigation.navigate('ConnectPartnerScreen');
     } catch (err: any) {
       setError(true);
     }
