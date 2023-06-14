@@ -103,7 +103,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     Toast.show({
       position: 'bottom',
       bottomOffset: 140,
-      visibilityTime: 2000,
+      visibilityTime: 3000,
       type: 'codeToast',
     });
   };
