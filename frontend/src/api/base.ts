@@ -1,12 +1,9 @@
-// 임시 백엔드 주소
-// 추후 .env 처리
-
 import axios from 'axios';
-
-const API = 'http://54.180.131.224';
+// @ts-ignore
+import { API_URL } from 'react-native-dotenv';
 
 const request = axios.create({
-  baseURL: API,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,
