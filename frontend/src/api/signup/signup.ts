@@ -1,9 +1,7 @@
-import { userProps } from '../../types/userStateType';
+import { UserSignupProps } from '../../types/register/signupFormType';
 import request from '../base';
 
-export const handleLogin = (userInfo: userProps) => {
-  // console.log('userInfo: ', userInfo); 추후 삭제 예정
-
+export const handleSignup = (userInfo: UserSignupProps) => {
   return request({
     method: 'POST',
     url: '/api/auth/signup',
