@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from '../types/navigationType';
+import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 
 type Props = StackScreenProps<StackParamList, 'OnboardingScreen'>;

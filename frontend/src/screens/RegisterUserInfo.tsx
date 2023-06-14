@@ -15,16 +15,16 @@ import DatePicker from 'react-native-date-picker';
 import { useRecoilValue } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from '../types/navigationType';
+import { StackParamList } from '../types/routes/navigationType';
 import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
-import { SignupFormData } from '../types/signupFormType';
+import { SignupFormData } from '../types/register/signupFormType';
 import { getFormattedDate } from '../utils/formattedDate';
 import { formFields } from '../utils/register/registerFormText';
 import { userState } from '../state/atoms/userAtom';
-import { handleLogin } from '../api/signup/signup';
+import { handleSignup } from '../api/signup/signup';
 
 type Props = StackScreenProps<StackParamList, 'RegisterInfoScreen'>;
 
@@ -67,7 +67,7 @@ const RegisterUserInfo = ({ navigation }: Props) => {
 
   // 가입하기 버튼 기능
   const handleSubmit = (data: SignupFormData) => {
-    const userData = {
+    const userFormData = {
       name: data.name,
       nickname: data.nickname,
       password: data.password,
@@ -76,7 +76,7 @@ const RegisterUserInfo = ({ navigation }: Props) => {
       gender: checkedGender,
     };
 
-    handleLogin(userData)
+    handleSignup(userFormData)
       .then(() => navigation.navigate('ConnectPartnerScreen'))
       .catch((err) =>
         err.response.data.code === 'C015'

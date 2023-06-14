@@ -15,7 +15,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { useSetRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from '../types/navigationType';
+import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 import { userState } from '../state/atoms/userAtom';
@@ -24,7 +24,7 @@ import {
   handleCheckedCode,
   handleVerify,
 } from '../api/register/verifyPhoneNumber';
-import { PhoneVerifyData } from '../types/signupFormType';
+import { PhoneVerifyData } from '../types/register/signupFormType';
 import { toastConfig } from '../components/design/ToastComponent';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;

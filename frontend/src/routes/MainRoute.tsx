@@ -1,7 +1,7 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { RouteScreens, StackParamList } from '../types/navigationType';
+import { RouteScreens, StackParamList } from '../types/routes/navigationType';
 import RegisterPhoneNum from '../screens/RegisterPhoneNum';
 import RegisterUserInfo from '../screens/RegisterUserInfo';
 import Login from '../screens/Login';

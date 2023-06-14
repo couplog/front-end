@@ -1,4 +1,4 @@
-import { LoginFormData } from '../../types/loginFormType';
+import { LoginFormData } from '../../types/login/loginFormType';
 import request from '../base';
 
 export const handleLogin = (loginInfo: LoginFormData) => {
