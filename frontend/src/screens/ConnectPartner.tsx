@@ -8,14 +8,20 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import DatePicker from 'react-native-date-picker';
 import ButtonComponent from '../components/design/ButtonComponent';
 import ModalComponent from '../components/modal/ModalComponent';
+import { getFormattedDate } from '../utils/formattedDate';
 
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [date, setDate] = useState<Date | ''>('');
+  const [formattedDate, setFormattedDate] = useState<string>('');
+  const [open, setOpen] = useState(false);
+  const todayDate = getFormattedDate(new Date());
 
   const reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
   const validCheck = () => {
@@ -30,6 +36,13 @@ const ConnectPartner = () => {
 
   const handleSubmit = () => {
     console.log('submit');
+  };
+
+  const handleFirstDate = (date: Date) => {
+    setOpen(false);
+    setDate(date);
+    const formattedDate = getFormattedDate(date);
+    setFormattedDate(formattedDate);
   };
 
   return (
@@ -53,6 +66,28 @@ const ConnectPartner = () => {
               잘못된 코드 형식입니다. 6자리 숫자, 문자
             </Text>
           )}
+        </View>
+        <View style={styles.firstDateView}>
+          <Text style={styles.firstDateText}>우리가 처음 만난 날</Text>
+          <TextInput
+            onPressIn={() => setOpen(true)}
+            value={date ? formattedDate : undefined}
+            style={styles.dateInput}
+            editable={false}
+            placeholder={todayDate}
+            placeholderTextColor="#000000"
+          />
+          <DatePicker
+            modal
+            open={open}
+            mode="date"
+            date={date || new Date()}
+            locale="ko"
+            onConfirm={(date) => handleFirstDate(date)}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
         </View>
 
         <ModalComponent visible={visible} setModalVisible={setModalVisible} />
@@ -87,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headTextView: {
-    marginTop: 32,
+    marginTop: 68,
   },
   headText: {
     fontFamily: 'Pretendard-Medium',
@@ -100,7 +135,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     marginTop: 32,
-    marginBottom: 350,
+    marginBottom: 32,
   },
   label: {
     color: '#000000',
@@ -122,12 +157,27 @@ const styles = StyleSheet.create({
     color: '#E53C3C',
     marginTop: 2,
   },
-  checkboxView: {
+  firstDateView: {
     flexDirection: 'row',
-    marginTop: 40,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 32,
+    marginBottom: 400,
   },
-  autoLoginText: {
-    marginLeft: 12,
+  firstDateText: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Medium',
+    fontSize: 16,
+  },
+  dateInput: {
+    width: 151,
+    height: 32,
+    borderWidth: 1,
+    borderColor: '#EDF0F3',
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 14,
+    textAlign: 'center',
   },
   checkCodeView: {},
   checkCodeFont: {
