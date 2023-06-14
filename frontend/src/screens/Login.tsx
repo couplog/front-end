@@ -58,11 +58,18 @@ const Login = ({ navigation }: Props) => {
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
 
-      // 현재 로그인 회원의 MemberId 조회 및 저장
+      // 현재 로그인 회원 정보 조회 및 저장
       const memberRes = await handleMemberInfo();
+      const memberInfo = memberRes?.data.data;
       const updateUserInfo = {
         ...userInfo,
-        memberId: memberRes?.data.data.memberId,
+        memberId: memberInfo.memberId,
+        name: memberInfo.name,
+        nickname: memberInfo.nickname,
+        phone: memberInfo.phone,
+        birth: memberInfo.birth,
+        gender: memberInfo.gender,
+        profileImageUrl: memberInfo.profileImageURL,
       };
       setUserInfo(updateUserInfo);
 
