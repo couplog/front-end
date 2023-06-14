@@ -105,6 +105,7 @@ const Login = ({ navigation }: Props) => {
                 placeholder="전화번호를 입력해주세요"
                 onChangeText={onChange}
                 value={value}
+                keyboardType="phone-pad"
               />
             )}
             name="phone"
