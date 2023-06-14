@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { ModalProps } from '../../types/modalType';
+import { ModalProps } from '../../types/components/modalType';
 import ButtonComponent from '../design/ButtonComponent';
 import Close from '../../assets/images/close.svg';
 
