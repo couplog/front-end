@@ -9,6 +9,6 @@ export const userState = atom<UserProps>({
     phone: '',
     birth: '',
     gender: null,
-    memberId: '',
+    memberId: null,
   },
 });
