@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { TimerProps } from '../../types/timerType';
+import { TimerProps } from '../../types/components/timerType';
 
 const TimerComponent = ({
   handleComplete,
