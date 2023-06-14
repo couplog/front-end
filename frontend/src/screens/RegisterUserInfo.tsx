@@ -9,9 +9,10 @@ import {
   Keyboard,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/navigationType';
@@ -19,18 +20,16 @@ import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
 import ButtonComponent from '../components/design/ButtonComponent';
-import { userState } from '../state/atoms/userAtom';
 import { SignupFormData } from '../types/signupFormType';
 import { getFormattedDate } from '../utils/formattedDate';
 import { formFields } from '../utils/register/registerFormText';
-
+import { userState } from '../state/atoms/userAtom';
 import { handleLogin } from '../api/signup/signup';
 
 type Props = StackScreenProps<StackParamList, 'RegisterInfoScreen'>;
 
 const RegisterUserInfo = ({ navigation }: Props) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-
+  const userInfo = useRecoilValue(userState);
   const [eyeClick, setEyeClick] = useState(false);
   const [checkedGender, setCheckedGender] = useState<'male' | 'female' | null>(
     null
@@ -42,6 +41,7 @@ const RegisterUserInfo = ({ navigation }: Props) => {
   const {
     control,
     getValues,
+    setError,
     formState: { errors },
   } = useForm<SignupFormData>({ mode: 'onChange' });
 
@@ -67,24 +67,30 @@ const RegisterUserInfo = ({ navigation }: Props) => {
 
   // 가입하기 버튼 기능
   const handleSubmit = (data: SignupFormData) => {
-    const updatedUserInfo = {
-      ...userInfo,
+    const userData = {
       name: data.name,
       nickname: data.nickname,
+      password: data.password,
+      phone: userInfo.phone,
       birth: formattedDate,
       gender: checkedGender,
-      password: data.password,
     };
 
-    setUserInfo(updatedUserInfo);
+    handleLogin(userData)
+      .then(() => navigation.navigate('ConnectPartnerScreen'))
+      .catch((err) =>
+        err.response.data.code === 'C015'
+          ? codeVerifyOver()
+          : setError('nickname', { message: err.response.data.message })
+      );
+  };
 
-    try {
-      handleLogin(updatedUserInfo);
-      console.log('회원가입 성공');
-      navigation.navigate('ConnectPartnerScreen');
-    } catch (err) {
-      console.log('err 확인 : ', err);
-    }
+  // 휴대폰 인증시간 만료
+  const codeVerifyOver = () => {
+    Alert.alert(
+      `인증이 만료되었습니다. ${'\n'} 다시 휴대폰 인증을 진행해주세요.`
+    );
+    navigation.navigate('OnboardingScreen');
   };
 
   return (
