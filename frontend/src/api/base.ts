@@ -1,6 +1,7 @@
 import axios from 'axios';
 // @ts-ignore
 import { API_URL } from 'react-native-dotenv';
+import { getData } from '../utils/storage';
 
 const request = axios.create({
   baseURL: API_URL,
@@ -11,8 +12,14 @@ const request = axios.create({
 });
 
 request.interceptors.request.use(
-  (config) => {
-    return config;
+  async (request) => {
+    const token = await getData('token');
+
+    if (token) {
+      request.headers.authorization = token;
+    }
+
+    return request;
   },
   (error) => {
     return Promise.reject(error);

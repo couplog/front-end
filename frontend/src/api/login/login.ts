@@ -8,3 +8,10 @@ export const handleLogin = (loginInfo: LoginFormData) => {
     data: loginInfo,
   });
 };
+
+export const handleMemberInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/api/members/me',
+  });
+};

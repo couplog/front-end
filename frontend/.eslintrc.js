@@ -8,6 +8,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    'no-unused-expressions': 'off',
     'prettier/prettier': 0,
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx', '.jsx'] }],
     '@typescript-eslint/no-unused-vars': ['warn'],
