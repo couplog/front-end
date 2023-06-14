@@ -27,7 +27,7 @@ type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
 const Login = ({ navigation }: Props) => {
   const [checked, setChecked] = useState(false);
-  const [eyeClick, setEyeClick] = useState(true);
+  const [eyeClick, setEyeClick] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [error, setError] = useState(false);
 
@@ -120,7 +120,7 @@ const Login = ({ navigation }: Props) => {
                 <TextInput
                   style={styles.input}
                   placeholder="비밀번호를 입력해주세요"
-                  secureTextEntry={eyeClick}
+                  secureTextEntry={!eyeClick}
                   onChangeText={onChange}
                   value={value}
                   autoCapitalize="none"
