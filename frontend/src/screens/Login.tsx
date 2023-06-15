@@ -1,5 +1,4 @@
 import {
-  Alert,
   Keyboard,
   SafeAreaView,
   StyleSheet,
@@ -13,12 +12,12 @@ import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from '../types/navigationType';
+import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import Checkbox from '../components/design/CheckBoxComponent';
-import { LoginFormData } from '../types/loginFormType';
+import { LoginFormData } from '../types/login/loginFormType';
 import { handleLogin, handleMemberInfo } from '../api/login/login';
 import { storeData } from '../utils/storage';
 import { userState } from '../state/atoms/userAtom';

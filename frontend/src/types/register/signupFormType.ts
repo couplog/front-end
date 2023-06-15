@@ -10,3 +10,9 @@ export interface SignupFormData {
   nickname: string;
   password: string;
 }
+
+export interface UserSignupProps extends SignupFormData {
+  phone: string;
+  birth: string;
+  gender: 'male' | 'female' | null;
+}

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { TimerProps } from '../../types/timerType';
+import { TimerProps } from '../../types/components/timerType';
 
 const TimerComponent = ({
   handleComplete,
@@ -11,6 +11,17 @@ const TimerComponent = ({
   const [timerCompleted, setTimerCompleted] = useState(false); // 타이머 완료시 완료 기능을 한번만 실행하기 위한 state 설정
   const [timerId, setTimerId] = useState<number | null>(null);
 
+  const handleCompleteCallback = useCallback(() => {
+    handleComplete(); // 타이머 완료 시 콜백 함수 호출
+  }, [handleComplete]);
+
+  useEffect(() => {
+    if (timerCompleted) {
+      handleCompleteCallback(); // 생성된 콜백 함수 호출
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timerCompleted]);
+
   useEffect(() => {
     let id: number;
 
@@ -19,7 +30,6 @@ const TimerComponent = ({
         if (prevTime <= 0) {
           if (!timerCompleted) {
             setTimerCompleted(true); // 타이머 완료 시 완료 여부 상태 변경
-            handleComplete(); // 타이머 완료 시 콜백 함수 호출
           }
           return 0;
         }
