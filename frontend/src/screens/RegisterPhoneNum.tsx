@@ -19,7 +19,7 @@ import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
 import { userState } from '../state/atoms/userAtom';
-import { phoneFileds } from '../utils/register/registerFormText';
+import { phoneFields } from '../utils/register/registerFormText';
 import {
   handleCheckedCode,
   handleVerify,
@@ -83,7 +83,9 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       phone: getValues().phoneNumber,
     }));
     setRequest(false); // timer clear을 위해
-    navigation.navigate('RegisterInfoScreen');
+    navigation.navigate('RegisterInfoScreen', {
+      phone: getValues().phoneNumber,
+    });
   };
 
   // 인증 완료 버튼 기능
@@ -121,7 +123,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
           {/* 인증 UI */}
           <View style={styles.inputView}>
             <FlatList
-              data={phoneFileds}
+              data={phoneFields}
               renderItem={({ item }) => (
                 <>
                   <Text style={{ ...styles.inputTitleText, marginTop: 15 }}>

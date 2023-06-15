@@ -12,7 +12,6 @@ import {
   Alert,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { useRecoilValue } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
@@ -23,13 +22,12 @@ import ButtonComponent from '../components/design/ButtonComponent';
 import { SignupFormData } from '../types/register/signupFormType';
 import { getFormattedDate } from '../utils/formattedDate';
 import { formFields } from '../utils/register/registerFormText';
-import { userState } from '../state/atoms/userAtom';
 import { handleSignup } from '../api/signup/signup';
 
 type Props = StackScreenProps<StackParamList, 'RegisterInfoScreen'>;
 
-const RegisterUserInfo = ({ navigation }: Props) => {
-  const userInfo = useRecoilValue(userState);
+const RegisterUserInfo = ({ navigation, route }: Props) => {
+  const { phone } = route.params;
   const [eyeClick, setEyeClick] = useState(false);
   const [checkedGender, setCheckedGender] = useState<'male' | 'female' | null>(
     null
@@ -71,7 +69,7 @@ const RegisterUserInfo = ({ navigation }: Props) => {
       name: data.name,
       nickname: data.nickname,
       password: data.password,
-      phone: userInfo.phone,
+      phone,
       birth: formattedDate,
       gender: checkedGender,
     };
@@ -163,7 +161,7 @@ const RegisterUserInfo = ({ navigation }: Props) => {
             <TextInput
               editable={false}
               selectTextOnFocus={false}
-              value={userInfo.phone}
+              value={phone}
               style={styles.textInput}
             />
 
