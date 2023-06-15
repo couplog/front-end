@@ -1,13 +1,10 @@
-// 임시 백엔드 주소
-// 추후 .env 처리
-
 import axios from 'axios';
+// @ts-ignore
+import { API_URL } from 'react-native-dotenv';
 import { getData } from '../utils/storage';
 
-const API = 'http://15.165.57.110';
-
 const request = axios.create({
-  baseURL: API,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
     withCredentials: true,

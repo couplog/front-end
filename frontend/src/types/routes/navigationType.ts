@@ -10,7 +10,9 @@ export enum RouteScreens {
 export type StackParamList = {
   OnboardingScreen: undefined;
   RegisterPhoneScreen: undefined;
-  RegisterInfoScreen: undefined;
+  RegisterInfoScreen: {
+    phone: string;
+  };
   LoginScreen: undefined;
   ConnectPartnerScreen: undefined;
 };
