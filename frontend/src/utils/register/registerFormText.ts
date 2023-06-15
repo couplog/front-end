@@ -26,7 +26,7 @@ export const formFields = [
   },
 ];
 
-export const phoneFileds = [
+export const phoneFields = [
   {
     key: 'phoneNumber',
     title: '휴대폰 인증',
