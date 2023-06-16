@@ -22,6 +22,7 @@ import {
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
+  const [validCheckError, setValidCheckError] = useState(false);
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [date, setDate] = useState<Date | ''>('');
@@ -35,12 +36,14 @@ const ConnectPartner = () => {
   const reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
   const validCheck = () => {
     if (reg.test(inviteCode)) {
+      setValidCheckError(false);
       setError(false);
       setDisabled(false);
     } else if (inviteCode.length === 0) {
+      setValidCheckError(false);
       setError(false);
     } else {
-      setError(true);
+      setValidCheckError(true);
       setDisabled(true);
     }
   };
@@ -61,6 +64,7 @@ const ConnectPartner = () => {
           // 메인화면으로 이동 예정
         })
         .catch((err) => {
+          setError(true);
           console.log(err.response.data);
         });
     }
@@ -105,10 +109,13 @@ const ConnectPartner = () => {
             onBlur={validCheck}
             keyboardType="name-phone-pad"
           />
-          {error && (
+          {validCheckError && (
             <Text style={styles.errorText}>
               잘못된 코드 형식입니다. 6자리 숫자, 문자
             </Text>
+          )}
+          {error && !validCheckError && (
+            <Text style={styles.errorText}>존재하지 않는 코드입니다.</Text>
           )}
         </View>
         <View style={styles.firstDateView}>
