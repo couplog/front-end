@@ -22,8 +22,7 @@ import {
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
-  const [validCheckError, setValidCheckError] = useState(false);
-  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [date, setDate] = useState<Date | ''>('');
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [open, setOpen] = useState(false);
@@ -31,23 +30,20 @@ const ConnectPartner = () => {
   const userInfo = useRecoilValue(userState);
   const { memberId } = userInfo;
 
-  const reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
-  const validCheck = () => {
-    if (reg.test(inviteCode)) {
-      setValidCheckError(false);
-      setError(false);
-    } else if (inviteCode.length === 0) {
-      setValidCheckError(false);
-      setError(false);
+  const validCheck = (code: string) => {
+    const pattern = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
+    if (code.length === 0) {
+      setErrorText('');
+    } else if (!pattern.test(code)) {
+      setErrorText('잘못된 코드 형식입니다. 6자리 숫자, 문자');
     } else {
-      setValidCheckError(true);
+      setErrorText('');
     }
   };
 
+  // 버튼 비활성화
   const disableButton =
-    formattedDate.length === 0 ||
-    inviteCode.length === 0 ||
-    !reg.test(inviteCode);
+    formattedDate.length === 0 || inviteCode.length === 0 || errorText;
 
   // 상대방과 연결하기 버튼
   const handleSubmit = () => {
@@ -66,8 +62,9 @@ const ConnectPartner = () => {
           console.log(res);
           // 메인화면으로 이동 예정
         })
+        // 일치하지 않는 코드
         .catch((err) => {
-          setError(true);
+          setErrorText('존재하지 않는 코드입니다.');
           console.log(err.response.data);
         });
     }
@@ -104,23 +101,16 @@ const ConnectPartner = () => {
             <TextInput
               style={{
                 ...styles.codeInput,
-                borderColor: validCheckError ? '#E53C3C' : '#EDF0F3',
+                borderColor: errorText ? '#E53C3C' : '#EDF0F3',
               }}
               placeholder="숫자, 문자 6자리"
               placeholderTextColor="#909090"
               onChangeText={(code) => setInviteCode(code)}
               value={inviteCode}
-              onBlur={validCheck}
+              onChange={(event) => validCheck(event.nativeEvent.text)}
               keyboardType="name-phone-pad"
             />
-            {validCheckError && (
-              <Text style={styles.errorText}>
-                잘못된 코드 형식입니다. 6자리 숫자, 문자
-              </Text>
-            )}
-            {error && !validCheckError && (
-              <Text style={styles.errorText}>존재하지 않는 코드입니다.</Text>
-            )}
+            {errorText && <Text style={styles.errorText}>{errorText}</Text>}
           </View>
           <View style={styles.firstDateView}>
             <Text style={styles.firstDateText}>우리가 처음 만난 날</Text>
@@ -152,18 +142,18 @@ const ConnectPartner = () => {
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={disableButton}
+            disabled={disableButton as boolean}
             text="연결하기"
             font="bold"
             onPress={handleSubmit}
           />
         </View>
+        <ModalComponent
+          visible={visible}
+          setModalVisible={setModalVisible}
+          code={myCode}
+        />
       </View>
-      <ModalComponent
-        visible={visible}
-        setModalVisible={setModalVisible}
-        code={myCode}
-      />
     </TouchableWithoutFeedback>
   );
 };
