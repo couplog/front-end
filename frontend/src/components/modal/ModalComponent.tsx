@@ -25,7 +25,7 @@ const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
             <Text style={styles.headFont}>나의 초대코드</Text>
             <Text style={styles.subFont}>{code}</Text>
           </View>
-          <View style={styles.buttonView}>
+          <View>
             <ButtonComponent
               disabled={false}
               text="코드 복사하기"
