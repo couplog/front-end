@@ -35,6 +35,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     control,
     getValues,
     setValue,
+    reset,
     clearErrors,
     formState: { errors },
   } = useForm<PhoneVerifyData>({
@@ -91,9 +92,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     });
 
     // 회원가입에서 유저 만료시 다시 리다이렉트 되기 때문에 인증완료시 state 초기화
-    setValue('code', '');
-    setValue('phoneNumber', '');
-    clearErrors();
+    reset();
   };
 
   // 토스트 메세지
