@@ -101,7 +101,10 @@ const ConnectPartner = () => {
         </View>
         <View style={styles.inputView}>
           <TextInput
-            style={styles.input}
+            style={{
+              ...styles.input,
+              borderColor: validCheckError ? '#E53C3C' : '#EDF0F3',
+            }}
             placeholder="숫자, 문자 6자리"
             onChangeText={(code) => setInviteCode(code)}
             value={inviteCode}
