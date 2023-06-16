@@ -189,6 +189,8 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   errorText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 12,
     color: '#E53C3C',
     marginTop: 2,
   },

@@ -89,73 +89,77 @@ const Login = ({ navigation }: Props) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.rootContainer}>
-        <View style={styles.logoView}>
-          <Text style={styles.logo}>Date Plan</Text>
-        </View>
-        <View style={styles.inputView}>
-          <Text style={styles.label}>전화번호</Text>
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-              minLength: 11,
-            }}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="전화번호를 입력해주세요"
-                onChangeText={onChange}
-                value={value}
-                keyboardType="phone-pad"
-              />
-            )}
-            name="phone"
-          />
-          <Text style={styles.label}>비밀번호</Text>
-          <View style={styles.passwordView}>
+      <View style={{ flex: 1, marginLeft: 25, marginRight: 25 }}>
+        <SafeAreaView style={styles.rootContainer}>
+          <View style={styles.logoView}>
+            <Text style={styles.logo}>Date Plan</Text>
+          </View>
+          <View style={styles.inputView}>
+            <Text style={styles.label}>전화번호</Text>
             <Controller
               control={control}
               rules={{
                 required: true,
+                minLength: 11,
               }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
                   style={styles.input}
-                  placeholder="비밀번호를 입력해주세요"
-                  secureTextEntry={!eyeClick}
+                  placeholder="전화번호를 입력해주세요"
+                  placeholderTextColor="#909090"
                   onChangeText={onChange}
                   value={value}
-                  autoCapitalize="none"
+                  keyboardType="phone-pad"
                 />
               )}
-              name="password"
+              name="phone"
             />
-            <TouchableOpacity
-              activeOpacity={1.0}
-              onPress={() => setEyeClick((prev) => !prev)}
-              style={{
-                ...styles.eyeIconView,
-                bottom: errors.password ? 33 : 0,
-              }}
-            >
-              {eyeClick ? <OnEye /> : <OffEye />}
-            </TouchableOpacity>
+            <Text style={styles.label}>비밀번호</Text>
+            <View style={styles.passwordView}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="비밀번호를 입력해주세요"
+                    placeholderTextColor="#909090"
+                    secureTextEntry={!eyeClick}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                  />
+                )}
+                name="password"
+              />
+              <TouchableOpacity
+                activeOpacity={1.0}
+                onPress={() => setEyeClick((prev) => !prev)}
+                style={{
+                  ...styles.eyeIconView,
+                  bottom: errors.password ? 33 : 0,
+                }}
+              >
+                {eyeClick ? <OnEye /> : <OffEye />}
+              </TouchableOpacity>
+            </View>
+            <View style={styles.checkboxView}>
+              <Checkbox
+                checked={checked}
+                onPress={() => setChecked(!checked)}
+                label="자동 로그인"
+              />
+            </View>
+            {error && (
+              <Text style={styles.errorText}>
+                유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
+                내용을 다시 확인해주세요.
+              </Text>
+            )}
           </View>
-          <View style={styles.checkboxView}>
-            <Checkbox
-              checked={checked}
-              onPress={() => setChecked(!checked)}
-              label="자동 로그인"
-            />
-          </View>
-          {error && (
-            <Text style={styles.errorText}>
-              유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
-              내용을 다시 확인해주세요.
-            </Text>
-          )}
-        </View>
+        </SafeAreaView>
         <View style={styles.signupView}>
           <Text style={styles.signupText} onPress={handleNavigation}>
             회원가입하기
@@ -169,7 +173,7 @@ const Login = ({ navigation }: Props) => {
             onPress={handleSubmit(handleComplete)}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -179,19 +183,16 @@ export default Login;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    marginLeft: 25,
-    marginRight: 25,
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   logoView: {
     height: 140,
+    alignItems: 'center',
   },
   logo: {
     fontFamily: 'Pretendard-Regular',
     color: '#000000',
     fontSize: 30,
-    paddingTop: 76,
+    paddingTop: 96,
   },
   errorText: {
     fontFamily: 'Pretendard-Regular',
@@ -203,13 +204,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     justifyContent: 'center',
-    marginTop: 32,
-    marginBottom: 150,
+    marginTop: 64,
   },
   label: {
     color: '#000000',
     fontFamily: 'Pretendard-Regular',
-    fontSize: 16,
+    fontSize: 14,
     marginTop: 32,
     marginBottom: 5,
   },
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: '#EDF0F3',
     height: 40,
     borderRadius: 4,
     paddingLeft: 12,
@@ -232,9 +232,9 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 30,
   },
-  signupView: {},
+  signupView: { alignItems: 'center', marginBottom: 23 },
   signupText: {
     color: '#909090',
     textDecorationLine: 'underline',
@@ -244,6 +244,6 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     width: '100%',
-    marginBottom: 40,
+    marginBottom: 46,
   },
 });

@@ -29,7 +29,7 @@ const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
             <ButtonComponent
               disabled={false}
               text="코드 복사하기"
-              font="bold"
+              font="regular"
               onPress={() => Clipboard.setString(code)}
             />
           </View>
