@@ -102,10 +102,11 @@ const ConnectPartner = () => {
         <View style={styles.inputView}>
           <TextInput
             style={{
-              ...styles.input,
+              ...styles.codeInput,
               borderColor: validCheckError ? '#E53C3C' : '#EDF0F3',
             }}
             placeholder="숫자, 문자 6자리"
+            placeholderTextColor="#909090"
             onChangeText={(code) => setInviteCode(code)}
             value={inviteCode}
             onBlur={validCheck}
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 5,
   },
-  input: {
+  codeInput: {
     width: '100%',
     backgroundColor: 'white',
     borderWidth: 1,
