@@ -39,6 +39,15 @@ const Onboarding = ({ navigation }: Props) => {
             onPress={() => navigation.navigate('ConnectPartnerScreen')}
           />
         </View>
+        <View style={{ marginTop: 15 }}>
+          {/* 상대방과 연결 페이지 확인을 위해 임시 구현 */}
+          <ButtonComponent
+            text="메인 페이지 (임시 구현)"
+            font="bold"
+            disabled={false}
+            onPress={() => navigation.navigate('MainScreen')}
+          />
+        </View>
       </View>
     </View>
   );
