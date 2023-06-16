@@ -94,61 +94,57 @@ const ConnectPartner = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.rootContainer}>
-        <View style={styles.headTextView}>
-          <Text style={styles.headText}>연결할 상대방의</Text>
-          <Text style={styles.headText}>초대 코드를 입력해주세요</Text>
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={{
-              ...styles.codeInput,
-              borderColor: validCheckError ? '#E53C3C' : '#EDF0F3',
-            }}
-            placeholder="숫자, 문자 6자리"
-            placeholderTextColor="#909090"
-            onChangeText={(code) => setInviteCode(code)}
-            value={inviteCode}
-            onBlur={validCheck}
-            keyboardType="name-phone-pad"
-          />
-          {validCheckError && (
-            <Text style={styles.errorText}>
-              잘못된 코드 형식입니다. 6자리 숫자, 문자
-            </Text>
-          )}
-          {error && !validCheckError && (
-            <Text style={styles.errorText}>존재하지 않는 코드입니다.</Text>
-          )}
-        </View>
-        <View style={styles.firstDateView}>
-          <Text style={styles.firstDateText}>우리가 처음 만난 날</Text>
-          <TextInput
-            onPressIn={() => setOpen(true)}
-            value={date ? formattedDate : undefined}
-            style={styles.dateInput}
-            editable={false}
-            placeholder="YYYY-MM-DD"
-            placeholderTextColor="#909090"
-          />
-          <DatePicker
-            modal
-            open={open}
-            mode="date"
-            date={date || new Date()}
-            locale="ko"
-            onConfirm={(date) => handleFirstDate(date)}
-            onCancel={() => {
-              setOpen(false);
-            }}
-          />
-        </View>
-
-        <ModalComponent
-          visible={visible}
-          setModalVisible={setModalVisible}
-          code={myCode}
-        />
+      <View style={{ flex: 1, marginLeft: 25, marginRight: 25 }}>
+        <SafeAreaView style={styles.rootContainer}>
+          <View style={styles.headTextView}>
+            <Text style={styles.headText}>연결할 상대방의</Text>
+            <Text style={styles.headText}>초대 코드를 입력해주세요</Text>
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={{
+                ...styles.codeInput,
+                borderColor: validCheckError ? '#E53C3C' : '#EDF0F3',
+              }}
+              placeholder="숫자, 문자 6자리"
+              placeholderTextColor="#909090"
+              onChangeText={(code) => setInviteCode(code)}
+              value={inviteCode}
+              onBlur={validCheck}
+              keyboardType="name-phone-pad"
+            />
+            {validCheckError && (
+              <Text style={styles.errorText}>
+                잘못된 코드 형식입니다. 6자리 숫자, 문자
+              </Text>
+            )}
+            {error && !validCheckError && (
+              <Text style={styles.errorText}>존재하지 않는 코드입니다.</Text>
+            )}
+          </View>
+          <View style={styles.firstDateView}>
+            <Text style={styles.firstDateText}>우리가 처음 만난 날</Text>
+            <TextInput
+              onPressIn={() => setOpen(true)}
+              value={date ? formattedDate : undefined}
+              style={styles.dateInput}
+              editable={false}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#909090"
+            />
+            <DatePicker
+              modal
+              open={open}
+              mode="date"
+              date={date || new Date()}
+              locale="ko"
+              onConfirm={(date) => handleFirstDate(date)}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+          </View>
+        </SafeAreaView>
         <View style={styles.checkCodeView}>
           <Text style={styles.checkCodeFont} onPress={handleCheckCode}>
             나의 초대코드 확인하기
@@ -162,7 +158,12 @@ const ConnectPartner = () => {
             onPress={handleSubmit}
           />
         </View>
-      </SafeAreaView>
+      </View>
+      <ModalComponent
+        visible={visible}
+        setModalVisible={setModalVisible}
+        code={myCode}
+      />
     </TouchableWithoutFeedback>
   );
 };
@@ -172,12 +173,10 @@ export default ConnectPartner;
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    marginLeft: 25,
-    marginRight: 25,
-    justifyContent: 'space-between',
   },
   headTextView: {
-    marginTop: 68,
+    marginTop: 30,
+    marginBottom: 30,
   },
   headText: {
     fontFamily: 'Pretendard-Medium',
@@ -188,16 +187,7 @@ const styles = StyleSheet.create({
   },
   inputView: {
     width: '100%',
-    justifyContent: 'center',
-    marginTop: 32,
-    marginBottom: 32,
-  },
-  label: {
-    color: '#000000',
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 16,
-    marginTop: 32,
-    marginBottom: 5,
+    marginBottom: 30,
   },
   codeInput: {
     width: '100%',
@@ -205,7 +195,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EDF0F3',
     height: 40,
-    borderRadius: 4,
+    borderRadius: 8,
     paddingLeft: 12,
   },
   errorText: {
@@ -217,7 +207,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 32,
-    marginBottom: 400,
   },
   firstDateText: {
     color: '#000000',
@@ -231,18 +220,13 @@ const styles = StyleSheet.create({
     borderColor: '#EDF0F3',
     borderRadius: 8,
     padding: 15,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
     textAlign: 'center',
   },
-  checkCodeView: {},
+  checkCodeView: { alignItems: 'center', marginBottom: 25 },
   checkCodeFont: {
-    textAlign: 'center',
-    fontFamily: 'Pretendard-Regular',
     color: '#000000',
+    fontFamily: 'Pretendard-Medium',
     textDecorationLine: 'underline',
-    fontSize: 14,
-    marginBottom: 23,
   },
   buttonView: {
     width: '100%',
