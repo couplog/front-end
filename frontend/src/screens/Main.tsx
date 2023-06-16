@@ -1,5 +1,6 @@
 import {
   ImageBackground,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -23,7 +24,12 @@ const Main = () => {
         <SafeAreaView style={styles.container}>
           <View style={{ marginLeft: 25, marginRight: 25 }}>
             {/* Header UI */}
-            <View style={styles.headerView}>
+            <View
+              style={{
+                ...styles.headerView,
+                marginTop: Platform.OS === 'android' ? 20 : 5,
+              }}
+            >
               <View style={styles.logoBox}>
                 <Text style={styles.logoText}>로고</Text>
               </View>
@@ -90,7 +96,6 @@ const styles = StyleSheet.create({
   headerView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 5,
   },
   iconFlex: {
     flexDirection: 'row',
