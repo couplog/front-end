@@ -48,6 +48,7 @@ const ConnectPartner = () => {
     }
   };
 
+  // 상대방과 연결하기 버튼
   const handleSubmit = () => {
     const userFormData = {
       connectionCode: inviteCode,
@@ -58,6 +59,7 @@ const ConnectPartner = () => {
       console.log(
         `req: {connectCode : ${inviteCode}, firstDate: ${formattedDate}}`
       );
+      // 상대방과 연결하기 API
       handlePostingCode(memberId, userFormData)
         .then((res) => {
           console.log(res);
@@ -70,6 +72,7 @@ const ConnectPartner = () => {
     }
   };
 
+  // 처음 만난 날 설정 함수
   const handleFirstDate = (date: Date) => {
     setOpen(false);
     setDate(date);
@@ -77,6 +80,7 @@ const ConnectPartner = () => {
     setFormattedDate(formattedDate);
   };
 
+  // 본인 코드 확인 함수
   const handleCheckCode = async () => {
     console.log(userInfo);
     if (memberId !== null) {

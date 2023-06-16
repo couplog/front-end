@@ -46,6 +46,7 @@ const Login = ({ navigation }: Props) => {
   const disableButton =
     watch('phone').length < 11 || !watch('phone') || !watch('password');
 
+  // 로그인 버튼
   const handleComplete = async (data: LoginFormData) => {
     try {
       // 로그인 API 호출
@@ -81,6 +82,7 @@ const Login = ({ navigation }: Props) => {
     }
   };
 
+  // 휴대폰 인증 화면으로 이동
   const handleNavigation = () => {
     navigation.navigate('RegisterPhoneScreen');
   };
