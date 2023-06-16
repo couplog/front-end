@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   signupText: {
     color: '#909090',
     textDecorationLine: 'underline',
+    fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     marginBottom: 23,
   },

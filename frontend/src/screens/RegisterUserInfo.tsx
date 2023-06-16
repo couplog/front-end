@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     borderColor: '#EDF0F3',
     borderRadius: 8,
     padding: 15,
+    fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     marginTop: 15,
   },
