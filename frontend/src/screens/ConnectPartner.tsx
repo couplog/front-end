@@ -128,7 +128,7 @@ const ConnectPartner = () => {
             style={styles.dateInput}
             editable={false}
             placeholder="YYYY-MM-DD"
-            placeholderTextColor="#000000"
+            placeholderTextColor="#909090"
           />
           <DatePicker
             modal
