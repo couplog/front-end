@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import DatePicker from 'react-native-date-picker';
 import ButtonComponent from '../components/design/ButtonComponent';
@@ -24,12 +24,10 @@ const ConnectPartner = () => {
   const [inviteCode, setInviteCode] = useState('');
   const [validCheckError, setValidCheckError] = useState(false);
   const [error, setError] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const [date, setDate] = useState<Date | ''>('');
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [myCode, setMyCode] = useState('');
-  const todayDate = getFormattedDate(new Date());
   const userInfo = useRecoilValue(userState);
   const { memberId } = userInfo;
 
@@ -38,15 +36,18 @@ const ConnectPartner = () => {
     if (reg.test(inviteCode)) {
       setValidCheckError(false);
       setError(false);
-      setDisabled(false);
     } else if (inviteCode.length === 0) {
       setValidCheckError(false);
       setError(false);
     } else {
       setValidCheckError(true);
-      setDisabled(true);
     }
   };
+
+  const disableButton =
+    formattedDate.length === 0 ||
+    inviteCode.length === 0 ||
+    !reg.test(inviteCode);
 
   // 상대방과 연결하기 버튼
   const handleSubmit = () => {
@@ -91,12 +92,6 @@ const ConnectPartner = () => {
     setModalVisible(true);
   };
 
-  // 만난날이 오늘인 사람을 위한 세팅
-  useEffect(() => {
-    const formattedDate = getFormattedDate(new Date());
-    setFormattedDate(formattedDate);
-  }, []);
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.rootContainer}>
@@ -129,7 +124,7 @@ const ConnectPartner = () => {
             value={date ? formattedDate : undefined}
             style={styles.dateInput}
             editable={false}
-            placeholder={todayDate}
+            placeholder="YYYY-MM-DD"
             placeholderTextColor="#000000"
           />
           <DatePicker
@@ -157,7 +152,7 @@ const ConnectPartner = () => {
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={disabled}
+            disabled={disableButton}
             text="연결하기"
             font="bold"
             onPress={handleSubmit}
