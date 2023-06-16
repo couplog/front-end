@@ -76,7 +76,7 @@ const Login = ({ navigation }: Props) => {
       connection
         ? navigation.navigate('OnboardingScreen')
         : navigation.navigate('ConnectPartnerScreen');
-    } catch (err: any) {
+    } catch (err) {
       setError(true);
       console.log(err);
     }

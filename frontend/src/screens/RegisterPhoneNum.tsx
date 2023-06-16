@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   numberInput: {
     width: '75%',
     color: '#000000',
-    height: 44,
+    height: 46,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
