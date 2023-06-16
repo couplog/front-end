@@ -12,13 +12,11 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { useSetRecoilState } from 'recoil';
 import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import TimerComponent from '../components/register/TimerComponent';
-import { userState } from '../state/atoms/userAtom';
 import { phoneFields } from '../utils/register/registerFormText';
 import {
   handleCheckedCode,
@@ -30,7 +28,6 @@ import { toastConfig } from '../components/design/ToastComponent';
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
 const RegisterPhoneNum = ({ navigation }: Props) => {
-  const setUserInfo = useSetRecoilState(userState);
   const [resetTimer, setResetTimer] = useState(false);
   const [request, setRequest] = useState(false);
 
@@ -38,6 +35,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     control,
     getValues,
     setValue,
+    reset,
     clearErrors,
     formState: { errors },
   } = useForm<PhoneVerifyData>({
@@ -54,7 +52,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     Object.keys(errors).length > 0 ||
     Object.values(getValues()).some((value) => value === '');
 
-  // 요청 & 재전송 버튼 기능
+  // 인증번호 요청 & 재전송 버튼 기능
   const handleRequest = (phone: string) => {
     // 휴대폰 인증 번호 발송
     handleVerify(phone)
@@ -71,21 +69,9 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       })
       .catch((error) => {
         // 요청이 실패한 경우 처리할 로직
-        const errorMessage = `${error.response?.data?.message} 번호를 확인해주세요.`;
+        const errorMessage = error.response?.data?.message;
         Alert.alert(errorMessage);
       });
-  };
-
-  // 인증 성공시 기능
-  const handleCodeSuccess = () => {
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      phone: getValues().phoneNumber,
-    }));
-    setRequest(false); // timer clear을 위해
-    navigation.navigate('RegisterInfoScreen', {
-      phone: getValues().phoneNumber,
-    });
   };
 
   // 인증 완료 버튼 기능
@@ -96,6 +82,17 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
     } catch (error) {
       Alert.alert('인증 번호가 일치하지 않습니다. 다시 시도해주세요.');
     }
+  };
+
+  // 인증 성공시 기능
+  const handleCodeSuccess = () => {
+    setRequest(false); // timer clear을 위해
+    navigation.navigate('RegisterInfoScreen', {
+      phone: getValues().phoneNumber,
+    });
+
+    // 회원가입에서 유저 만료시 다시 리다이렉트 되기 때문에 인증완료시 state 초기화
+    reset();
   };
 
   // 토스트 메세지
@@ -197,7 +194,9 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
           </View>
           <Text style={styles.infoText}>
             ∙ 3분 이내로 인증번호를 입력해 주세요.{'\n'}∙ 인증번호가 전송되지
-            않을경우 &quot;재전송&quot; 버튼을 눌러주세요.
+            않을경우 &quot;재전송&quot; 버튼을 눌러주세요. {'\n'}∙ 1일 최대 인증
+            시도 횟수는 5회로 제한되며, 초과시 인증 번호가{'\n'} 발송되지
+            않습니다.
           </Text>
         </SafeAreaView>
         <Toast config={toastConfig} />

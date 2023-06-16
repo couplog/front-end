@@ -40,6 +40,7 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
     control,
     getValues,
     setError,
+    reset,
     formState: { errors },
   } = useForm<SignupFormData>({ mode: 'onChange' });
 
@@ -75,7 +76,7 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
     };
 
     handleSignup(userFormData)
-      .then(() => navigation.navigate('ConnectPartnerScreen'))
+      .then(() => handleCodeSuccess())
       .catch((err) =>
         err.response.data.code === 'C015'
           ? codeVerifyOver()
@@ -83,12 +84,19 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
       );
   };
 
+  // 가입 성공
+  const handleCodeSuccess = () => {
+    navigation.navigate('LoginScreen');
+    reset();
+  };
+
   // 휴대폰 인증시간 만료
   const codeVerifyOver = () => {
     Alert.alert(
-      `인증이 만료되었습니다. ${'\n'} 다시 휴대폰 인증을 진행해주세요.`
+      `인증이 만료되었습니다. ${'\n'} 휴대폰 인증을 다시 진행해주세요.`
     );
-    navigation.navigate('OnboardingScreen');
+    navigation.navigate('RegisterPhoneScreen');
+    reset();
   };
 
   return (
