@@ -77,6 +77,7 @@ const Login = ({ navigation }: Props) => {
         : navigation.navigate('ConnectPartnerScreen');
     } catch (err: any) {
       setError(true);
+      console.log(err);
     }
   };
 

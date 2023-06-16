@@ -7,11 +7,12 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { ModalProps } from '../../types/components/modalType';
 import ButtonComponent from '../design/ButtonComponent';
 import Close from '../../assets/images/close.svg';
 
-const ModalComponent = ({ visible, setModalVisible }: ModalProps) => {
+const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
   return (
     <Modal animationType="slide" transparent visible={visible}>
       <View style={styles.modalBackground}>
@@ -25,14 +26,14 @@ const ModalComponent = ({ visible, setModalVisible }: ModalProps) => {
           {/* 모달창 디자인에따라 컴포넌트 구조 변경 예정 */}
           <View style={styles.textView}>
             <Text style={styles.haedFont}>나의 초대코드</Text>
-            <Text style={styles.subFont}>ABC123</Text>
+            <Text style={styles.subFont}>{code}</Text>
           </View>
           <View style={styles.buttonView}>
             <ButtonComponent
               disabled={false}
               text="코드 복사하기"
               font="bold"
-              onPress={() => console.log('copy')}
+              onPress={() => Clipboard.setString(code)}
             />
           </View>
         </View>

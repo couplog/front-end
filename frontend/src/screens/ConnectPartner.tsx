@@ -7,11 +7,17 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import DatePicker from 'react-native-date-picker';
 import ButtonComponent from '../components/design/ButtonComponent';
 import ModalComponent from '../components/modal/ModalComponent';
 import { getFormattedDate } from '../utils/formattedDate';
+import { userState } from '../state/atoms/userAtom';
+import {
+  handleGettingCode,
+  handlePostingCode,
+} from '../api/connectCode/connectCode';
 
 const ConnectPartner = () => {
   const [visible, setModalVisible] = useState(false);
@@ -21,13 +27,18 @@ const ConnectPartner = () => {
   const [date, setDate] = useState<Date | ''>('');
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [open, setOpen] = useState(false);
+  const [myCode, setMyCode] = useState('');
   const todayDate = getFormattedDate(new Date());
+  const userInfo = useRecoilValue(userState);
+  const { memberId } = userInfo;
 
   const reg = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
   const validCheck = () => {
     if (reg.test(inviteCode)) {
       setError(false);
       setDisabled(false);
+    } else if (inviteCode.length === 0) {
+      setError(false);
     } else {
       setError(true);
       setDisabled(true);
@@ -35,7 +46,24 @@ const ConnectPartner = () => {
   };
 
   const handleSubmit = () => {
-    console.log('submit');
+    const userFormData = {
+      connectionCode: inviteCode,
+      firstDate: formattedDate,
+    };
+
+    if (memberId !== null) {
+      console.log(
+        `req: {connectCode : ${inviteCode}, firstDate: ${formattedDate}}`
+      );
+      handlePostingCode(memberId, userFormData)
+        .then((res) => {
+          console.log(res);
+          // 메인화면으로 이동 예정
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    }
   };
 
   const handleFirstDate = (date: Date) => {
@@ -44,6 +72,22 @@ const ConnectPartner = () => {
     const formattedDate = getFormattedDate(date);
     setFormattedDate(formattedDate);
   };
+
+  const handleCheckCode = async () => {
+    console.log(userInfo);
+    if (memberId !== null) {
+      const res = await handleGettingCode(memberId);
+      setMyCode(res.data.data.connectionCode);
+    }
+
+    setModalVisible(true);
+  };
+
+  // 만난날이 오늘인 사람을 위한 세팅
+  useEffect(() => {
+    const formattedDate = getFormattedDate(new Date());
+    setFormattedDate(formattedDate);
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -90,12 +134,13 @@ const ConnectPartner = () => {
           />
         </View>
 
-        <ModalComponent visible={visible} setModalVisible={setModalVisible} />
+        <ModalComponent
+          visible={visible}
+          setModalVisible={setModalVisible}
+          code={myCode}
+        />
         <View style={styles.checkCodeView}>
-          <Text
-            style={styles.checkCodeFont}
-            onPress={() => setModalVisible(true)}
-          >
+          <Text style={styles.checkCodeFont} onPress={handleCheckCode}>
             나의 초대코드 확인하기
           </Text>
         </View>
@@ -182,6 +227,7 @@ const styles = StyleSheet.create({
   checkCodeView: {},
   checkCodeFont: {
     textAlign: 'center',
+    fontFamily: 'Pretendard-Medium',
     color: '#000000',
     textDecorationLine: 'underline',
     fontSize: 14,
