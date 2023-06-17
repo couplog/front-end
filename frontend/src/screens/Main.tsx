@@ -33,16 +33,16 @@ const Main = () => {
           ...prevCoupleInfo,
           ...updatedCoupleInfo,
         }));
+
+        fetchPartnerProfile(updatedCoupleInfo.partnerId);
       } catch (error) {
         console.log(error);
       }
     };
 
-    const fetchPartnerProfile = async () => {
+    const fetchPartnerProfile = async (partnerId: number) => {
       try {
-        const partnerProfileResponse = await handlePartnerProfile(
-          coupleInfo.partnerId
-        );
+        const partnerProfileResponse = await handlePartnerProfile(partnerId);
         const partnerImage = partnerProfileResponse.data.data.profileImageURL;
 
         setCoupleInfo((prevCoupleInfo) => ({
@@ -55,8 +55,6 @@ const Main = () => {
     };
 
     fetchCoupleInfo();
-    fetchPartnerProfile();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -32,16 +32,20 @@ const Profile = ({ meetDate, partnerImageUrl }: ProfileComponentProps) => {
         </View>
         <View style={styles.profileView}>
           {/* 본인 */}
-          <Image
-            source={{ uri: userInfo.profileImageUrl }}
-            style={{ width: 50, height: 50 }}
-          />
+          {userInfo.profileImageUrl !== '' && (
+            <Image
+              source={{ uri: userInfo.profileImageUrl }}
+              style={{ width: 50, height: 50 }}
+            />
+          )}
           <Heart />
           {/* 상대방  */}
-          <Image
-            source={{ uri: partnerImageUrl }}
-            style={{ width: 50, height: 50 }}
-          />
+          {partnerImageUrl !== '' && (
+            <Image
+              source={{ uri: partnerImageUrl }}
+              style={{ width: 50, height: 50 }}
+            />
+          )}
         </View>
       </View>
     </>
@@ -55,7 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 55,
+    marginTop: 25,
     marginBottom: 20,
   },
   profileView: {
