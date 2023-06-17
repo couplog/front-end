@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { Controller, useForm } from 'react-hook-form';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
@@ -29,22 +28,8 @@ const Login = ({ navigation }: Props) => {
   const [eyeClick, setEyeClick] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [error, setError] = useState(false);
-
-  const {
-    control,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      phone: '',
-      password: '',
-    },
-  });
-
-  // 가입하기 버튼 충족조건
-  const disableButton =
-    watch('phone').length < 11 || !watch('phone') || !watch('password');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
 
   // 로그인 버튼
   const handleComplete = async (data: LoginFormData) => {
@@ -59,19 +44,7 @@ const Login = ({ navigation }: Props) => {
       await storeData('refreshToken', refreshToken);
 
       // 현재 로그인 회원 정보 조회 및 저장
-      const memberRes = await handleMemberInfo();
-      const memberInfo = memberRes?.data.data;
-      const updateUserInfo = {
-        ...userInfo,
-        memberId: memberInfo.memberId,
-        name: memberInfo.name,
-        nickname: memberInfo.nickname,
-        phone: memberInfo.phone,
-        birth: memberInfo.birth,
-        gender: memberInfo.gender,
-        profileImageUrl: memberInfo.profileImageURL,
-      };
-      setUserInfo(updateUserInfo);
+      handleUserInfo();
 
       connection
         ? navigation.navigate('OnboardingScreen')
@@ -82,65 +55,59 @@ const Login = ({ navigation }: Props) => {
     }
   };
 
-  // 휴대폰 인증 화면으로 이동
-  const handleNavigation = () => {
-    navigation.navigate('RegisterPhoneScreen');
+  // 로그인 성공 시, 유저 정보 저장
+  const handleUserInfo = async () => {
+    const memberRes = await handleMemberInfo();
+    const memberInfo = memberRes?.data.data;
+    const updateUserInfo = {
+      ...userInfo,
+      memberId: memberInfo.memberId,
+      name: memberInfo.name,
+      nickname: memberInfo.nickname,
+      phone: memberInfo.phone,
+      birth: memberInfo.birth,
+      gender: memberInfo.gender,
+      profileImageUrl: memberInfo.profileImageURL,
+    };
+    setUserInfo(updateUserInfo);
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1, marginLeft: 25, marginRight: 25 }}>
+      <View style={styles.marginContainer}>
         <SafeAreaView style={styles.rootContainer}>
+          {/* 헤더 UI  */}
+          {/* 임시 */}
           <View style={styles.logoView}>
-            <Text style={styles.logo}>Date Plan</Text>
+            <Text style={styles.logo}>로고</Text>
           </View>
+
+          {/* Input Field UI */}
           <View style={styles.inputView}>
             <Text style={styles.label}>전화번호</Text>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
-                minLength: 11,
-              }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="전화번호를 입력해주세요"
-                  placeholderTextColor="#909090"
-                  onChangeText={onChange}
-                  value={value}
-                  keyboardType="phone-pad"
-                />
-              )}
-              name="phone"
+            <TextInput
+              style={styles.inputBox}
+              placeholder="전화번호를 입력해주세요"
+              placeholderTextColor="#909090"
+              onChangeText={setPhone}
+              value={phone}
+              keyboardType="phone-pad"
             />
             <Text style={styles.label}>비밀번호</Text>
             <View style={styles.passwordView}>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <TextInput
-                    style={styles.input}
-                    placeholder="비밀번호를 입력해주세요"
-                    placeholderTextColor="#909090"
-                    secureTextEntry={!eyeClick}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                  />
-                )}
-                name="password"
+              <TextInput
+                style={styles.inputBox}
+                placeholder="비밀번호를 입력해주세요"
+                placeholderTextColor="#909090"
+                secureTextEntry={!eyeClick}
+                onChangeText={setPassword}
+                value={password}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 activeOpacity={1.0}
                 onPress={() => setEyeClick((prev) => !prev)}
-                style={{
-                  ...styles.eyeIconView,
-                  bottom: errors.password ? 33 : 0,
-                }}
+                style={styles.eyeIconView}
               >
                 {eyeClick ? <OnEye /> : <OffEye />}
               </TouchableOpacity>
@@ -160,17 +127,22 @@ const Login = ({ navigation }: Props) => {
             )}
           </View>
         </SafeAreaView>
-        <View style={styles.signupView}>
-          <Text style={styles.signupText} onPress={handleNavigation}>
+
+        {/* Footer UI */}
+        <View style={{ alignItems: 'center' }}>
+          <Text
+            style={styles.signupText}
+            onPress={() => navigation.navigate('RegisterPhoneScreen')}
+          >
             회원가입하기
           </Text>
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
-            disabled={disableButton as boolean}
+            disabled={phone === '' || password === ''}
             text="로그인"
             font="bold"
-            onPress={handleSubmit(handleComplete)}
+            onPress={() => handleComplete({ password, phone })}
           />
         </View>
       </View>
@@ -181,24 +153,34 @@ const Login = ({ navigation }: Props) => {
 export default Login;
 
 const styles = StyleSheet.create({
+  marginContainer: {
+    flex: 1,
+    marginLeft: 25,
+    marginRight: 25,
+  },
   rootContainer: {
     flex: 1,
   },
   logoView: {
-    height: 140,
+    width: 200,
+    height: 100,
+    justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#E7E7E7',
+    marginTop: 80,
   },
   logo: {
-    fontFamily: 'Pretendard-Regular',
-    color: '#000000',
+    fontFamily: 'Pretendard-Bold',
+    color: '#909090',
     fontSize: 30,
-    paddingTop: 96,
   },
   errorText: {
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
+    fontSize: 12,
+    lineHeight: 15,
     color: '#E53C3C',
-    marginTop: 20,
+    marginTop: 15,
+    fontFamily: 'Pretendard-Regular',
   },
   inputView: {
     width: '100%',
@@ -209,17 +191,16 @@ const styles = StyleSheet.create({
   label: {
     color: '#000000',
     fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
     marginTop: 32,
     marginBottom: 5,
   },
-  input: {
+  inputBox: {
     width: '100%',
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#EDF0F3',
-    height: 40,
-    borderRadius: 4,
+    height: 45,
+    borderRadius: 8,
     paddingLeft: 12,
   },
   passwordView: {
@@ -232,18 +213,16 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 30,
+    marginTop: 10,
   },
-  signupView: { alignItems: 'center', marginBottom: 23 },
   signupText: {
     color: '#909090',
     textDecorationLine: 'underline',
     fontFamily: 'Pretendard-Regular',
-    fontSize: 14,
-    marginBottom: 23,
+    marginBottom: 25,
   },
   buttonView: {
     width: '100%',
-    marginBottom: 46,
+    marginBottom: 50,
   },
 });
