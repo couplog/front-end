@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dateText: {
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Regular',
   },
   checkCodeView: { alignItems: 'center', marginBottom: 25 },
   checkCodeFont: {

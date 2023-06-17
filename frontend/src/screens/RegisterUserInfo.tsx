@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: '#000000',
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Regular',
   },
 });
 

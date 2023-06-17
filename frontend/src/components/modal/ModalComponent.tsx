@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headFont: {
-    fontFamily: 'Pretendard',
+    fontFamily: 'Pretendard-Medium',
     fontWeight: '500',
     fontSize: 18,
     color: '#000000',
