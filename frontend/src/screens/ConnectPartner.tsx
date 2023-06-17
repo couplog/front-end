@@ -65,7 +65,7 @@ const ConnectPartner = ({ navigation }: Props) => {
       handlePostingCode(memberId, userFormData)
         .then((res) => {
           console.log(res);
-          // 메인화면으로 이동 예정
+          navigation.navigate('MainScreen');
         })
         // 일치하지 않는 코드
         .catch((err) => {
