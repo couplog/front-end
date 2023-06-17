@@ -14,4 +14,5 @@ export interface CoupleProps {
   coupleId: number | null;
   firstDate: string;
   partnerId: number | null;
+  partnerImageUrl: string;
 }

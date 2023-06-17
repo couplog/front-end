@@ -8,5 +8,6 @@ export const coupleState = atom<CoupleProps>({
     coupleId: null,
     firstDate: '',
     partnerId: null,
+    partnerImageUrl: '',
   },
 });
