@@ -3,7 +3,7 @@ import { Text, View, Modal, StyleSheet, Dimensions } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ModalProps } from '../../types/components/modalType';
 import ButtonComponent from '../design/ButtonComponent';
-import Close from '../../assets/images/close.svg';
+import Close from '../../assets/images/common/close.svg';
 
 const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
   return (
