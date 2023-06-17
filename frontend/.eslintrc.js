@@ -1,12 +1,22 @@
 module.exports = {
   root: true,
-  extends: ['eslint:recommended', '@react-native-community', 'airbnb', 'airbnb/hooks', 'plugin:prettier/recommended'],
+  extends: [
+    'eslint:recommended',
+    '@react-native-community',
+    'airbnb',
+    'airbnb/hooks',
+    'plugin:prettier/recommended',
+  ],
   rules: {
+    'no-unused-expressions': 'off',
     'prettier/prettier': 0,
     'react/jsx-filename-extension': ['warn', { extensions: ['.tsx', '.jsx'] }],
     '@typescript-eslint/no-unused-vars': ['warn'],
     'no-unused-vars': 'off',
-    'react/function-component-definition': [2, { namedComponents: ['arrow-function', 'function-declaration'] }],
+    'react/function-component-definition': [
+      2,
+      { namedComponents: ['arrow-function', 'function-declaration'] },
+    ],
     'no-use-before-define': 'off', // style err fixed
     'import/extensions': [
       'error',
@@ -26,6 +36,11 @@ module.exports = {
     'react/jsx-no-useless-fragment': 'off', // 불필요한 fragment 금지
     'react/require-default-props': 0,
     'no-plusplus': 'off',
+    'react-native/no-inline-styles': 0,
+    'no-nested-ternary': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'no-unneeded-ternary': 'off',
   },
   settings: {
     'import/resolver': {
@@ -33,5 +48,11 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
+    'import/core-modules': [
+      'react-hook-form',
+      'react-native-bouncy-checkbox',
+      '@react-navigation/stack',
+      '@react-native-async-storage/async-storage',
+    ], //import/no-extraneous-dependencies 에러 해결
   },
 };
