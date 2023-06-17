@@ -11,7 +11,6 @@ export const handleLogin = (loginInfo: LoginFormData) => {
 
 export const handleMemberInfo = () => {
   return request({
-    method: 'GET',
     url: '/api/members/me',
   });
 };
