@@ -40,6 +40,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
+    'no-unneeded-ternary': 'off',
   },
   settings: {
     'import/resolver': {
