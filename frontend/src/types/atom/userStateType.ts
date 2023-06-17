@@ -6,6 +6,7 @@ export interface UserProps {
   phone: string;
   birth: string;
   gender: 'male' | 'female' | null;
+  profileImageUrl: string;
 }
 
 // 커플

@@ -10,5 +10,6 @@ export const userState = atom<UserProps>({
     birth: '',
     gender: null,
     memberId: null,
+    profileImageUrl: '',
   },
 });
