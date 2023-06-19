@@ -13,6 +13,6 @@ export interface SignupFormData {
 
 export interface UserSignupProps extends SignupFormData {
   phone: string;
-  birth: string;
+  birthDay: string;
   gender: 'male' | 'female' | null;
 }

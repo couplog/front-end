@@ -71,7 +71,7 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
       nickname: data.nickname,
       password: data.password,
       phone,
-      birth: formattedDate,
+      birthDay: formattedDate,
       gender: checkedGender,
     };
 
