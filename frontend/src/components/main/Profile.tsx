@@ -26,16 +26,17 @@ const Profile = ({ meetDate, partnerImageUrl }: ProfileComponentProps) => {
   return (
     <>
       <View style={styles.coupleView}>
-        <View style={styles.dayView}>
-          <Text style={styles.weText}>우리가 만난지</Text>
-          <Text style={styles.dayText}>{daysDifference}일 째</Text>
-        </View>
+        {/* 이 부분 디자이너 분들과 상의해보기 & 피그마 디자인처럼 구현 가능한지 리서치 */}
+        <Text style={styles.dayText}>D+{daysDifference}</Text>
         <View style={styles.profileView}>
           {/* 본인 */}
           {userInfo.profileImageUrl !== '' && (
             <Image
               source={{ uri: userInfo.profileImageUrl }}
-              style={{ width: 50, height: 50 }}
+              style={{
+                ...styles.profileImg,
+                transform: [{ rotate: '-10deg' }],
+              }}
             />
           )}
           <Heart />
@@ -43,7 +44,7 @@ const Profile = ({ meetDate, partnerImageUrl }: ProfileComponentProps) => {
           {partnerImageUrl !== '' && (
             <Image
               source={{ uri: partnerImageUrl }}
-              style={{ width: 50, height: 50 }}
+              style={{ ...styles.profileImg, transform: [{ rotate: '10deg' }] }}
             />
           )}
         </View>
@@ -56,21 +57,18 @@ export default Profile;
 
 const styles = StyleSheet.create({
   coupleView: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 25,
-    marginBottom: 20,
+    marginTop: 30,
   },
   profileView: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 15,
   },
-  dayView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 3,
+  profileImg: {
+    width: 120,
+    height: 120,
+    borderRadius: 6,
   },
   weText: {
     fontFamily: 'Pretendard-Regular',
@@ -79,9 +77,10 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   dayText: {
-    fontSize: 24,
+    fontSize: 96,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
-    color: '#000000',
+    color: '#FFFFFF',
+    borderColor: '#FFFFFF',
   },
 });

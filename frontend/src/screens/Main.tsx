@@ -7,6 +7,7 @@ import Header from '../components/main/Header';
 import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
 import { handlePartnerProfile } from '../api/couple/partnerProfile';
+import Weather from '../components/main/Weather';
 
 // - 커플 배경 사진 등록 / 수정 / 삭제 / 조회
 // - 각자 프로필 사진 조회
@@ -59,11 +60,16 @@ const Main = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+    // 임시 배경화면 (추후 API로 가져와야함)
+    <ImageBackground
+      source={require('../assets/images/main/background.png')}
+      style={{ width: '100%', height: '100%' }}
+    >
       <SafeAreaView style={styles.container}>
         <View style={styles.margin}>
           {/* Header UI */}
           <Header />
+          <Weather />
 
           {/* 유저 프로필 & 연애 day UI */}
           {/* 임시 구현(이미지) */}
@@ -71,18 +77,12 @@ const Main = () => {
             meetDate={coupleInfo.firstDate}
             partnerImageUrl={coupleInfo.partnerImageUrl}
           />
-          {/* 임시 배경화면 (추후 API로 가져와야함) */}
-          <ImageBackground
-            source={require('../assets/images/main/background.png')}
-            style={{ width: '100%', height: '80%' }}
-            imageStyle={{ borderRadius: 15 }}
-          />
         </View>
 
         {/* Footer UI */}
         <Footer />
       </SafeAreaView>
-    </View>
+    </ImageBackground>
   );
 };
 
