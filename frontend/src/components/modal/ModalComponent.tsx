@@ -1,16 +1,9 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  Modal,
-  TouchableHighlight,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { Text, View, Modal, StyleSheet, Dimensions } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ModalProps } from '../../types/components/modalType';
 import ButtonComponent from '../design/ButtonComponent';
-import Close from '../../assets/images/close.svg';
+import Close from '../../assets/images/common/close.svg';
 
 const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
   return (
@@ -38,7 +31,9 @@ const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
     </Modal>
   );
 };
+
 export default ModalComponent;
+
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
@@ -50,7 +45,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: '85%',
-    height: '55%',
+    height: '50%',
     justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
     borderRadius: 9,
@@ -69,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headFont: {
-    fontFamily: 'Pretendard',
+    fontFamily: 'Pretendard-Medium',
     fontWeight: '500',
     fontSize: 18,
     color: '#000000',

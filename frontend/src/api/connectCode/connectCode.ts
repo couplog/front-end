@@ -3,7 +3,6 @@ import request from '../base';
 
 export const handleGettingCode = (memberId: number) => {
   return request({
-    method: 'GET',
     url: `/api/members/${memberId}/connect`,
   });
 };

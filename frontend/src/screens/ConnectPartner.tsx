@@ -6,9 +6,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { StackScreenProps } from '@react-navigation/stack';
 import DatePicker from 'react-native-date-picker';
 import ButtonComponent from '../components/design/ButtonComponent';
 import ModalComponent from '../components/modal/ModalComponent';
@@ -18,8 +20,11 @@ import {
   handleGettingCode,
   handlePostingCode,
 } from '../api/connectCode/connectCode';
+import { StackParamList } from '../types/routes/navigationType';
 
-const ConnectPartner = () => {
+type Props = StackScreenProps<StackParamList, 'ConnectPartnerScreen'>;
+
+const ConnectPartner = ({ navigation }: Props) => {
   const [visible, setModalVisible] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
   const [errorText, setErrorText] = useState('');
@@ -60,7 +65,7 @@ const ConnectPartner = () => {
       handlePostingCode(memberId, userFormData)
         .then((res) => {
           console.log(res);
-          // 메인화면으로 이동 예정
+          navigation.navigate('MainScreen');
         })
         // 일치하지 않는 코드
         .catch((err) => {
@@ -108,20 +113,25 @@ const ConnectPartner = () => {
               onChangeText={(code) => setInviteCode(code)}
               value={inviteCode}
               onChange={(event) => validCheck(event.nativeEvent.text)}
-              keyboardType="name-phone-pad"
             />
             {errorText && <Text style={styles.errorText}>{errorText}</Text>}
           </View>
           <View style={styles.firstDateView}>
             <Text style={styles.firstDateText}>우리가 처음 만난 날</Text>
-            <TextInput
-              onPressIn={() => setOpen(true)}
-              value={date ? formattedDate : undefined}
+            <TouchableOpacity
               style={styles.dateInput}
-              editable={false}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#909090"
-            />
+              activeOpacity={1.0}
+              onPress={() => setOpen(true)}
+            >
+              <Text
+                style={{
+                  ...styles.dateText,
+                  color: formattedDate ? '#000000' : '#909090',
+                }}
+              >
+                {formattedDate ? formattedDate : 'YYYY-MM-DD'}
+              </Text>
+            </TouchableOpacity>
             <DatePicker
               modal
               open={open}
@@ -184,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: '#EDF0F3',
-    height: 40,
+    height: 45,
     borderRadius: 8,
     paddingLeft: 12,
   },
@@ -198,7 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 32,
   },
   firstDateText: {
     color: '#000000',
@@ -206,13 +215,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   dateInput: {
-    width: 151,
+    width: '48%',
     height: 32,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
-    padding: 15,
-    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dateText: {
+    fontFamily: 'Pretendard-Regular',
   },
   checkCodeView: { alignItems: 'center', marginBottom: 25 },
   checkCodeFont: {

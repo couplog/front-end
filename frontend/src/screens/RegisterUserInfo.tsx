@@ -175,14 +175,20 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
 
             {/* 생년월일 입력 필드 */}
             <Text style={styles.titleTextMargin}>생년월일</Text>
-            <TextInput
-              onPressIn={() => setOpen(true)}
-              value={date ? formattedDate : undefined}
-              style={styles.textInput}
-              editable={false}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#909090"
-            />
+            <TouchableOpacity
+              activeOpacity={1.0}
+              onPress={() => setOpen(true)}
+              style={styles.datePickBox}
+            >
+              <Text
+                style={{
+                  ...styles.dateText,
+                  color: formattedDate ? '#000000' : '#909090',
+                }}
+              >
+                {formattedDate ? formattedDate : 'YYYY-MM-DD'}
+              </Text>
+            </TouchableOpacity>
             <DatePicker
               modal
               open={open}
@@ -286,6 +292,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     marginTop: 15,
+  },
+  datePickBox: {
+    width: '100%',
+    color: '#000000',
+    height: 46,
+    borderWidth: 1,
+    borderColor: '#EDF0F3',
+    borderRadius: 8,
+    marginTop: 15,
+    fontFamily: 'Pretendard-Regular',
+    justifyContent: 'center',
+    paddingLeft: 15,
+  },
+  dateText: {
+    color: '#000000',
+    fontFamily: 'Pretendard-Regular',
   },
 });
 
