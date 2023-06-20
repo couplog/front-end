@@ -1,34 +1,27 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { BlurView } from '@react-native-community/blur';
+import { StyleSheet, Text, View } from 'react-native';
+import { DayInfo } from './DayInfo';
 import Calendar from '../../assets/images/main/calendar.svg';
+import Image from '../../assets/images/main/image.svg';
 
 const Footer = () => {
   return (
     <View style={styles.footerView}>
-      <View
-        style={{
-          ...styles.dDayBox,
-          backgroundColor: Platform.OS === 'android' ? '#d5d4d463' : undefined,
-        }}
-      >
-        {Platform.OS === 'ios' && (
-          <BlurView
-            blurType="light"
-            style={styles.absolute}
-            blurAmount={5}
-            reducedTransparencyFallbackColor="white"
-          />
-        )}
-        <View style={styles.itemFlex}>
-          {/* 임시 사각 박스 */}
-          <View style={{ width: 60, height: 60, backgroundColor: '#C8C8C8' }} />
-          <View>
-            <Text style={styles.weText}>다음 (기념일)까지</Text>
-            <Text style={styles.dayText}>83일 남았어요</Text>
-          </View>
+      <View style={styles.dDayBox}>
+        <Text style={styles.headText}>다가오는 기념일</Text>
+        <View>
+          {/* 기념일 API 구현되면 적용 */}
+          <DayInfo days="900일" date="2023.08.17" />
+          <DayInfo days="1000일" date="2023.11.25" />
+          <DayInfo days="3주년" date="2024.03.01" />
         </View>
-        <Calendar style={styles.iconCalendar} />
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        {/* 추후 일정 페이지 연결 */}
+        <Calendar />
+        {/* 추후 사진 페이지 연결 */}
+        <Image />
       </View>
     </View>
   );
@@ -40,44 +33,25 @@ const styles = StyleSheet.create({
   footerView: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 120,
+    marginBottom: 20,
+    marginLeft: 25,
+    marginRight: 25,
   },
   dDayBox: {
-    width: 330,
-    height: 85,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderColor: '#D8D8D8',
-    borderWidth: 1,
-    borderRadius: 14,
+    width: 225,
+    height: 135,
+    padding: 15,
+    backgroundColor: '#0000004D',
+    borderColor: '#545454',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    marginBottom: 25,
   },
-  itemFlex: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 15,
-    gap: 10,
-  },
-  absolute: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    borderRadius: 14,
-  },
-  iconCalendar: { marginBottom: 35, marginRight: 10 },
-  weText: {
-    fontFamily: 'Pretendard-Regular',
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  dayText: {
+  headText: {
     fontSize: 20,
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Bold',
     fontWeight: '700',
     color: '#FFFFFF',
+    marginBottom: 3,
   },
 });

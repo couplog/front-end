@@ -24,6 +24,7 @@ import {
 } from '../api/register/verifyPhoneNumber';
 import { PhoneVerifyData } from '../types/register/signupFormType';
 import { toastConfig } from '../components/design/ToastComponent';
+import Back from '../assets/images/register/back.svg';
 
 type Props = StackScreenProps<StackParamList, 'RegisterPhoneScreen'>;
 
@@ -112,6 +113,10 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
           {/* 헤더 UI */}
+          <Back
+            onPress={() => navigation.navigate('LoginScreen')}
+            style={{ marginTop: 30 }}
+          />
           <Text style={styles.headText}>
             회원가입을 위해{'\n'}
             휴대폰 번호를 인증해주세요
@@ -242,7 +247,7 @@ const styles = StyleSheet.create({
     marginRight: 25,
   },
   headText: {
-    marginTop: 70,
+    marginTop: 45,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     lineHeight: 32,
