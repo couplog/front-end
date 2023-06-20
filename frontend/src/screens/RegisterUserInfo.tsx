@@ -71,16 +71,17 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
       nickname: data.nickname,
       password: data.password,
       phone,
-      birth: formattedDate,
+      birthDay: formattedDate,
       gender: checkedGender,
     };
 
     handleSignup(userFormData)
       .then(() => handleCodeSuccess())
-      .catch((err) =>
-        err.response.data.code === 'C015'
-          ? codeVerifyOver()
-          : setError('nickname', { message: err.response.data.message })
+      .catch(
+        (err) => console.log(err.response.data)
+        // err.response.data.code === 'C015'
+        //   ? codeVerifyOver()
+        //   : setError('nickname', { message: err.response.data.message })
       );
   };
 
