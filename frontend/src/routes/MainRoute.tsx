@@ -8,6 +8,7 @@ import Login from '../screens/Login';
 import Onboarding from '../screens/Onboarding';
 import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
+import CheckPlan from '../screens/CheckPlan';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -51,6 +52,11 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.MainScreen}
           component={Main}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={RouteScreens.CheckPlanScreen}
+          component={CheckPlan}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
