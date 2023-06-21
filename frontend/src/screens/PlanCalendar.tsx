@@ -14,9 +14,9 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
 import CheckCalendar from '../components/plan/CheckCalendar';
 
-type Props = StackScreenProps<StackParamList, 'CheckPlanScreen'>;
+type Props = StackScreenProps<StackParamList, 'PlanCalendarScreen'>;
 
-const CheckPlan = ({ navigation }: Props) => {
+const PlanCalendar = ({ navigation }: Props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.marginContainer}>
@@ -28,7 +28,7 @@ const CheckPlan = ({ navigation }: Props) => {
   );
 };
 
-export default CheckPlan;
+export default PlanCalendar;
 
 const styles = StyleSheet.create({
   marginContainer: {
