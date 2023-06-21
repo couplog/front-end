@@ -22,6 +22,14 @@ const Onboarding = ({ navigation }: Props) => {
           onPress={() => navigation.navigate('LoginScreen')}
         />
       </View>
+      <View style={styles.buttonView}>
+        <ButtonComponent
+          text="일정(디테일 이동 임시 구현)"
+          font="bold"
+          disabled={false}
+          onPress={() => navigation.navigate('PlanDetailScreen')}
+        />
+      </View>
     </View>
   );
 };
