@@ -130,12 +130,12 @@ const Login = ({ navigation }: Props) => {
 
         {/* Footer UI */}
         <View style={{ alignItems: 'center' }}>
-          <Text
-            style={styles.signupText}
+          <TouchableOpacity
+            activeOpacity={1.0}
             onPress={() => navigation.navigate('RegisterPhoneScreen')}
           >
-            회원가입하기
-          </Text>
+            <Text style={styles.signupText}>회원가입하기</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
