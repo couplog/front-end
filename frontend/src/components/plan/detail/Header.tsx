@@ -55,5 +55,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     fontFamily: 'Pretendard-Medium',
+    color: '#000000',
   },
 });
