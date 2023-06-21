@@ -12,13 +12,18 @@ import React, { useState } from 'react';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
+import CheckCalendar from '../components/plan/CheckCalendar';
 
 type Props = StackScreenProps<StackParamList, 'CheckPlanScreen'>;
 
 const CheckPlan = ({ navigation }: Props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.marginContainer} />
+      <View style={styles.marginContainer}>
+        <SafeAreaView style={styles.rootContainer}>
+          <CheckCalendar />
+        </SafeAreaView>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
