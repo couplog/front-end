@@ -22,7 +22,7 @@ const CheckCalendar = () => {
   const [open, setOpen] = useState(false);
   const [arr, setArr] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const currentMonth = getFormattedDate(new Date());
+  const today = getFormattedDate(new Date());
 
   // 처음 만난 날 설정 함수
   const handleDate = (date: Date) => {
@@ -31,45 +31,108 @@ const CheckCalendar = () => {
     const formattedDate = getFormattedDate(date);
     setFormattedDate(formattedDate);
   };
+
+  const handleMonth = (month: string) => {
+    if (Number(month) > 9) {
+      return month;
+    }
+    return month[1];
+  };
+
+  const handleDay = (day: string) => {
+    if (Number(day) > 9) {
+      return day;
+    }
+    return day[1];
+  };
+  const running = { key: 'running', color: 'blue' };
+  const cycling = { key: 'cycling', color: 'green' };
+  const walking = { key: 'walking', color: 'orange' };
+
+  const marked = {
+    '2023-06-01': {
+      dots: [running, walking],
+    },
+    '2023-06-02': {
+      dots: [running, walking, cycling],
+    },
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.marginContainer}>
         <Calendar
-          renderHeader={() => (
-            <TouchableNativeFeedback onPress={() => setOpen(true)}>
-              <View>
-                <Text>{currentMonth}</Text>
-              </View>
-            </TouchableNativeFeedback>
-          )}
+          // renderHeader={() => (
+          //   <TouchableNativeFeedback onPress={() => setOpen(true)}>
+          //     <View>
+          //       <Text>{currentMonth}</Text>
+          //     </View>
+          //   </TouchableNativeFeedback>
+          // )}
           current={formattedDate}
           key={formattedDate}
           onDayPress={(day) => {
             setSelected(day.dateString);
+            console.log(selected);
           }}
+          markingType="custom"
           markedDates={{
             [selected]: {
               selected: true,
               disableTouchEvent: true,
-              // selectedColor: 'orange',
+              selectedColor: 'orange',
             },
           }}
           hideArrows
+          style={{
+            paddingLeft: 0,
+            paddingRight: 0,
+          }}
           theme={{
-            calendarBackground: '#166088',
-
-            selectedDayBackgroundColor: '#C0D6DF',
-            selectedDayTextColor: '#166088',
-            selectedDotColor: '#166088',
-
-            dayTextColor: '#DBE9EE',
-            textDisabledColor: '#729DAF',
-            dotColor: '#DBE9EE',
-
-            monthTextColor: '#DBE9EE',
-            textMonthFontWeight: 'bold',
-
-            arrowColor: '#DBE9EE',
+            selectedDayBackgroundColor: '#00adf5',
+            selectedDayTextColor: '#ffffff',
+            dayTextColor: 'red',
+            todayTextColor: 'red',
+          }}
+          dayComponent={({ date, state, marking, theme }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  if (date?.dateString) {
+                    setSelected(date?.dateString);
+                  }
+                  console.log(selected);
+                }}
+              >
+                <View
+                  style={{
+                    marginVertical: -2.5,
+                    justifyContent: 'center',
+                    width: 44,
+                    height: 44,
+                    borderWidth: 1,
+                    borderColor:
+                      date?.dateString === selected ||
+                      date?.dateString === today
+                        ? '#667C92'
+                        : '#EDF0F3',
+                    borderRadius: 8,
+                    backgroundColor:
+                      state === 'disabled' ? '#FFFFFF' : '#EDF0F3',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: 'Pretendard-Regular',
+                      fontSize: 18,
+                      textAlign: 'center',
+                      color: state === 'disabled' ? '#EDF0F3' : '#000000',
+                    }}
+                  >
+                    {date?.day}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
           }}
         />
         <TouchableOpacity onPress={() => setOpen(true)}>
@@ -77,8 +140,8 @@ const CheckCalendar = () => {
             modal
             open={open}
             mode="date"
+            locale="en"
             date={date || new Date()}
-            locale="ko"
             onConfirm={(date) => handleDate(date)}
             onCancel={() => {
               setOpen(false);
@@ -86,6 +149,20 @@ const CheckCalendar = () => {
           />
           <Text>{formattedDate}</Text>
         </TouchableOpacity>
+        {/* 캘린더 왼쪽라인과 일치하지 않음 */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontFamily: 'Pretendard-Medium',
+            fontWeight: '500',
+            fontSize: 16,
+            textAlign: 'left',
+            color: '#000000',
+          }}
+        >
+          {handleMonth(selected.substring(5, 7) || today.substring(5, 7))}월
+          {handleDay(selected.substring(8, 10) || today.substring(8, 10))}일
+        </Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -96,8 +173,8 @@ export default CheckCalendar;
 const styles = StyleSheet.create({
   marginContainer: {
     flex: 1,
-    marginLeft: 25,
-    marginRight: 25,
+    // marginLeft: 21,
+    // marginRight: 21,
     paddingTop: 20,
   },
   rootContainer: {

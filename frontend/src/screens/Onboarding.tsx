@@ -24,10 +24,10 @@ const Onboarding = ({ navigation }: Props) => {
       </View>
       <View style={styles.buttonView}>
         <ButtonComponent
-          text="CheckPlanScreen"
+          text="PlanCalendarScreen"
           font="bold"
           disabled={false}
-          onPress={() => navigation.navigate('CheckPlanScreen')}
+          onPress={() => navigation.navigate('PlanCalendarScreen')}
         />
       </View>
     </View>
