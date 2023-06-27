@@ -20,5 +20,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Regular',
     textDecorationLine: 'underline',
     textAlign: 'center',
+    fontWeight: '600',
   },
 });
