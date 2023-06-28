@@ -33,8 +33,6 @@ export default PlanCalendar;
 const styles = StyleSheet.create({
   marginContainer: {
     flex: 1,
-    marginLeft: 25,
-    marginRight: 25,
   },
   rootContainer: {
     flex: 1,
