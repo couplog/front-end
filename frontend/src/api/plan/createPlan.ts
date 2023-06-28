@@ -9,6 +9,6 @@ export const handleCreatePlan = async (
   return request({
     method: 'POST',
     url: `/api/members/${memberId}/schedules`,
-    data: { planData },
+    data: planData,
   });
 };
