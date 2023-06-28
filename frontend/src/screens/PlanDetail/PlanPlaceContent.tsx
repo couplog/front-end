@@ -10,12 +10,12 @@ import Header from '../../components/plan/detail/Header';
 type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
 
 const PlanPlaceContent = ({ navigation }: Props) => {
-  const setPlan = useSetRecoilState(planState);
+  const setPlanAtom = useSetRecoilState(planState);
   const [place, setPlace] = useState('');
   const [content, setContent] = useState('');
 
   const handlePlaceContent = () => {
-    setPlan((prevPlan) => ({
+    setPlanAtom((prevPlan) => ({
       ...prevPlan,
       location: place,
       content,
