@@ -7,18 +7,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
+import { userState } from '../../state/atoms/userAtom';
 import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
-import { DayType } from '../../types/calendar/calendarType';
+import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
+import { handleGetMyPlan } from '../../api/plan/getMyPlan';
 
 const CheckCalendar = () => {
+  const userData = useRecoilValue(userState);
   const [selected, setSelected] = useState('');
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [mySchedule, setMySchedule] = useState([]);
   const today = getFormattedDate(new Date());
   const formattedDate = getFormattedDate(date);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,13 +40,6 @@ const CheckCalendar = () => {
     'October',
     'November',
     'December',
-  ];
-  const mySchedule = [
-    '2023-06-02',
-    '2023-06-03',
-    '2023-06-13',
-    '2023-06-16',
-    '2023-06-20',
   ];
   const partnerSchedule = [
     '2023-06-01',
@@ -217,6 +215,26 @@ const CheckCalendar = () => {
       },
     ],
   };
+
+  // 개인 일정 조회
+  const handleCheckMyPlan = async (
+    { year, month }: PlanPropsType,
+    memberId: number | null
+  ) => {
+    try {
+      const res = await handleGetMyPlan({ year, month }, memberId);
+      setMySchedule(res.data.data.scheduleDates);
+    } catch (err: any) {
+      console.log(err.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    const year = selected.substring(0, 4);
+    const month = selected.substring(5, 7);
+    userData.memberId && handleCheckMyPlan({ year, month }, userData.memberId);
+  }, [selected, userData.memberId]);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.marginContainer}>
