@@ -30,7 +30,8 @@ const CheckCalendarDayComponent = ({
               ? '#667C92'
               : '#EDF0F3',
           backgroundColor: state === 'disabled' ? '#FFFFFF' : '#EDF0F3',
-          borderWidth: marking?.dots?.length ? 0 : 2,
+          borderWidth:
+            !marking?.dots?.length || date?.dateString === selected ? 2 : 0,
         }}
       >
         <Text
