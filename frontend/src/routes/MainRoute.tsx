@@ -8,6 +8,7 @@ import Login from '../screens/Login';
 import Onboarding from '../screens/Onboarding';
 import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
+import PlanRoute from './PlanRoute';
 import PlanCalendar from '../screens/PlanCalendar';
 
 const Stack = createStackNavigator<StackParamList>();
@@ -57,6 +58,12 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.PlanCalendarScreen}
           component={PlanCalendar}
+          options={{ headerShown: false }}
+        />
+        {/* 일정 추가 route */}
+        <Stack.Screen
+          name={RouteScreens.PlanRoute}
+          component={PlanRoute}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
