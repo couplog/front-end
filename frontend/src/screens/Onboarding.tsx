@@ -29,6 +29,12 @@ const Onboarding = ({ navigation }: Props) => {
           disabled={false}
           onPress={() => navigation.navigate('PlanRoute')}
         />
+        <ButtonComponent
+          text="PlanCalendarScreen"
+          font="bold"
+          disabled={false}
+          onPress={() => navigation.navigate('PlanCalendarScreen')}
+        />
       </View>
     </View>
   );

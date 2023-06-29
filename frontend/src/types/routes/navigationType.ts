@@ -5,6 +5,7 @@ export enum RouteScreens {
   LoginScreen = 'LoginScreen',
   ConnectPartnerScreen = 'ConnectPartnerScreen',
   MainScreen = 'MainScreen',
+  PlanCalendarScreen = 'PlanCalendarScreen',
 
   // 일정 생성 페이지 route
   PlanRoute = 'PlanRoute',
@@ -25,6 +26,7 @@ export type StackParamList = {
   LoginScreen: undefined;
   ConnectPartnerScreen: undefined;
   MainScreen: undefined;
+  PlanCalendarScreen: undefined;
 
   // 일정 생성 페이지 route
   PlanRoute: undefined;
