@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../state/atoms/userAtom';
 import Heart from '../../assets/images/main/heart.svg';
-import { ProfileComponentProps } from '../../types/main/profileType';
+import { ProfileComponentProps } from '../../types/main/mainPageTypes';
 import { partnerState } from '../../state/atoms/partnerAtom';
 
 const Profile = ({ meetDate }: ProfileComponentProps) => {
