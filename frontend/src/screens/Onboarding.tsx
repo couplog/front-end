@@ -22,6 +22,14 @@ const Onboarding = ({ navigation }: Props) => {
           onPress={() => navigation.navigate('LoginScreen')}
         />
       </View>
+      <View style={styles.buttonView}>
+        <ButtonComponent
+          text="PlanCalendarScreen"
+          font="bold"
+          disabled={false}
+          onPress={() => navigation.navigate('PlanCalendarScreen')}
+        />
+      </View>
     </View>
   );
 };
