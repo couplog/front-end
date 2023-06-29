@@ -36,3 +36,9 @@ interface MarkingDotsType {
   key?: string;
   color: string;
 }
+
+export interface PlanPropsType {
+  year?: string;
+  month?: string;
+  day?: string;
+}
