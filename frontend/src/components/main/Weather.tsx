@@ -22,7 +22,7 @@ export default Weather;
 const styles = StyleSheet.create({
   weatherBox: {
     width: '100%',
-    marginTop: 40,
+    marginTop: 10,
     borderWidth: 1,
     borderColor: '#FFFFFF',
     backgroundColor: 'rgba(237, 240, 243, 0.3)',
