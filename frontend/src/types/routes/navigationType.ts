@@ -5,6 +5,15 @@ export enum RouteScreens {
   LoginScreen = 'LoginScreen',
   ConnectPartnerScreen = 'ConnectPartnerScreen',
   MainScreen = 'MainScreen',
+  PlanCalendarScreen = 'PlanCalendarScreen',
+
+  // 일정 생성 페이지 route
+  PlanRoute = 'PlanRoute',
+  PlanTitleScreen = 'PlanTitleScreen',
+  PlanStartScreen = 'PlanStartScreen',
+  PlanEndScreen = 'PlanEndScreen',
+  PlanPlaceContentScreen = 'PlanPlaceContentScreen',
+  PlanRepeatScreen = 'PlanRepeatScreen',
 }
 
 // 필요한 파라미터가 없는 상태
@@ -17,4 +26,13 @@ export type StackParamList = {
   LoginScreen: undefined;
   ConnectPartnerScreen: undefined;
   MainScreen: undefined;
+  PlanCalendarScreen: undefined;
+
+  // 일정 생성 페이지 route
+  PlanRoute: undefined;
+  PlanTitleScreen: undefined;
+  PlanStartScreen: undefined;
+  PlanEndScreen: undefined;
+  PlanPlaceContentScreen: undefined;
+  PlanRepeatScreen: undefined;
 };
