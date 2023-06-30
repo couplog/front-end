@@ -1,12 +1,15 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../state/atoms/userAtom';
 import Heart from '../../assets/images/main/heart.svg';
-import { ProfileComponentProps } from '../../types/main/profileType';
+import { ProfileComponentProps } from '../../types/main/mainPageTypes';
+import { partnerState } from '../../state/atoms/partnerAtom';
 
-const Profile = ({ meetDate, partnerImageUrl }: ProfileComponentProps) => {
+const Profile = ({ meetDate }: ProfileComponentProps) => {
   const userInfo = useRecoilValue(userState);
+  const partnerInfo = useRecoilValue(partnerState);
+
   // 커플 만날 날짜 계산
   const today = new Date();
   const firstDate = meetDate;
@@ -26,28 +29,12 @@ const Profile = ({ meetDate, partnerImageUrl }: ProfileComponentProps) => {
   return (
     <>
       <View style={styles.coupleView}>
-        {/* 이 부분 디자이너 분들과 상의해보기 & 피그마 디자인처럼 구현 가능한지 리서치 */}
-        <Text style={styles.dayText}>D+{daysDifference}</Text>
         <View style={styles.profileView}>
-          {/* 본인 */}
-          {userInfo.profileImageUrl !== '' && (
-            <Image
-              source={{ uri: userInfo.profileImageUrl }}
-              style={{
-                ...styles.profileImg,
-                transform: [{ rotate: '-10deg' }],
-              }}
-            />
-          )}
+          <Text style={styles.nameText}>{userInfo.nickname}</Text>
           <Heart />
-          {/* 상대방  */}
-          {partnerImageUrl !== '' && (
-            <Image
-              source={{ uri: partnerImageUrl }}
-              style={{ ...styles.profileImg, transform: [{ rotate: '10deg' }] }}
-            />
-          )}
+          <Text style={styles.nameText}>{partnerInfo.nickname}</Text>
         </View>
+        <Text style={styles.dayText}>+{daysDifference}</Text>
       </View>
     </>
   );
@@ -57,30 +44,25 @@ export default Profile;
 
 const styles = StyleSheet.create({
   coupleView: {
-    alignItems: 'center',
-    marginTop: 30,
+    alignItems: 'flex-start',
+    marginTop: 80,
   },
   profileView: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
-  },
-  profileImg: {
-    width: 120,
-    height: 120,
-    borderRadius: 6,
-  },
-  weText: {
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
+    gap: 5,
   },
   dayText: {
-    fontSize: 96,
-    fontFamily: 'Pretendard-Medium',
-    fontWeight: '700',
+    fontSize: 74,
+    fontFamily: 'Pretendard-Bold',
+    fontWeight: '900',
     color: '#FFFFFF',
-    borderColor: '#FFFFFF',
+    marginTop: -5,
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: '700',
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });
