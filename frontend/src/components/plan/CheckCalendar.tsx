@@ -17,13 +17,16 @@ import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
 import { handleGetMyPlan } from '../../api/plan/getMyPlan';
+import { partnerState } from '../../state/atoms/partnerAtom';
 
 const CheckCalendar = () => {
   const userData = useRecoilValue(userState);
+  const partnerData = useRecoilValue(partnerState);
   const [selected, setSelected] = useState('');
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mySchedule, setMySchedule] = useState([]);
+  const [partnerSchedule, setPartnerSchedule] = useState([]);
   const today = getFormattedDate(new Date());
   const formattedDate = getFormattedDate(date);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,12 +44,12 @@ const CheckCalendar = () => {
     'November',
     'December',
   ];
-  const partnerSchedule = [
-    '2023-06-01',
-    '2023-06-03',
-    '2023-06-16',
-    '2023-06-26',
-  ];
+  // const partnerSchedule = [
+  //   '2023-06-01',
+  //   '2023-06-03',
+  //   '2023-06-16',
+  //   '2023-06-26',
+  // ];
   const coupleSchedule = [
     '2023-06-01',
     '2023-06-02',
@@ -229,11 +232,26 @@ const CheckCalendar = () => {
     }
   };
 
+  // 상대방 일정 조회
+  const handleCheckPartnerPlan = async (
+    { year, month }: PlanPropsType,
+    memberId: number | null
+  ) => {
+    try {
+      const res = await handleGetMyPlan({ year, month }, memberId);
+      setPartnerSchedule(res.data.data.scheduleDates);
+    } catch (err: any) {
+      console.log(err.response.data.message);
+    }
+  };
+
   useEffect(() => {
     const year = selected.substring(0, 4);
     const month = selected.substring(5, 7);
     userData.memberId && handleCheckMyPlan({ year, month }, userData.memberId);
-  }, [selected, userData.memberId]);
+    partnerData.memberId &&
+      handleCheckPartnerPlan({ year, month }, partnerData.memberId);
+  }, [partnerData, selected, userData.memberId]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
