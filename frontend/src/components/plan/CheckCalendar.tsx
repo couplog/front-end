@@ -18,6 +18,7 @@ import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
 import { handleGetMyPlan } from '../../api/plan/getMyPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
+import CheckCalendarDetail from './CheckCalendarDetail';
 
 const CheckCalendar = () => {
   const userData = useRecoilValue(userState);
@@ -298,16 +299,7 @@ const CheckCalendar = () => {
               );
             }}
           />
-
-          {/* 캘린더 왼쪽라인과 일치하지 않음 */}
-          <Text
-            style={{
-              ...styles.selectedDateText,
-            }}
-          >
-            {handleMonth(selected.substring(5, 7) || today.substring(5, 7))}월
-            {handleDay(selected.substring(8, 10) || today.substring(8, 10))}일
-          </Text>
+          <CheckCalendarDetail selected={selected} today={today} />
         </View>
         {show && (
           <MonthPicker
