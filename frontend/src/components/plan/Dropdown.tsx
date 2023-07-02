@@ -19,7 +19,7 @@ const Dropdown = () => {
   return (
     <View style={styles.containerView}>
       <SelectDropdown
-        defaultValue="전체"
+        defaultButtonText={filterData[0][0]}
         data={filterData}
         dropdownOverlayColor="none"
         buttonStyle={styles.dropdownButtonView}
