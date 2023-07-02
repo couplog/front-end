@@ -1,13 +1,7 @@
-import {
-  Animated,
-  Keyboard,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import Dropdown from './Dropdown';
+import CalendarDetailBox from './CalendarDetailBox';
 
 interface Props {
   selected: string;
@@ -50,6 +44,8 @@ const CheckCalendarDetail = ({ selected, today }: Props) => {
           300일
         </Text>
       </View>
+      <Dropdown />
+      <CalendarDetailBox />
     </View>
   );
 };
@@ -59,7 +55,7 @@ export default CheckCalendarDetail;
 const styles = StyleSheet.create({
   calendarDetailView: {
     marginTop: 24,
-    marginLeft: 8,
+    marginLeft: 7,
   },
   calendarDetailHeaderView: {
     display: 'flex',
