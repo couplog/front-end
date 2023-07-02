@@ -10,3 +10,13 @@ export const handleGetPlan = async (
     url: `/api/members/${memberId}/schedules/dates?year=${year}&month=${month}`,
   });
 };
+
+// 개인 일정 디테일 조회
+export const handleGetPlanDetail = async (
+  { year, month, day }: PlanPropsType,
+  memberId: number | null
+) => {
+  return request({
+    url: `/api/members/${memberId}/schedules?year=${year}&month=${month}&day=${day}`,
+  });
+};
