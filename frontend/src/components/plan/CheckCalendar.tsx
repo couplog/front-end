@@ -16,7 +16,7 @@ import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
-import { handleGetMyPlan } from '../../api/plan/getMyPlan';
+import { handleGetPlan } from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import CheckCalendarDetail from './CheckCalendarDetail';
 
@@ -226,7 +226,7 @@ const CheckCalendar = () => {
     memberId: number | null
   ) => {
     try {
-      const res = await handleGetMyPlan({ year, month }, memberId);
+      const res = await handleGetPlan({ year, month }, memberId);
       setMySchedule(res.data.data.scheduleDates);
     } catch (err: any) {
       console.log(err.response.data.message);
@@ -239,7 +239,7 @@ const CheckCalendar = () => {
     memberId: number | null
   ) => {
     try {
-      const res = await handleGetMyPlan({ year, month }, memberId);
+      const res = await handleGetPlan({ year, month }, memberId);
       setPartnerSchedule(res.data.data.scheduleDates);
     } catch (err: any) {
       console.log(err.response.data.message);
