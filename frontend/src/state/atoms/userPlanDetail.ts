@@ -13,17 +13,3 @@ export const planState = atom<UserPlanDetailProps>({
     repeatEndTime: '',
   },
 });
-
-// 일정 등록 취소시 state값을 초기화 시켜주기 위한 atom
-export const initialState = atom<UserPlanDetailProps>({
-  key: `userAtom:${Math.random()}`,
-  default: {
-    title: '',
-    startDateTime: '',
-    endDateTime: '',
-    location: '',
-    content: '',
-    repeatRule: '',
-    repeatEndTime: '',
-  },
-});
