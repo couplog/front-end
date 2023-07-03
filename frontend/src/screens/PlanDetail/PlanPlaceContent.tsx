@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../types/routes/navigationType';
 import { planState } from '../../state/atoms/userPlanDetail';
@@ -14,6 +14,8 @@ const PlanPlaceContent = ({ navigation }: Props) => {
   const [place, setPlace] = useState('');
   const [content, setContent] = useState('');
 
+  const reset = useResetRecoilState(planState);
+
   const handlePlaceContent = () => {
     setPlanAtom((prevPlan) => ({
       ...prevPlan,
@@ -22,6 +24,15 @@ const PlanPlaceContent = ({ navigation }: Props) => {
     }));
 
     navigation.navigate('PlanRepeatScreen');
+  };
+
+  // 일정 취소
+  const handelCancel = () => {
+    reset();
+    setPlace('');
+    setContent('');
+
+    navigation.navigate('PlanCalendarScreen');
   };
 
   return (
@@ -56,7 +67,7 @@ const PlanPlaceContent = ({ navigation }: Props) => {
           />
         </View>
       </SafeAreaView>
-      <Footer />
+      <Footer onPress={handelCancel} />
     </View>
   );
 };

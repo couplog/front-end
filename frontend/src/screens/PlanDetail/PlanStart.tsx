@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import Header from '../../components/plan/detail/Header';
 import InputGroup from '../../components/plan/detail/InputGroup';
@@ -15,6 +15,8 @@ const PlanStart = ({ navigation }: Props) => {
   const [daySelected, setDaySelected] = useState('');
   const [timeSelected, setTimeSelected] = useState('');
 
+  const reset = useResetRecoilState(planState);
+
   const isDisabled = daySelected === '' || timeSelected === '';
 
   const handleStartDayTime = () => {
@@ -24,6 +26,14 @@ const PlanStart = ({ navigation }: Props) => {
     }));
 
     navigation.navigate('PlanEndScreen');
+  };
+
+  const handelCancel = () => {
+    reset();
+    setDaySelected('');
+    setTimeSelected('');
+
+    navigation.navigate('PlanCalendarScreen');
   };
 
   return (
@@ -43,7 +53,7 @@ const PlanStart = ({ navigation }: Props) => {
           setTimeSelected={setTimeSelected}
         />
       </SafeAreaView>
-      <Footer />
+      <Footer onPress={handelCancel} />
     </View>
   );
 };

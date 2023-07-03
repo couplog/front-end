@@ -1,29 +1,34 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 import Header from '../../components/plan/detail/Header';
 import InputGroup from '../../components/plan/detail/InputGroup';
 import Footer from '../../components/plan/detail/Footer';
-import { planState } from '../../state/atoms/userPlanDetail';
 import { StackParamList } from '../../types/routes/navigationType';
+import { planState } from '../../state/atoms/userPlanDetail';
 
 type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
 
 const PlanEnd = ({ navigation }: Props) => {
-  const setPlanAtom = useSetRecoilState(planState);
   const [daySelected, setDaySelected] = useState('');
   const [timeSelected, setTimeSelected] = useState('');
+
+  const reset = useResetRecoilState(planState);
 
   const isDisabled = daySelected === '' || timeSelected === '';
 
   const handleEndDayTime = () => {
-    setPlanAtom((prevPlan) => ({
-      ...prevPlan,
-      endDateTime: `${daySelected}T${timeSelected}`,
-    }));
-
     navigation.navigate('PlanPlaceContentScreen');
+  };
+
+  // 일정 취소
+  const handelCancel = () => {
+    reset();
+    setDaySelected('');
+    setTimeSelected('');
+
+    navigation.navigate('PlanCalendarScreen');
   };
 
   return (
@@ -39,7 +44,7 @@ const PlanEnd = ({ navigation }: Props) => {
           setTimeSelected={setTimeSelected}
         />
       </SafeAreaView>
-      <Footer />
+      <Footer onPress={handelCancel} />
     </View>
   );
 };

@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import Header from '../../components/plan/detail/Header';
 import RepeatOption from '../../components/plan/detail/RepeatStartOption';
@@ -29,6 +29,8 @@ const PlanRepeat = ({ navigation }: Props) => {
   const [repeatEnd, setRepeatEnd] = useState('');
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
+
+  const reset = useResetRecoilState(planState);
 
   const startOptionVisible = () => {
     setStartVisible(!startVisible);
@@ -75,6 +77,16 @@ const PlanRepeat = ({ navigation }: Props) => {
 
     // 일정 생성 함수 실행
     handlePlanCreation(planData, userData.memberId);
+  };
+
+  // 일정 취소
+  const handelCancel = () => {
+    reset();
+    setRepeatStart('');
+    setRepeatEnd('');
+    setRepeatCode('');
+
+    navigation.navigate('PlanCalendarScreen');
   };
 
   return (
@@ -129,7 +141,7 @@ const PlanRepeat = ({ navigation }: Props) => {
           />
         ) : null}
       </SafeAreaView>
-      <Footer />
+      <Footer onPress={handelCancel} />
     </View>
   );
 };
