@@ -16,7 +16,7 @@ import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
-import { handleGetPlan } from '../../api/plan/getPlan';
+import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import CheckCalendarDetail from './CheckCalendarDetail';
 
@@ -28,7 +28,15 @@ const CheckCalendar = () => {
   const [show, setShow] = useState(false);
   const [mySchedule, setMySchedule] = useState([]);
   const [partnerSchedule, setPartnerSchedule] = useState([]);
+  const [myScheduleDetail, setMyScheduleDetail] = useState([]);
+  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
   const today = getFormattedDate(new Date());
+  const currentYear = today.substring(0, 4);
+  const currentMonth = today.substring(5, 7);
+  const currentDay = today.substring(8, 10);
+  const selectedYear = selected.substring(0, 4);
+  const selectedMonth = selected.substring(5, 7);
+  const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const month = [
@@ -45,12 +53,6 @@ const CheckCalendar = () => {
     'November',
     'December',
   ];
-  // const partnerSchedule = [
-  //   '2023-06-01',
-  //   '2023-06-03',
-  //   '2023-06-16',
-  //   '2023-06-26',
-  // ];
   const coupleSchedule = [
     '2023-06-01',
     '2023-06-02',
@@ -71,7 +73,7 @@ const CheckCalendar = () => {
     };
   });
 
-  partnerSchedule.forEach((day) => {
+  mySchedule.forEach((day) => {
     Object.keys(newDaysObject).includes(day)
       ? (newDaysObject = {
           ...newDaysObject,
@@ -92,7 +94,7 @@ const CheckCalendar = () => {
         });
   });
 
-  mySchedule.forEach((day) => {
+  partnerSchedule.forEach((day) => {
     if (Object.keys(newDaysObject).includes(day)) {
       if (newDaysObject[day].dots.length === 2) {
         newDaysObject = {
@@ -160,22 +162,6 @@ const CheckCalendar = () => {
     },
     [month]
   );
-
-  // 한 자릿수 월 일 때 0을 삭제해 주는 함수
-  const handleMonth = (month: string) => {
-    if (Number(month) > 9) {
-      return month;
-    }
-    return month[1];
-  };
-
-  // 한 자릿수 일 일 때 0을 삭제해 주는 함수
-  const handleDay = (day: string) => {
-    if (Number(day) > 9) {
-      return day;
-    }
-    return day[1];
-  };
 
   // 년도, 월을 변경할 때 사용하는 함수
   const handleChangeValue = useCallback(
@@ -246,13 +232,56 @@ const CheckCalendar = () => {
     }
   };
 
+  // 개인 일정 디테일 조회
+  const handleCheckMyPlanDetail = async (
+    { year, month, day }: PlanPropsType,
+    memberId: number | null
+  ) => {
+    try {
+      const res = await handleGetPlanDetail({ year, month, day }, memberId);
+      setMyScheduleDetail(res.data.data.schedules);
+    } catch (err: any) {
+      console.log(err.response.data.message);
+    }
+  };
+
+  // 상대방 일정 디테일 조회
+  const handleCheckPartnerPlanDetail = async (
+    { year, month, day }: PlanPropsType,
+    memberId: number | null
+  ) => {
+    try {
+      const res = await handleGetPlanDetail({ year, month, day }, memberId);
+      setPartnerScheduleDetail(res.data.data.schedules);
+    } catch (err: any) {
+      console.log(err.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const year = selected.substring(0, 4);
-    const month = selected.substring(5, 7);
-    userData.memberId && handleCheckMyPlan({ year, month }, userData.memberId);
-    partnerData.memberId &&
-      handleCheckPartnerPlan({ year, month }, partnerData.memberId);
-  }, [partnerData, selected, userData.memberId]);
+    const year = selectedYear || currentYear;
+    const month = selectedMonth || currentMonth;
+    const day = selectedDay || currentDay;
+    const myMemberId = userData.memberId;
+    const partnerMemberId = partnerData.memberId;
+
+    myMemberId && handleCheckMyPlan({ year, month }, myMemberId);
+    myMemberId && handleCheckMyPlanDetail({ year, month, day }, myMemberId);
+    partnerMemberId && handleCheckPartnerPlan({ year, month }, partnerMemberId);
+    partnerMemberId &&
+      handleCheckPartnerPlanDetail({ year, month, day }, partnerMemberId);
+  }, [
+    currentDay,
+    currentMonth,
+    currentYear,
+    partnerData,
+    selected,
+    selectedDay,
+    selectedMonth,
+    selectedYear,
+    today,
+    userData.memberId,
+  ]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -299,7 +328,14 @@ const CheckCalendar = () => {
               );
             }}
           />
-          <CheckCalendarDetail selected={selected} today={today} />
+          <CheckCalendarDetail
+            selectedMonth={selectedMonth}
+            selectedDay={selectedDay}
+            currentMonth={currentMonth}
+            currentDay={currentDay}
+            myScheduleDetail={myScheduleDetail}
+            partnerScheduleDetail={partnerScheduleDetail}
+          />
         </View>
         {show && (
           <MonthPicker

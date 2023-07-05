@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { getFormattedDate } from '../../utils/formattedDate';
 import MultipleCalendarBox from './MultipleCalendarBox';
 import { Props } from '../../types/calendar/calendarType';
@@ -31,7 +31,11 @@ const CheckCalendarDayComponent = ({
               : '#EDF0F3',
           backgroundColor: state === 'disabled' ? '#FFFFFF' : '#EDF0F3',
           borderWidth:
-            !marking?.dots?.length || date?.dateString === selected ? 2 : 0,
+            date?.dateString === today ||
+            !marking?.dots?.length ||
+            date?.dateString === selected
+              ? 2
+              : 0,
         }}
       >
         <Text
