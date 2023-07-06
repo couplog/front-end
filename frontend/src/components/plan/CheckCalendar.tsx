@@ -59,6 +59,7 @@ const CheckCalendar = () => {
     '2023-06-13',
     '2023-06-16',
     '2023-06-26',
+    '2023-07-05',
   ];
 
   let newDaysObject: DayType = {};
