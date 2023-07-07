@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import Header from '../../components/plan/detail/Header';
 import InputGroup from '../../components/plan/detail/InputGroup';
 import Footer from '../../components/plan/detail/Footer';
@@ -11,6 +11,7 @@ import { planState } from '../../state/atoms/userPlanDetail';
 type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
 
 const PlanEnd = ({ navigation }: Props) => {
+  const setPlanAtom = useSetRecoilState(planState);
   const [daySelected, setDaySelected] = useState('');
   const [timeSelected, setTimeSelected] = useState('');
 
@@ -19,6 +20,11 @@ const PlanEnd = ({ navigation }: Props) => {
   const isDisabled = daySelected === '' || timeSelected === '';
 
   const handleEndDayTime = () => {
+    setPlanAtom((prevPlan) => ({
+      ...prevPlan,
+      endDateTime: `${daySelected}T${timeSelected}`,
+    }));
+
     navigation.navigate('PlanPlaceContentScreen');
   };
 

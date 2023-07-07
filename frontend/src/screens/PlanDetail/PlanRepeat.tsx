@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import Header from '../../components/plan/detail/Header';
@@ -24,8 +25,8 @@ type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
 const PlanRepeat = ({ navigation }: Props) => {
   const userData = useRecoilValue(userState);
   const [planAtom, setPlanAtom] = useRecoilState(planState);
-  const [repeatStart, setRepeatStart] = useState('');
-  const [repeatCode, setRepeatCode] = useState('');
+  const [repeatStart, setRepeatStart] = useState('없음');
+  const [repeatCode, setRepeatCode] = useState('N');
   const [repeatEnd, setRepeatEnd] = useState('');
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
@@ -44,7 +45,7 @@ const PlanRepeat = ({ navigation }: Props) => {
 
   const repeatTextStyle = {
     ...styles.text,
-    color: repeatStart ? '#000000' : '#909090',
+    color: repeatStart === '없음' ? '#909090' : '#000000',
   };
 
   // 일정 생성 기능
@@ -62,7 +63,7 @@ const PlanRepeat = ({ navigation }: Props) => {
     }
   };
 
-  const handleSetPlan = async () => {
+  const handleSetPlan = () => {
     // 없음 = 백엔드에서 ''로 받아야함
     const updatedRepeatEnd = repeatEnd === '없음' ? '' : repeatEnd;
 
@@ -74,6 +75,8 @@ const PlanRepeat = ({ navigation }: Props) => {
 
     // atom 업데이트
     setPlanAtom(planData);
+
+    console.log(planData);
 
     // 일정 생성 함수 실행
     handlePlanCreation(planData, userData.memberId);
@@ -127,7 +130,9 @@ const PlanRepeat = ({ navigation }: Props) => {
               onPress={endOptionVisible}
             >
               <Text style={repeatTextStyle}>
-                {repeatEnd ? repeatEnd : '없음'}
+                {repeatEnd && repeatEnd !== '없음'
+                  ? format(new Date(repeatEnd), 'yyyy. MM. dd')
+                  : '없음'}
               </Text>
             </TouchableOpacity>
           </View>

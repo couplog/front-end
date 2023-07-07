@@ -38,6 +38,9 @@ const RepeatEndOption = ({
     const textStyles = isSelected ? { color: '#3478F6' } : {};
     const borderStyles =
       item.text === '기간 설정' ? { borderBottomWidth: 0 } : {};
+    if (selectedOption !== '없음' && item.text === '기간 설정') {
+      textStyles.color = '#3478F6';
+    }
 
     return (
       <TouchableOpacity
