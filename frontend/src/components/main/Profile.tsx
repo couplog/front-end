@@ -49,7 +49,7 @@ const Profile = ({ meetDate, anniversary }: ProfileComponentProps) => {
           <Text style={textStyle}>{partnerInfo.nickname}</Text>
         </View>
         <Text style={dayTextStyle}>
-          {anniversary ? `D+${daysDifference}` : daysDifference}
+          {anniversary ? `D+${daysDifference}` : `+${daysDifference}`}
         </Text>
       </View>
     </>
