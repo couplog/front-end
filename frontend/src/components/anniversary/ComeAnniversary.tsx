@@ -15,7 +15,13 @@ const ComeAnniversary = ({
         const targetDate = new Date(anniversary.date);
         const currentDate = new Date();
         const dayDiff = differenceInDays(targetDate, currentDate);
-        const dDay = dayDiff >= 0 ? `D-${dayDiff}` : `D+${Math.abs(dayDiff)}`;
+        let dDay = '';
+
+        if (dayDiff === 0) {
+          dDay = 'D-Day';
+        } else {
+          dDay = dayDiff >= 0 ? `D-${dayDiff}` : `D+${Math.abs(dayDiff)}`;
+        }
 
         return (
           <View key={anniversary.id} style={anniversaryGlobalStyles.dayView}>
