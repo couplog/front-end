@@ -402,6 +402,7 @@ export default CheckCalendar;
 
 const styles = StyleSheet.create({
   marginContainer: {
+    flex: 1,
     paddingTop: 8,
   },
   rootContainer: {
