@@ -12,8 +12,6 @@ import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
 import Weather from '../components/main/Weather';
 
-// - 커플 배경 사진 등록 / 수정 / 삭제 / 조회
-
 const Main = () => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
   const setPartnerInfo = useSetRecoilState(partnerState);
