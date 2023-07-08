@@ -18,6 +18,7 @@ export interface Props {
   marking?: MarkingType;
   setSelected: Dispatch<SetStateAction<string>>;
   selected: string;
+  detail: boolean | undefined;
 }
 
 export interface DateType {
