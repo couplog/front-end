@@ -2,7 +2,7 @@ import { UserPlanDetailProps } from '../../types/atom/userPlanType';
 import request from '../base';
 
 // 일정 생성
-export const handleCreatePlan = async (
+export const handleCreatePlan = (
   planData: UserPlanDetailProps,
   memberId: number | null
 ) => {
