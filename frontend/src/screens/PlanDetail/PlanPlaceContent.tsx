@@ -58,7 +58,7 @@ const PlanPlaceContent = ({ navigation }: Props) => {
           <Text style={styles.inputText}>내용</Text>
           <TextInput
             style={styles.contentInputBox}
-            placeholder="일정 내용을 입력하세요. (0-100자)"
+            placeholder="일정 내용을 입력하세요. (0-80자)"
             placeholderTextColor="#909090"
             value={content}
             onChangeText={(text) => setContent(text)}
