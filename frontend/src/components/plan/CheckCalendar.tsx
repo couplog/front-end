@@ -405,9 +405,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 8,
   },
-  rootContainer: {
-    flex: 1,
-  },
   calendarView: {
     marginLeft: 21,
     marginRight: 21,

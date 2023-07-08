@@ -8,7 +8,10 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
+import { useRecoilValue } from 'recoil';
 import { ScheduleDetailType } from '../../types/atom/scheduleDetailType';
+import { userState } from '../../state/atoms/userAtom';
+import { handleDeletePlan } from '../../api/plan/deletePlan';
 
 interface Props {
   scheduleDetail?: ScheduleDetailType;
@@ -18,6 +21,8 @@ interface Props {
 
 const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
+  const { memberId } = useRecoilValue(userState);
+  const scheduleId = scheduleDetail?.scheduleId;
   const colorViewStyle = {
     width: 13,
     height: '100%',
@@ -54,12 +59,17 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
       [
         {
           text: '반복 일정 전체 삭제',
-          onPress: () => console.log('반복 일정 전체 삭제'),
+          onPress: () => {
+            // 새로고침하는 기능 추가해야함
+            scheduleId && handleDeletePlan(memberId, scheduleId, true);
+          },
           style: 'destructive',
         },
         {
           text: '해당 일정만 삭제',
-          onPress: () => console.log('해당 일정만 삭제'),
+          onPress: () =>
+            // 새로고침하는 기능 추가해야함
+            scheduleId && handleDeletePlan(memberId, scheduleId, false),
         },
       ],
       { cancelable: true }
