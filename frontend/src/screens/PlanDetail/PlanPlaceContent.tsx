@@ -49,7 +49,7 @@ const PlanPlaceContent = ({ navigation }: Props) => {
             placeholderTextColor="#909090"
             value={place}
             onChangeText={(text) => setPlace(text)}
-            maxLength={10}
+            maxLength={15}
           />
         </View>
 
@@ -62,7 +62,7 @@ const PlanPlaceContent = ({ navigation }: Props) => {
             placeholderTextColor="#909090"
             value={content}
             onChangeText={(text) => setContent(text)}
-            maxLength={100}
+            maxLength={80}
             multiline
           />
         </View>
