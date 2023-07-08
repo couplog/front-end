@@ -1,5 +1,6 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import Header from '../../components/plan/detail/Header';
@@ -12,7 +13,9 @@ type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
 
 const PlanEnd = ({ navigation }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
-  const [daySelected, setDaySelected] = useState('');
+  const [daySelected, setDaySelected] = useState(
+    format(new Date(), 'yyyy-MM-dd')
+  );
   const [timeSelected, setTimeSelected] = useState('');
 
   const reset = useResetRecoilState(planState);
