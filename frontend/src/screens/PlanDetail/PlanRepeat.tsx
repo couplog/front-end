@@ -21,7 +21,7 @@ import { handleCreatePlan } from '../../api/plan/createPlan';
 import { UserPlanDetailProps } from '../../types/atom/userPlanType';
 import { StackParamList } from '../../types/routes/navigationType';
 
-type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
+type Props = StackScreenProps<StackParamList, 'PlanRepeatScreen'>;
 
 const PlanRepeat = ({ navigation }: Props) => {
   const userData = useRecoilValue(userState);

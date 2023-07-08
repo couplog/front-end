@@ -7,7 +7,7 @@ import { planState } from '../../state/atoms/userPlanDetail';
 import Footer from '../../components/plan/detail/Footer';
 import Header from '../../components/plan/detail/Header';
 
-type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
+type Props = StackScreenProps<StackParamList, 'PlanPlaceContentScreen'>;
 
 const PlanPlaceContent = ({ navigation }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
