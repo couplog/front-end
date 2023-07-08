@@ -10,12 +10,18 @@ const Header = ({ onPress }: { onPress: () => void }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        activeOpacity={1.0}
         hitSlop={styles.hitSlop}
         onPress={() => navigation.goBack()}
       >
         <Back />
       </TouchableOpacity>
-      <TouchableOpacity hitSlop={styles.hitSlop} onPress={onPress}>
+
+      <TouchableOpacity
+        activeOpacity={1.0}
+        hitSlop={styles.hitSlop}
+        onPress={onPress}
+      >
         <Plus onPress={onPress} />
       </TouchableOpacity>
     </View>
