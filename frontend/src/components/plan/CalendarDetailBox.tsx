@@ -18,6 +18,16 @@ interface Props {
 
 const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
+  const colorViewStyle = {
+    width: 13,
+    height: '100%',
+    maxHeight: 121,
+    minHeight: 44,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    backgroundColor: boxColor,
+    borderColor: boxColor,
+  };
 
   const rightSwipeActions = () => {
     return (
@@ -76,13 +86,7 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
                   ...styles.detailBoxView,
                 }}
               >
-                <View
-                  style={{
-                    ...styles.colorView,
-                    backgroundColor: boxColor,
-                    borderColor: boxColor,
-                  }}
-                />
+                <View style={colorViewStyle} />
                 <View
                   style={{
                     ...styles.detailTextContainerView,
@@ -161,7 +165,6 @@ export default CalendarDetailBox;
 
 const styles = StyleSheet.create({
   containerView: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'row',
     maxHeight: 121,
@@ -185,14 +188,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderLeftWidth: 0,
     alignItems: 'center',
-  },
-  colorView: {
-    width: 13,
-    height: '100%',
-    maxHeight: 121,
-    minHeight: 44,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
   },
   detailTextContainerView: {
     flex: 1,
