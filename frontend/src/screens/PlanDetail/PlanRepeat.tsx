@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -35,10 +36,17 @@ const PlanRepeat = ({ navigation }: Props) => {
 
   const startOptionVisible = () => {
     setStartVisible(!startVisible);
+    setEndVisible(false);
   };
 
   const endOptionVisible = () => {
     setEndVisible(!endVisible);
+    setStartVisible(false);
+  };
+
+  const handleCloseOptions = () => {
+    setStartVisible(false);
+    setEndVisible(false);
   };
 
   const repeatEndVisible = repeatStart === '' || repeatStart === '없음';
@@ -75,7 +83,6 @@ const PlanRepeat = ({ navigation }: Props) => {
 
     // atom 업데이트
     setPlanAtom(planData);
-
     console.log(planData);
 
     // 일정 생성 함수 실행
@@ -93,61 +100,68 @@ const PlanRepeat = ({ navigation }: Props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container}>
-        <Header text="추가" disabled={!repeatStart} onPress={handleSetPlan} />
+    <TouchableWithoutFeedback onPress={handleCloseOptions}>
+      <View style={{ flex: 1 }}>
+        <SafeAreaView style={styles.container}>
+          <Header text="추가" disabled={!repeatStart} onPress={handleSetPlan} />
 
-        <View style={styles.inputView}>
-          <Text style={styles.inputText}>반복</Text>
-          <TouchableOpacity
-            activeOpacity={1.0}
-            style={styles.placeInputBox}
-            onPress={startOptionVisible}
-          >
-            <Text style={repeatTextStyle}>
-              {repeatStart ? repeatStart : '없음'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* 반복 list option */}
-        {startVisible && (
-          <RepeatOption
-            selectedOption={repeatStart}
-            setOptionVisible={setStartVisible}
-            setSelectedOption={setRepeatStart}
-            setRepeatCode={setRepeatCode}
-          />
-        )}
-
-        {/* 반복 종료 list option */}
-        {!repeatEndVisible ? (
           <View style={styles.inputView}>
-            <Text style={styles.inputText}>반복 종료</Text>
+            <Text style={styles.inputText}>반복</Text>
             <TouchableOpacity
               activeOpacity={1.0}
               style={styles.placeInputBox}
-              onPress={endOptionVisible}
+              onPress={startOptionVisible}
             >
               <Text style={repeatTextStyle}>
-                {repeatEnd && repeatEnd !== '없음'
-                  ? format(new Date(repeatEnd), 'yyyy. MM. dd')
-                  : '없음'}
+                {repeatStart ? repeatStart : '없음'}
               </Text>
             </TouchableOpacity>
           </View>
-        ) : null}
-        {endVisible ? (
-          <RepeatEndOption
-            setSelectedOption={setRepeatEnd}
-            setOptionVisible={setEndVisible}
-            selectedOption={repeatEnd}
-            setRepeatCode={setRepeatCode}
-          />
-        ) : null}
-      </SafeAreaView>
-      <Footer onPress={handelCancel} />
-    </View>
+
+          {/* 반복 list option */}
+          {startVisible && (
+            <TouchableWithoutFeedback onPress={() => setStartVisible(false)}>
+              <View>
+                <RepeatOption
+                  selectedOption={repeatStart}
+                  setOptionVisible={setStartVisible}
+                  setSelectedOption={setRepeatStart}
+                  setRepeatCode={setRepeatCode}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          )}
+
+          {/* 반복 종료 list option */}
+          {!repeatEndVisible && (
+            <View style={styles.inputView}>
+              <Text style={styles.inputText}>반복 종료</Text>
+              <TouchableOpacity
+                activeOpacity={1.0}
+                style={styles.placeInputBox}
+                onPress={endOptionVisible}
+              >
+                <Text style={repeatTextStyle}>
+                  {repeatEnd && repeatEnd !== '없음'
+                    ? format(new Date(repeatEnd), 'yyyy. MM. dd')
+                    : '없음'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {endVisible && (
+            <RepeatEndOption
+              setSelectedOption={setRepeatEnd}
+              setOptionVisible={setEndVisible}
+              selectedOption={repeatEnd}
+              setRepeatCode={setRepeatCode}
+            />
+          )}
+        </SafeAreaView>
+        <Footer onPress={handelCancel} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

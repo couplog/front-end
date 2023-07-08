@@ -38,7 +38,15 @@ const RepeatEndOption = ({
     const textStyles = isSelected ? { color: '#3478F6' } : {};
     const borderStyles =
       item.text === '기간 설정' ? { borderBottomWidth: 0 } : {};
-    if (selectedOption !== '없음' && item.text === '기간 설정') {
+
+    if (!selectedOption && item.text === '없음') {
+      textStyles.color = '#3478F6'; // 최초 옵션창이 열릴 때 '없음'에 빨간 색상 적용
+    }
+    if (
+      selectedOption !== '' &&
+      selectedOption !== '없음' &&
+      item.text === '기간 설정'
+    ) {
       textStyles.color = '#3478F6';
     }
 
