@@ -172,12 +172,14 @@ const CheckCalendar = () => {
 
       handleShowPicker(false);
       setDate(selectedDate);
-      formattedDate.substring(0, 7) === today.substring(0, 7)
+      formattedDate.substring(0, 7) === selected.substring(0, 7) && selected
+        ? setSelected(selected)
+        : formattedDate.substring(0, 7) === today.substring(0, 7)
         ? setSelected(today)
         : setSelected(formattedDate);
       handleMonthName(date);
     },
-    [date, handleMonthName, handleShowPicker, today]
+    [date, handleMonthName, handleShowPicker, selected, today]
   );
 
   const [rotateAnimation, setRotateAnimation] = useState(new Animated.Value(0));
