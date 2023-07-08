@@ -78,10 +78,87 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
         </View>
       ) : (
         <View style={{ flex: 1 }}>
-          {/* 클릭 시 Swipe가 늦게 들어가는 이슈 */}
-          <Swipeable renderRightActions={rightSwipeActions}>
+          {boxColor !== '#D0E6A5' ? (
+            /* 클릭 시 Swipe가 늦게 들어가는 이슈 */
+            <Swipeable renderRightActions={rightSwipeActions}>
+              <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
+                <Animated.View
+                  style={{
+                    ...styles.detailBoxView,
+                  }}
+                >
+                  <View style={colorViewStyle} />
+                  <View
+                    style={{
+                      ...styles.detailTextContainerView,
+                      flexDirection: openDetail ? 'column' : 'row',
+                      paddingTop: openDetail ? 15 : 0,
+                      alignItems: openDetail ? 'stretch' : 'center',
+                    }}
+                  >
+                    <View
+                      style={{
+                        flex: openDetail ? 0 : 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Text style={styles.detailHeaderText}>
+                        {scheduleDetail?.title}
+                      </Text>
+                      <Text style={styles.placeText}>
+                        {scheduleDetail?.location}
+                      </Text>
+                    </View>
+                    {openDetail && (
+                      <>
+                        <View style={styles.detailTimeView}>
+                          <Text
+                            style={{
+                              ...styles.detailTimeText,
+                              marginRight: 4,
+                            }}
+                          >
+                            {scheduleDetail?.startDateTime.substring(0, 10)}
+                          </Text>
+                          <Text style={styles.detailTimeText}>
+                            {scheduleDetail?.startDateTime.substring(11, 16)}
+                          </Text>
+                          <Text
+                            style={{
+                              ...styles.detailTimeText,
+                              marginLeft: 4,
+                              marginRight: 4,
+                            }}
+                          >
+                            -
+                          </Text>
+                          <Text
+                            style={{
+                              ...styles.detailTimeText,
+                              marginRight: 4,
+                            }}
+                          >
+                            {scheduleDetail?.endDateTime.substring(0, 10)}
+                          </Text>
+                          <Text style={styles.detailTimeText}>
+                            {scheduleDetail?.endDateTime.substring(11, 16)}
+                          </Text>
+                        </View>
+                        <View style={styles.detailContentView}>
+                          <Text style={styles.detailContentText}>
+                            {scheduleDetail?.content}
+                          </Text>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </Animated.View>
+              </TouchableOpacity>
+            </Swipeable>
+          ) : (
             <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
-              <Animated.View
+              <View
                 style={{
                   ...styles.detailBoxView,
                 }}
@@ -152,9 +229,9 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
                     </>
                   )}
                 </View>
-              </Animated.View>
+              </View>
             </TouchableOpacity>
-          </Swipeable>
+          )}
         </View>
       )}
     </View>
