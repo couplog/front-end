@@ -3,10 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../state/atoms/userAtom';
 import Heart from '../../assets/images/main/heart.svg';
+import BlackHeart from '../../assets/images/main/heartBlack.svg';
 import { ProfileComponentProps } from '../../types/main/mainPageTypes';
 import { partnerState } from '../../state/atoms/partnerAtom';
 
-const Profile = ({ meetDate }: ProfileComponentProps) => {
+const Profile = ({ meetDate, anniversary }: ProfileComponentProps) => {
   const userInfo = useRecoilValue(userState);
   const partnerInfo = useRecoilValue(partnerState);
 
@@ -26,15 +27,30 @@ const Profile = ({ meetDate }: ProfileComponentProps) => {
 
   const daysDifference = getDayDifference(today.toISOString(), firstDate);
 
+  // 페이지별 스타일 분기처리
+  const textStyle = {
+    ...styles.nameText,
+    color: anniversary ? '#000000' : '#FFFFFF',
+    fontWeight: anniversary ? '500' : ('700' as '500' | '700'),
+  };
+
+  const dayTextStyle = {
+    ...styles.dayText,
+    color: anniversary ? '#000000' : '#FFFFFF',
+    fontWeight: anniversary ? '500' : ('900' as '500' | '900'),
+  };
+
   return (
     <>
       <View style={styles.coupleView}>
         <View style={styles.profileView}>
-          <Text style={styles.nameText}>{userInfo.nickname}</Text>
-          <Heart />
-          <Text style={styles.nameText}>{partnerInfo.nickname}</Text>
+          <Text style={textStyle}>{userInfo.nickname}</Text>
+          {anniversary ? <BlackHeart /> : <Heart />}
+          <Text style={textStyle}>{partnerInfo.nickname}</Text>
         </View>
-        <Text style={styles.dayText}>+{daysDifference}</Text>
+        <Text style={dayTextStyle}>
+          {anniversary ? `D+${daysDifference}` : daysDifference}
+        </Text>
       </View>
     </>
   );
@@ -55,14 +71,10 @@ const styles = StyleSheet.create({
   dayText: {
     fontSize: 74,
     fontFamily: 'Pretendard-Bold',
-    fontWeight: '900',
-    color: '#FFFFFF',
     marginTop: -5,
   },
   nameText: {
     fontSize: 18,
-    fontWeight: '700',
     fontFamily: 'Pretendard-Medium',
-    color: '#FFFFFF',
   },
 });
