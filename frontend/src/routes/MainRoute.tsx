@@ -10,6 +10,7 @@ import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
 import PlanCalendar from '../screens/PlanCalendar';
+import AnniversaryRoute from './AnniversaryRoute';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -64,6 +65,12 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.PlanRoute}
           component={PlanRoute}
+          options={{ headerShown: false }}
+        />
+        {/* 기념일 route */}
+        <Stack.Screen
+          name={RouteScreens.AnniversaryRoute}
+          component={AnniversaryRoute}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
