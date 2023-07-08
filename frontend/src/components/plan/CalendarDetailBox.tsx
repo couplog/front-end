@@ -26,46 +26,39 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
           <Text style={styles.swipeText}>수정</Text>
         </View>
 
-        <View style={styles.swipeRightView}>
-          <TouchableOpacity onPress={handleDeleteAlert}>
+        <TouchableOpacity onPress={handleDeleteAlert}>
+          <View style={styles.swipeRightView}>
             <Text style={styles.swipeText}>삭제</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
 
+  // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
+  // alert 글자 색상 수정하는 부분 구현 못함
   const handleDeleteAlert = () => {
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-      },
-    });
     Alert.alert(
       '일정 삭제',
       '반복 일정을 모두 삭제할까요?',
       [
         {
           text: '반복 일정 전체 삭제',
-          onPress: () => console.log('아니라는데'),
+          onPress: () => console.log('반복 일정 전체 삭제'),
           style: 'destructive',
         },
         {
           text: '해당 일정만 삭제',
-          onPress: () => console.log('그렇다는데'),
+          onPress: () => console.log('해당 일정만 삭제'),
         },
       ],
-      { cancelable: false }
+      { cancelable: true }
     );
   };
   return (
     <View
       style={{
         ...styles.containerView,
-        maxHeight: 121,
-        minHeight: 44,
         flex: openDetail ? 0 : 1,
       }}
     >
@@ -114,82 +107,41 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
                   </View>
                   {openDetail && (
                     <>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          marginTop: 4,
-                        }}
-                      >
+                      <View style={styles.detailTimeView}>
                         <Text
                           style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 12,
+                            ...styles.detailTimeText,
                             marginRight: 4,
-                            color: '#909090',
                           }}
                         >
                           {scheduleDetail?.startDateTime.substring(0, 10)}
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 12,
-                            color: '#909090',
-                          }}
-                        >
+                        <Text style={styles.detailTimeText}>
                           {scheduleDetail?.startDateTime.substring(11, 16)}
                         </Text>
                         <Text
                           style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 12,
+                            ...styles.detailTimeText,
                             marginLeft: 4,
                             marginRight: 4,
-                            color: '#909090',
                           }}
                         >
                           -
                         </Text>
                         <Text
                           style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 12,
+                            ...styles.detailTimeText,
                             marginRight: 4,
-                            color: '#909090',
                           }}
                         >
                           {scheduleDetail?.endDateTime.substring(0, 10)}
                         </Text>
-                        <Text
-                          style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 12,
-                            color: '#909090',
-                          }}
-                        >
+                        <Text style={styles.detailTimeText}>
                           {scheduleDetail?.endDateTime.substring(11, 16)}
                         </Text>
                       </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          marginTop: 15,
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: 'Pretendard-Medium',
-                            fontWeight: '400',
-                            fontSize: 14,
-                            color: '#000000',
-                          }}
-                        >
+                      <View style={styles.detailContentView}>
+                        <Text style={styles.detailContentText}>
                           {scheduleDetail?.content}
                         </Text>
                       </View>
@@ -212,6 +164,8 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
+    maxHeight: 121,
+    minHeight: 44,
     alignItems: 'center',
     marginTop: 12,
     marginRight: 5,
@@ -245,11 +199,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     paddingLeft: 12,
     paddingRight: 12,
-    // borderColor: '#EDF0F3',
-    // borderWidth: 1,
-    // borderLeftWidth: 0,
-    // borderTopRightRadius: 8,
-    // borderBottomRightRadius: 8,
   },
   detailHeaderText: {
     fontFamily: 'Pretendard-Medium',
@@ -282,11 +231,33 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   swipeRightView: {
+    flex: 1,
     width: 53,
     backgroundColor: '#FE3D2F',
     justifyContent: 'center',
     alignItems: 'center',
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
+  },
+  detailTimeView: {
+    flexDirection: 'row',
+    marginTop: 4,
+  },
+  detailTimeText: {
+    fontFamily: 'Pretendard-Medium',
+    fontWeight: '400',
+    fontSize: 12,
+    color: '#909090',
+  },
+  detailContentView: {
+    flexDirection: 'row',
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  detailContentText: {
+    fontFamily: 'Pretendard-Medium',
+    fontWeight: '400',
+    fontSize: 14,
+    color: '#000000',
   },
 });
