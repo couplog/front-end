@@ -1,18 +1,20 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../types/routes/navigationType';
 import { planState } from '../../state/atoms/userPlanDetail';
 import Footer from '../../components/plan/detail/Footer';
 import Header from '../../components/plan/detail/Header';
 
-type Props = StackScreenProps<StackParamList, 'PlanEndScreen'>;
+type Props = StackScreenProps<StackParamList, 'PlanPlaceContentScreen'>;
 
 const PlanPlaceContent = ({ navigation }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
   const [place, setPlace] = useState('');
   const [content, setContent] = useState('');
+
+  const reset = useResetRecoilState(planState);
 
   const handlePlaceContent = () => {
     setPlanAtom((prevPlan) => ({
@@ -22,6 +24,15 @@ const PlanPlaceContent = ({ navigation }: Props) => {
     }));
 
     navigation.navigate('PlanRepeatScreen');
+  };
+
+  // 일정 취소
+  const handelCancel = () => {
+    reset();
+    setPlace('');
+    setContent('');
+
+    navigation.navigate('PlanCalendarScreen');
   };
 
   return (
@@ -38,7 +49,7 @@ const PlanPlaceContent = ({ navigation }: Props) => {
             placeholderTextColor="#909090"
             value={place}
             onChangeText={(text) => setPlace(text)}
-            maxLength={10}
+            maxLength={15}
           />
         </View>
 
@@ -47,16 +58,16 @@ const PlanPlaceContent = ({ navigation }: Props) => {
           <Text style={styles.inputText}>내용</Text>
           <TextInput
             style={styles.contentInputBox}
-            placeholder="일정 내용을 입력하세요. (0-100자)"
+            placeholder="일정 내용을 입력하세요. (0-80자)"
             placeholderTextColor="#909090"
             value={content}
             onChangeText={(text) => setContent(text)}
-            maxLength={100}
+            maxLength={80}
             multiline
           />
         </View>
       </SafeAreaView>
-      <Footer />
+      <Footer onPress={handelCancel} />
     </View>
   );
 };

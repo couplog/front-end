@@ -1,30 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { DayInfoProps } from '../../types/main/mainPageTypes';
 
-interface DayInfoProps {
-  days: string;
-  date: string;
-}
-
-export const DayInfo = ({ days, date }: DayInfoProps) => {
+export const DayInfo = ({
+  title,
+  date,
+  backgroundColor,
+  opacity,
+}: DayInfoProps) => {
   return (
-    <View style={styles.dayBox}>
-      <Text style={styles.dayText}>{days}</Text>
-      <Text style={styles.dayText}>{date}</Text>
+    <View style={[styles.dayBox, { backgroundColor, opacity }]}>
+      <Text style={[styles.dayText, { marginLeft: 5 }]}>{title}</Text>
+      <Text style={[styles.dayText, { marginRight: 5 }]}>{date}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   dayBox: {
+    width: '100%',
+    padding: 15,
+    marginTop: 7,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 7,
+    borderRadius: 12,
   },
   dayText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: '#000000',
   },
 });

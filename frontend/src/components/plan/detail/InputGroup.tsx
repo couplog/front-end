@@ -3,27 +3,18 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import DatePicker from 'react-native-date-picker';
 import { DetailInputProps } from '../../../types/plan/planDetailTypes';
+import CheckCalendar from '../CheckCalendar';
 
 const InputGroup = ({
   text,
-  daySelected,
   timeSelected,
+  daySelected,
   setDaySelected,
   setTimeSelected,
 }: DetailInputProps) => {
-  const [date, setDate] = useState<Date | ''>('');
   const [time, setTime] = useState<Date | ''>('');
 
-  const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
-
-  // 날짜 입력 핸들러
-  const handleDateChange = (date: Date) => {
-    setDateOpen(false);
-    setDate(date);
-    const formattedDate = format(date, 'yyyy-MM-dd');
-    setDaySelected(formattedDate);
-  };
 
   // 시간 입력 핸들러
   const handleTimeChange = (time: Date) => {
@@ -33,30 +24,27 @@ const InputGroup = ({
     setTimeSelected(formattedTime);
   };
 
-  const dateTextStyle = {
-    ...styles.dayText,
-    color: daySelected ? '#000000' : '#909090',
-  };
-
   const timeTextStyle = {
     ...styles.dayText,
     color: timeSelected ? '#000000' : '#909090',
   };
 
   return (
-    <View>
-      {/* 날짜 입력, 캘린더 UI 가져올 예정 (임시 구현) */}
+    <>
       <View style={styles.inputView}>
         <Text style={styles.inputText}>{text}일</Text>
-        <TouchableOpacity
-          style={styles.inputBox}
-          activeOpacity={1.0}
-          onPress={() => setDateOpen(true)}
-        >
-          <Text style={dateTextStyle}>
-            {daySelected ? daySelected : 'YYYY-MM-DD'}
+        <TouchableOpacity style={styles.inputBox} activeOpacity={1.0}>
+          <Text style={styles.dayText}>
+            {daySelected
+              ? format(new Date(daySelected), 'yyyy. MM. dd')
+              : format(new Date(), 'yyyy. MM. dd')}
           </Text>
         </TouchableOpacity>
+      </View>
+
+      {/* 캘린더 UI */}
+      <View style={styles.calenderView}>
+        <CheckCalendar setDaySelected={setDaySelected} detail />
       </View>
 
       {/* 시간 입력 */}
@@ -75,18 +63,6 @@ const InputGroup = ({
 
       <DatePicker
         modal
-        open={dateOpen}
-        mode="date"
-        date={date || new Date()}
-        locale="ko"
-        onConfirm={(date) => handleDateChange(date)}
-        onCancel={() => {
-          setDateOpen(false);
-        }}
-      />
-
-      <DatePicker
-        modal
         open={timeOpen}
         mode="time"
         minuteInterval={5}
@@ -95,7 +71,7 @@ const InputGroup = ({
         onConfirm={(time) => handleTimeChange(time)}
         onCancel={() => setTimeOpen(false)}
       />
-    </View>
+    </>
   );
 };
 
@@ -103,7 +79,7 @@ export default InputGroup;
 
 const styles = StyleSheet.create({
   inputView: {
-    marginTop: 50,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -122,16 +98,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
   },
-  infoInputBox: {
-    width: 330,
-    height: 100,
-    backgroundColor: '#EDF0F3',
-    borderRadius: 8,
-    marginTop: 15,
-    padding: 10,
-    paddingBottom: 65,
-  },
   dayText: {
     fontFamily: 'Pretendard-Regular',
+    color: '#000000',
+  },
+  calenderView: {
+    borderWidth: 1,
+    borderColor: '#EDF0F3',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 10,
   },
 });
