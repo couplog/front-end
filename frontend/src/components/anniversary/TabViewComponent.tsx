@@ -123,36 +123,4 @@ const styles = StyleSheet.create({
     borderBottomColor: '#909090',
     borderBottomWidth: 1,
   },
-  dayView: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    marginTop: 13,
-    borderRadius: 8,
-    padding: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  dayInfoText: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#000000',
-    fontFamily: 'Pretendard-Regular',
-  },
-  dateText: {
-    fontSize: 12,
-    fontWeight: '400',
-    fontFamily: 'Pretendard-Regular',
-    color: '#909090',
-  },
-  dDayText: {
-    fontSize: 12,
-    fontWeight: '400',
-    fontFamily: 'Pretendard-Regular',
-    color: '#000000',
-  },
-  textFlex: {
-    flexDirection: 'row',
-    gap: 15,
-  },
 });
