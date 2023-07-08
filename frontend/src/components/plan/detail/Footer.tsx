@@ -1,11 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ onPress }: { onPress: () => void }) => {
   return (
     <View style={{ marginBottom: 60 }}>
-      {/* 클릭시 캘린더 화면으로 이동 */}
-      <TouchableOpacity activeOpacity={1.0}>
+      <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
         <Text style={styles.text}>일정 등록 취소</Text>
       </TouchableOpacity>
     </View>

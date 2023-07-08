@@ -30,6 +30,12 @@ const PlanTitle = ({ navigation }: Props) => {
     navigation.navigate('PlanStartScreen');
   };
 
+  // 일정 취소
+  const handleCancel = () => {
+    setTitle('');
+    navigation.navigate('PlanCalendarScreen');
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
@@ -56,7 +62,7 @@ const PlanTitle = ({ navigation }: Props) => {
           ) : null}
         </SafeAreaView>
 
-        <Footer />
+        <Footer onPress={handleCancel} />
       </View>
     </TouchableWithoutFeedback>
   );

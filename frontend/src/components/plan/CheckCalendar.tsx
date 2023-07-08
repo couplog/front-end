@@ -7,7 +7,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useRecoilValue } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
@@ -18,14 +24,21 @@ import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
 import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
+import OptionArrow from '../../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from './CheckCalendarDetail';
 
-const CheckCalendar = () => {
+const CheckCalendar = ({
+  detail,
+  setDaySelected,
+}: {
+  detail?: boolean;
+  setDaySelected?: Dispatch<SetStateAction<string>>;
+}) => {
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const [selected, setSelected] = useState('');
-  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [mySchedule, setMySchedule] = useState([]);
   const [partnerSchedule, setPartnerSchedule] = useState([]);
   const [myScheduleDetail, setMyScheduleDetail] = useState([]);
@@ -38,6 +51,7 @@ const CheckCalendar = () => {
   const selectedMonth = selected.substring(5, 7);
   const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const month = [
     'January',
@@ -63,6 +77,14 @@ const CheckCalendar = () => {
   ];
 
   let newDaysObject: DayType = {};
+
+  // 날짜 선택 및 전달
+  const handleSelectedDate = (date: SetStateAction<string>) => {
+    setSelected(date);
+    if (setDaySelected) {
+      setDaySelected(date);
+    }
+  };
 
   coupleSchedule.forEach((day) => {
     newDaysObject = {
@@ -289,20 +311,37 @@ const CheckCalendar = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.marginContainer}>
-        <View style={styles.calendarView}>
-          <View style={styles.calendarHeaderView}>
-            <TouchableOpacity onPress={() => handleShowPicker(true)}>
-              <Text style={styles.yearText}>{date.getFullYear()}</Text>
-              <Text style={styles.monthText}>{handleMonthName(date)}</Text>
-            </TouchableOpacity>
-
-            {/* 플러스 버튼 눌렀을 때 엑스로 변경되는 애니메이션 아직 구현 못함 */}
-            <TouchableOpacity style={styles.plusButton}>
-              <Animated.Text style={animatedStyle}>
-                <Plus onPress={async () => handleAnimation()} />
-              </Animated.Text>
-            </TouchableOpacity>
-          </View>
+        <View style={detail ? undefined : styles.calendarView}>
+          {/* 플랜 생성 페이지 분기처리 */}
+          {detail ? (
+            <View style={styles.calendarHeaderView}>
+              <TouchableOpacity
+                activeOpacity={1.0}
+                style={styles.textFlex}
+                onPress={() => handleShowPicker(true)}
+              >
+                <Text style={styles.detailText}>{date.getFullYear()}</Text>
+                <Text style={styles.detailText}>{handleMonthName(date)}</Text>
+                <OptionArrow />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.calendarHeaderView}>
+              <TouchableOpacity
+                activeOpacity={1.0}
+                onPress={() => handleShowPicker(true)}
+              >
+                <Text style={styles.yearText}>{date.getFullYear()}</Text>
+                <Text style={styles.monthText}>{handleMonthName(date)}</Text>
+              </TouchableOpacity>
+              {/* 플러스 버튼 눌렀을 때 엑스로 변경되는 애니메이션 아직 구현 못함 */}
+              <TouchableOpacity style={styles.plusButton}>
+                <Animated.Text style={animatedStyle}>
+                  <Plus onPress={async () => handleAnimation()} />
+                </Animated.Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* 캘린더 주간 제목 색상 및 대문자 설정 아직 구현 못함 */}
           <Calendar
@@ -322,24 +361,29 @@ const CheckCalendar = () => {
             dayComponent={({ date, state, marking }) => {
               return (
                 <CheckCalendarDayComponent
+                  detail={detail}
                   date={date}
                   state={state}
                   marking={marking}
-                  setSelected={setSelected}
+                  setSelected={(date) => handleSelectedDate(date)}
                   selected={selected}
                 />
               );
             }}
           />
-          <CheckCalendarDetail
-            selectedMonth={selectedMonth}
-            selectedDay={selectedDay}
-            currentMonth={currentMonth}
-            currentDay={currentDay}
-            myScheduleDetail={myScheduleDetail}
-            partnerScheduleDetail={partnerScheduleDetail}
-          />
+
+          {detail ? null : (
+            <CheckCalendarDetail
+              selectedMonth={selectedMonth}
+              selectedDay={selectedDay}
+              currentMonth={currentMonth}
+              currentDay={currentDay}
+              myScheduleDetail={myScheduleDetail}
+              partnerScheduleDetail={partnerScheduleDetail}
+            />
+          )}
         </View>
+
         {show && (
           <MonthPicker
             onChange={handleChangeValue}
@@ -358,7 +402,6 @@ export default CheckCalendar;
 
 const styles = StyleSheet.create({
   marginContainer: {
-    flex: 1,
     paddingTop: 8,
   },
   rootContainer: {
@@ -369,7 +412,6 @@ const styles = StyleSheet.create({
     marginRight: 21,
   },
   calendarHeaderView: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -384,12 +426,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 32,
     color: '#000000',
-  },
-  inputView: {
-    width: '100%',
-    height: 200,
-    justifyContent: 'center',
-    marginTop: 64,
+    textTransform: 'uppercase',
   },
   plusButton: {
     paddingTop: 13,
@@ -401,5 +438,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     color: '#000000',
+  },
+
+  // 해당 부분은 일정 생성 페이지 캘린더 UI 스타일 분기 코드
+  detailText: {
+    fontWeight: '500',
+    fontSize: 18,
+    color: '#787878',
+    fontFamily: 'Pretendard-Medium',
+    marginRight: 5,
+    textTransform: 'uppercase',
+  },
+  textFlex: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
