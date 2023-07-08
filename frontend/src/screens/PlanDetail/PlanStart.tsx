@@ -39,7 +39,6 @@ const PlanStart = ({ navigation }: Props) => {
     navigation.navigate('PlanCalendarScreen');
   };
 
-  console.log(daySelected);
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>

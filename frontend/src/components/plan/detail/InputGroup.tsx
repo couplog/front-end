@@ -29,7 +29,6 @@ const InputGroup = ({
     color: timeSelected ? '#000000' : '#909090',
   };
 
-  // picker 수정해야할듯 + svg 추가
   return (
     <>
       <View style={styles.inputView}>
@@ -61,6 +60,7 @@ const InputGroup = ({
           </Text>
         </TouchableOpacity>
       </View>
+
       <DatePicker
         modal
         open={timeOpen}
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
+    padding: 10,
     marginTop: 10,
   },
 });
