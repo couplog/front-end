@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useIsFocused } from '@react-navigation/native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { handleAnniversaryComing } from '../../api/anniversary/anniversaryCome';
 import { coupleState } from '../../state/atoms/coupleAtom';
@@ -15,6 +16,8 @@ import ComeAnniversary from './ComeAnniversary';
 
 // 수정/삭제 swipe는 캘린더 구현되면 component 가져와 쓸 예정 **
 const TabViewComponent = () => {
+  const isFocused = useIsFocused();
+
   const coupleInfo = useRecoilValue(coupleState);
   const [index, setIndex] = useState(0);
   const [comeAnniversaries, setComeAnniversaries] = useState<
@@ -48,7 +51,7 @@ const TabViewComponent = () => {
     fetchAnniversaryComing(coupleInfo.coupleId, 10);
     fetchOurAnniversary(coupleInfo.coupleId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFocused]);
 
   // 다가오는 기념일 조회
   const fetchAnniversaryComing = async (
