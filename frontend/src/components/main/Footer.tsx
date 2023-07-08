@@ -19,7 +19,7 @@ const Footer = ({
           let backgroundColor;
           let opacity;
 
-          // 최근가준 기념일 부터 색상, opacity 변경
+          // 최근기준 기념일 부터 색상, opacity 변경
           if (index === 0) {
             backgroundColor = 'rgba(237, 240, 243, 1)';
             opacity = 1;
