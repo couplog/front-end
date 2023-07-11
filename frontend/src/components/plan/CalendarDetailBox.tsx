@@ -26,7 +26,6 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
   const colorViewStyle = {
     width: 13,
     height: '100%',
-    maxHeight: 121,
     minHeight: 44,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
@@ -36,7 +35,7 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
 
   const rightSwipeActions = () => {
     return (
-      <View style={{ flexDirection: 'row', maxHeight: 121, minHeight: 44 }}>
+      <View style={{ flexDirection: 'row', minHeight: 44 }}>
         <View style={styles.swipeLeftView}>
           <Text style={styles.swipeText}>수정</Text>
         </View>
@@ -79,7 +78,6 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
     <View
       style={{
         ...styles.containerView,
-        flex: openDetail ? 0 : 1,
       }}
     >
       {noSchedule ? (
@@ -254,7 +252,6 @@ const styles = StyleSheet.create({
   containerView: {
     display: 'flex',
     flexDirection: 'row',
-    maxHeight: 121,
     minHeight: 44,
     alignItems: 'center',
     marginTop: 12,
@@ -274,7 +271,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderLeftWidth: 0,
-    alignItems: 'center',
   },
   detailTextContainerView: {
     flex: 1,
