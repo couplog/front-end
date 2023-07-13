@@ -328,9 +328,14 @@ const CheckCalendar = ({
     userData.memberId,
   ]);
 
+  const marginContainerStyle = {
+    ...styles.marginContainer,
+    flex: detail ? 0 : 1,
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.marginContainer}>
+      <View style={marginContainerStyle}>
         <View style={detail ? undefined : styles.calendarView}>
           {/* 플랜 생성 페이지 분기처리 */}
           {detail ? (
@@ -459,7 +464,6 @@ export default CheckCalendar;
 
 const styles = StyleSheet.create({
   marginContainer: {
-    flex: 1,
     paddingTop: 8,
   },
   calendarView: {
