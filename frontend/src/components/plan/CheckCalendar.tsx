@@ -17,6 +17,7 @@ import React, {
 import { useRecoilValue } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
+import SelectDropdown from 'react-native-select-dropdown';
 import { userState } from '../../state/atoms/userAtom';
 import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
@@ -43,6 +44,11 @@ const CheckCalendar = ({
   const [partnerSchedule, setPartnerSchedule] = useState([]);
   const [myScheduleDetail, setMyScheduleDetail] = useState([]);
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
+  const addPlanData = [
+    ['데이트', '#FC887B'],
+    ['내 일정', '#FFDD95'],
+  ];
+  const [selectedFilter, setSelectedFilter] = useState(0);
   const today = getFormattedDate(new Date());
   const currentYear = today.substring(0, 4);
   const currentMonth = today.substring(5, 7);
@@ -245,33 +251,6 @@ const CheckCalendar = ({
     [date, handleMonthName, handleShowPicker, selected, today]
   );
 
-  const [rotateAnimation, setRotateAnimation] = useState(new Animated.Value(0));
-
-  // 플러스 버튼을 누르면 엑스버튼으로 바꿔주는 함수
-  const handleAnimation = () => {
-    Animated.timing(rotateAnimation, {
-      toValue: 1,
-      duration: 800,
-      // easing: Easing.linear,
-      useNativeDriver: true,
-    }).start(() => {
-      rotateAnimation.setValue(0);
-    });
-  };
-
-  const interpolateRotating = rotateAnimation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['0deg', '45deg', '90deg'],
-  });
-
-  const animatedStyle = {
-    transform: [
-      {
-        rotate: interpolateRotating,
-      },
-    ],
-  };
-
   // 개인 일정 조회
   const handleCheckMyPlan = async (
     { year, month }: PlanPropsType,
@@ -375,12 +354,49 @@ const CheckCalendar = ({
                 <Text style={styles.yearText}>{date.getFullYear()}</Text>
                 <Text style={styles.monthText}>{handleMonthName(date)}</Text>
               </TouchableOpacity>
-              {/* 플러스 버튼 눌렀을 때 엑스로 변경되는 애니메이션 아직 구현 못함 */}
-              <TouchableOpacity style={styles.plusButton}>
-                <Animated.Text style={animatedStyle}>
-                  <Plus onPress={async () => handleAnimation()} />
-                </Animated.Text>
-              </TouchableOpacity>
+              <View style={styles.dropdownContainerView}>
+                <SelectDropdown
+                  data={addPlanData}
+                  dropdownOverlayColor="none"
+                  buttonStyle={styles.dropdownButtonView}
+                  buttonTextStyle={styles.dropdownButtonText}
+                  renderDropdownIcon={(isOpened) => {
+                    return (
+                      <Plus
+                        style={{
+                          transform: [{ rotate: isOpened ? '45deg' : '0deg' }],
+                          marginRight: -10,
+                        }}
+                      />
+                    );
+                  }}
+                  dropdownStyle={styles.dropdownBelowContainerView}
+                  renderCustomizedRowChild={(item) => {
+                    return (
+                      <View style={styles.rowChildView}>
+                        <View
+                          style={{
+                            ...styles.circleView,
+                            backgroundColor: item[1],
+                          }}
+                        />
+                        <Text>{item[0]}</Text>
+                      </View>
+                    );
+                  }}
+                  rowTextStyle={styles.rowChildText}
+                  rowStyle={styles.rowDividerView}
+                  onSelect={(selectedItem, index) => {
+                    setSelectedFilter(index);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem[0];
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item[0];
+                  }}
+                />
+              </View>
             </View>
           )}
 
@@ -491,5 +507,58 @@ const styles = StyleSheet.create({
   textFlex: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  dropdownContainerView: {
+    flexDirection: 'row',
+    height: 19,
+    marginTop: 14,
+  },
+  dropdownButtonView: {
+    backgroundColor: '#FFFFFF',
+    width: 120,
+  },
+  dropdownButtonText: {
+    display: 'none',
+  },
+  dropdownBelowContainerView: {
+    width: 120,
+    height: 64,
+    borderBottomColor: '#FFFFFF',
+    marginTop: -8,
+    backgroundColor: '#FFFFFF',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 6,
+      height: 4,
+    },
+    shadowColor: '#000000',
+    borderColor: 'rgba(22,20,10,0.1)',
+    overflow: 'visible',
+    borderRadius: 8,
+  },
+  rowChildView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 23,
+  },
+  circleView: {
+    height: 12,
+    width: 12,
+    borderRadius: 1000,
+    marginRight: 12,
+  },
+  rowChildText: {
+    fontFamily: 'Pretendard-Medium',
+    fontWeight: '400',
+    fontSize: 14,
+    marginLeft: 23,
+    textAlign: 'left',
+    color: '#000000',
+  },
+  rowDividerView: {
+    height: 32,
+    borderBottomColor: '#EDF0F3',
   },
 });
