@@ -8,7 +8,7 @@ import Header from '../../components/anniversary/Header';
 import TabViewComponent from '../../components/anniversary/TabViewComponent';
 import { StackParamList } from '../../types/routes/navigationType';
 
-type Props = StackScreenProps<StackParamList, 'AnniversaryMainScreen'>;
+export type Props = StackScreenProps<StackParamList, 'AnniversaryMainScreen'>;
 
 const AnniversaryMainScreen = ({ navigation }: Props) => {
   const coupleInfo = useRecoilValue(coupleState);
