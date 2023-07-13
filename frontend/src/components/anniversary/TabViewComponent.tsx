@@ -33,7 +33,10 @@ const TabViewComponent = () => {
   );
 
   const OurAnniversaryRoute = () => (
-    <OurAnniversary ourAnniversaries={ourAnniversaries} />
+    <OurAnniversary
+      reloadAnniversaries={() => fetchOurAnniversary(coupleInfo.coupleId)}
+      ourAnniversaries={ourAnniversaries}
+    />
   );
 
   const renderScene = SceneMap({
@@ -89,6 +92,7 @@ const TabViewComponent = () => {
           <TabBar
             {...props}
             activeColor="#000000"
+            pressColor="transparent"
             inactiveColor="#909090"
             labelStyle={styles.labelText}
             indicatorStyle={styles.indicatorStyle}
