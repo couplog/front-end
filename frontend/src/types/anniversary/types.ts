@@ -40,3 +40,8 @@ export interface AnniversaryProps {
   repeatRule?: string;
   date: string;
 }
+
+export interface SwipeButtonProps {
+  onEdit: () => void;
+  onDelete: () => void;
+}
