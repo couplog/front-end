@@ -17,16 +17,21 @@ const CheckCalendarDayComponent = ({
   const daySelected =
     date?.dateString === selected || (date?.dateString === today && !selected);
 
+  const borderColor =
+    !daySelected && state === 'disabled' ? '#EDF0F3' : '#667C92';
+
+  const borderWidth =
+    (date?.dateString === today && selected === today) ||
+    (!marking?.dots?.length && state === 'disabled') ||
+    date?.dateString === selected
+      ? 2
+      : 0;
+
   const calendarDayStyle = {
     ...styles.calendarDayView,
-    borderColor: daySelected ? '#667C92' : '#EDF0F3',
+    borderColor,
     backgroundColor: state === 'disabled' ? '#FFFFFF' : '#EDF0F3',
-    borderWidth:
-      date?.dateString === today ||
-      !marking?.dots?.length ||
-      date?.dateString === selected
-        ? 2
-        : 0,
+    borderWidth,
   };
 
   const calendarTextStyle = {

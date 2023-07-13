@@ -44,7 +44,8 @@ const CheckCalendar = ({
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
-  const [selected, setSelected] = useState('');
+  const today = getFormattedDate(new Date());
+  const [selected, setSelected] = useState(today);
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mySchedule, setMySchedule] = useState([]);
@@ -57,7 +58,6 @@ const CheckCalendar = ({
     ['내 일정', '#FFDD95'],
   ];
   const [selectedFilter, setSelectedFilter] = useState(0);
-  const today = getFormattedDate(new Date());
   const currentYear = today.substring(0, 4);
   const currentMonth = today.substring(5, 7);
   const currentDay = today.substring(8, 10);
