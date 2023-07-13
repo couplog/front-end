@@ -1,17 +1,26 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useResetRecoilState } from 'recoil';
 import Plus from '../../assets/images/common/boldPlus.svg';
 import Back from '../../assets/images/common/smallBack.svg';
 import { HeaderProps } from '../../types/anniversary/types';
 import XButton from '../../assets/images/common/xButton.svg';
+import { editAnniversaryState } from '../../state/atoms/editAnniversary';
 
-const Header = ({ onPress, create, isDisabled }: HeaderProps) => {
+const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
   const navigation = useNavigation();
+  const reset = useResetRecoilState(editAnniversaryState);
 
   const containerStyle = {
     ...styles.container,
-    marginBottom: create ? undefined : -50,
+    marginBottom: create || edit ? undefined : -50,
+  };
+
+  // 화면 뒤로 이동 및, 값 reset
+  const handleBack = () => {
+    reset();
+    navigation.goBack();
   };
 
   return (
@@ -19,9 +28,9 @@ const Header = ({ onPress, create, isDisabled }: HeaderProps) => {
       <TouchableOpacity
         activeOpacity={1.0}
         hitSlop={styles.hitSlop}
-        onPress={() => navigation.goBack()}
+        onPress={edit ? handleBack : () => navigation.goBack()}
       >
-        {create ? <XButton /> : <Back />}
+        {create || edit ? <XButton /> : <Back />}
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -30,7 +39,11 @@ const Header = ({ onPress, create, isDisabled }: HeaderProps) => {
         hitSlop={styles.hitSlop}
         onPress={onPress}
       >
-        {create ? <Text style={styles.createText}>추가</Text> : <Plus />}
+        {create || edit ? (
+          <Text style={styles.createText}>{edit ? '수정' : '추가'}</Text>
+        ) : (
+          <Plus />
+        )}
       </TouchableOpacity>
     </View>
   );
