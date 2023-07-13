@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { ScheduleDetailType } from '../atom/scheduleDetailType';
 
 export interface DayType {
   [key: string]: {
@@ -42,6 +43,12 @@ export interface PlanPropsType {
   year?: string;
   month?: string;
   day?: string;
+}
+
+export interface CalendarDetailBoxType {
+  scheduleDetail?: ScheduleDetailType;
+  boxColor?: '#FFDD95' | '#D0E6A5' | '#FC887B';
+  noSchedule?: boolean;
 }
 
 export interface CheckMyPlanDetailType extends PlanPropsType {

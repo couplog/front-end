@@ -6,48 +6,43 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ScheduleDetailType } from '../../types/atom/scheduleDetailType';
 import { userState } from '../../state/atoms/userAtom';
 import { handleDeletePlan } from '../../api/plan/deletePlan';
+import { CalendarDetailBoxType } from '../../types/calendar/calendarType';
 
-interface Props {
-  scheduleDetail?: ScheduleDetailType;
-  boxColor?: '#FFDD95' | '#D0E6A5' | '#FC887B';
-  noSchedule?: boolean;
-}
-
-const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
+const CalendarDetailBox = ({
+  scheduleDetail,
+  boxColor,
+  noSchedule,
+}: CalendarDetailBoxType) => {
   const [openDetail, setOpenDetail] = useState(false);
   const { memberId } = useRecoilValue(userState);
 
   const scheduleId = scheduleDetail?.scheduleId;
   const colorViewStyle = {
-    width: 13,
-    height: '100%',
-    minHeight: 44,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
+    ...styles.colorView,
     backgroundColor: boxColor,
     borderColor: boxColor,
   };
+  const detailTextContainerViewStyle = {};
 
-  const rightSwipeActions = () => {
-    return (
-      <View style={{ flexDirection: 'row', minHeight: 44 }}>
-        <View style={styles.swipeLeftView}>
-          <Text style={styles.swipeText}>수정</Text>
-        </View>
+  // const rightSwipeActions = () => {
+  //   return (
+  //     <View style={{ flexDirection: 'row', minHeight: 44 }}>
+  //       <View style={styles.swipeLeftView}>
+  //         <Text style={styles.swipeText}>수정</Text>
+  //       </View>
 
-        <TouchableOpacity onPress={handleDeleteAlert}>
-          <View style={styles.swipeRightView}>
-            <Text style={styles.swipeText}>삭제</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  //       <TouchableOpacity onPress={handleDeleteAlert}>
+  //         <View style={styles.swipeRightView}>
+  //           <Text style={styles.swipeText}>삭제</Text>
+  //         </View>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
 
   // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
   // alert 글자 색상 수정하는 부분 구현 못함
@@ -281,6 +276,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  colorView: {
+    width: 13,
+    height: '100%',
+    minHeight: 44,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   detailBoxView: {
     display: 'flex',
