@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../types/routes/navigationType';
 import Header from '../../components/anniversary/Header';
@@ -13,13 +13,20 @@ import TitleInput from '../../components/anniversary/TitleInput';
 import ContentInput from '../../components/anniversary/ContentInput';
 import Repeat from '../../components/anniversary/Repeat';
 import DateInput from '../../components/anniversary/DateInput';
-import { handleCreateAnniversary } from '../../api/anniversary/CreateAnniversary';
+import {
+  handleCreateAnniversary,
+  handleEditAnniversary,
+} from '../../api/anniversary/CreateAnniversary';
 import { coupleState } from '../../state/atoms/coupleAtom';
+import { editAnniversaryState } from '../../state/atoms/editAnniversary';
 
 type Props = StackScreenProps<StackParamList, 'AnniversaryCreateScreen'>;
 
 const AnniversaryCreateScreen = ({ navigation }: Props) => {
   const coupleInfo = useRecoilValue(coupleState);
+  const editAnniversary = useRecoilValue(editAnniversaryState);
+  const reset = useResetRecoilState(editAnniversaryState);
+  const editMode = editAnniversary.title.length > 0;
   const [title, setTitle] = useState('');
   const [daySelected, setDaySelected] = useState('');
   const [repeatStart, setRepeatStart] = useState('');
@@ -37,6 +44,16 @@ const AnniversaryCreateScreen = ({ navigation }: Props) => {
     }
   }, [title, daySelected, repeatCode]);
 
+  // 수정모드일 경우 해당 값들 채워넣기
+  useEffect(() => {
+    if (editMode) {
+      setTitle(editAnniversary.title);
+      setContent((prevContent) => editAnniversary.content ?? prevContent);
+      setDaySelected(editAnniversary.date);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editAnniversary]);
+
   // 기념일 추가히기
   const handleOnClick = async () => {
     try {
@@ -51,11 +68,31 @@ const AnniversaryCreateScreen = ({ navigation }: Props) => {
     }
   };
 
+  // 기념일 수정히기
+  const handleOnEdit = async () => {
+    try {
+      const response = await handleEditAnniversary(
+        { content, title, date: daySelected },
+        coupleInfo.coupleId,
+        editAnniversary.id
+      );
+      navigation.navigate('AnniversaryMainScreen');
+      console.log(response.data);
+      reset();
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => setStartVisible(false)}>
         <View style={styles.wrapper}>
-          <Header isDisabled={isDisabled} create onPress={handleOnClick} />
+          {editMode ? (
+            <Header isDisabled={isDisabled} edit onPress={handleOnEdit} />
+          ) : (
+            <Header isDisabled={isDisabled} create onPress={handleOnClick} />
+          )}
 
           <TitleInput setTitle={setTitle} title={title} />
 
@@ -71,6 +108,7 @@ const AnniversaryCreateScreen = ({ navigation }: Props) => {
             setRepeatCode={setRepeatCode}
             startVisible={startVisible}
             setStartVisible={setStartVisible}
+            edit={editMode ? true : false}
           />
 
           <ContentInput content={content} setContent={setContent} />
