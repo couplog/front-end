@@ -28,9 +28,11 @@ import OptionArrow from '../../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from './CheckCalendarDetail';
 import { month } from '../../utils/plan/calendarText';
 import {
+  handleCheckCouplePlanDetail,
   handleCheckMyPlanDetail,
   handleCheckPartnerPlanDetail,
 } from '../../utils/plan/calendar';
+import { coupleState } from '../../state/atoms/coupleAtom';
 
 const CheckCalendar = ({
   detail,
@@ -41,6 +43,7 @@ const CheckCalendar = ({
 }) => {
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
+  const coupleData = useRecoilValue(coupleState);
   const [selected, setSelected] = useState('');
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -48,6 +51,7 @@ const CheckCalendar = ({
   const [partnerSchedule, setPartnerSchedule] = useState([]);
   const [myScheduleDetail, setMyScheduleDetail] = useState([]);
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
+  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState([]);
   const addPlanData = [
     ['데이트', '#FC887B'],
     ['내 일정', '#FFDD95'],
@@ -269,26 +273,33 @@ const CheckCalendar = ({
     const day = selectedDay || currentDay;
     const myMemberId = userData.memberId;
     const partnerMemberId = partnerData.memberId;
+    const { coupleId } = coupleData;
 
-    myMemberId && handleCheckMyPlan({ year, month }, myMemberId);
-    myMemberId &&
-      handleCheckMyPlanDetail({
-        year,
-        month,
-        day,
-        myMemberId,
-        setMyScheduleDetail,
-      });
-    partnerMemberId && handleCheckPartnerPlan({ year, month }, partnerMemberId);
-    partnerMemberId &&
-      handleCheckPartnerPlanDetail({
-        year,
-        month,
-        day,
-        partnerMemberId,
-        setPartnerScheduleDetail,
-      });
+    handleCheckMyPlan({ year, month }, myMemberId);
+    handleCheckMyPlanDetail({
+      year,
+      month,
+      day,
+      myMemberId,
+      setMyScheduleDetail,
+    });
+    handleCheckPartnerPlan({ year, month }, partnerMemberId);
+    handleCheckPartnerPlanDetail({
+      year,
+      month,
+      day,
+      partnerMemberId,
+      setPartnerScheduleDetail,
+    });
+    handleCheckCouplePlanDetail({
+      year,
+      month,
+      day,
+      coupleId,
+      setCoupleScheduleDetail,
+    });
   }, [
+    coupleData,
     currentDay,
     currentMonth,
     currentYear,

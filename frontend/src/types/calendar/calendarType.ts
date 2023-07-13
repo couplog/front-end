@@ -53,3 +53,8 @@ export interface CheckPartnerPlanDetailType extends PlanPropsType {
   partnerMemberId: number | null;
   setPartnerScheduleDetail: Dispatch<SetStateAction<never[]>>;
 }
+
+export interface CheckCouplePlanDetailType extends PlanPropsType {
+  coupleId: number | null;
+  setCoupleScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}

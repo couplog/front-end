@@ -29,8 +29,11 @@ export const handleGetDatePlan = async (coupleId: number | null) => {
 };
 
 // 데이트 일정 디테일 조회
-export const handleGetDatePlanDetail = async (coupleId: number | null) => {
+export const handleGetDatePlanDetail = async (
+  { year, month, day }: PlanPropsType,
+  coupleId: number | null
+) => {
   return request({
-    url: `/api/couples/${coupleId}/dating`,
+    url: `/api/couples/${coupleId}/dating?year=${year}&month=${month}&day=${day}`,
   });
 };
