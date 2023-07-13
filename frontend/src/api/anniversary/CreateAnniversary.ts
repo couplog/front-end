@@ -12,3 +12,16 @@ export const handleCreateAnniversary = (
     data: anniversaryData,
   });
 };
+
+// 일정 수정
+export const handleEditAnniversary = (
+  anniversaryData: AnniversaryProps,
+  coupleId: number | null,
+  anniversaryId: number | null
+) => {
+  return request({
+    method: 'PUT',
+    url: `/api/couples/${coupleId}/anniversary/${anniversaryId}`,
+    data: anniversaryData,
+  });
+};
