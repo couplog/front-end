@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 export interface HeaderProps {
   onPress: () => void;
   create?: boolean;
+  edit?: boolean;
   isDisabled?: boolean;
 }
 
@@ -23,16 +24,19 @@ export interface RepeatProps {
   setRepeatCode: Dispatch<SetStateAction<string>>;
   startVisible: boolean;
   setStartVisible: Dispatch<SetStateAction<boolean>>;
+  edit?: boolean;
 }
 
 export interface ContentInputProps {
-  content: string;
-  setContent: Dispatch<SetStateAction<string>>;
+  content: string | null;
+  setContent:
+    | Dispatch<SetStateAction<string>>
+    | Dispatch<SetStateAction<string | null>>;
 }
 
 export interface AnniversaryProps {
   title: string;
   content: string;
-  repeatRule: string;
+  repeatRule?: string;
   date: string;
 }
