@@ -1,13 +1,12 @@
 import {
   Alert,
-  Animated,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useState } from 'react';
-import { Swipeable } from 'react-native-gesture-handler';
 import { useRecoilValue } from 'recoil';
 import { ScheduleDetailType } from '../../types/atom/scheduleDetailType';
 import { userState } from '../../state/atoms/userAtom';
@@ -87,10 +86,9 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
       ) : (
         <View style={{ flex: 1 }}>
           {boxColor !== '#D0E6A5' ? (
-            /* 클릭 시 Swipe가 늦게 들어가는 이슈 */
-            <Swipeable renderRightActions={rightSwipeActions}>
+            <ScrollView horizontal>
               <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
-                <Animated.View
+                <View
                   style={{
                     ...styles.detailBoxView,
                   }}
@@ -161,9 +159,25 @@ const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
                       </>
                     )}
                   </View>
-                </Animated.View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      minHeight: 44,
+                      justifyContent: 'flex-end',
+                    }}
+                  >
+                    <View style={styles.swipeLeftView}>
+                      <Text style={styles.swipeText}>수정</Text>
+                    </View>
+                    <TouchableOpacity onPress={handleDeleteAlert}>
+                      <View style={styles.swipeRightView}>
+                        <Text style={styles.swipeText}>삭제</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </TouchableOpacity>
-            </Swipeable>
+            </ScrollView>
           ) : (
             <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
               <View
@@ -273,6 +287,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0,
   },
   detailTextContainerView: {
+    width: '100%',
     flex: 1,
     display: 'flex',
     paddingLeft: 12,

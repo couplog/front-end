@@ -54,7 +54,7 @@ const CheckCalendarDayComponent = ({
     <TouchableOpacity onPress={handelSelectDay}>
       <View style={detail ? planStyle : calendarDayStyle}>
         <Text style={calendarTextStyle}>{date?.day}</Text>
-        <>
+        {/* <>
           {marking?.dots?.length === 1 && marking?.dots[0]?.color === 'red' && (
             <MultipleCalendarBox color="#FC887B" />
           )}
@@ -66,6 +66,8 @@ const CheckCalendarDayComponent = ({
             marking?.dots[0]?.color === 'green' && (
               <MultipleCalendarBox color="#D0E6A5" />
             )}
+          {marking?.dots?.length === 1 &&
+            marking?.dots[0]?.color === 'white' && <Text>heart</Text>}
           {marking?.dots?.length === 2 &&
             marking?.dots[0]?.color === 'red' &&
             marking?.dots[1]?.color === 'yellow' && (
@@ -83,6 +85,14 @@ const CheckCalendarDayComponent = ({
               </>
             )}
           {marking?.dots?.length === 2 &&
+            marking?.dots[0]?.color === 'red' &&
+            marking?.dots[1]?.color === 'white' && (
+              <>
+                <MultipleCalendarBox color="#FC887B" />
+                <Text>heart</Text>
+              </>
+            )}
+          {marking?.dots?.length === 2 &&
             marking?.dots[0]?.color === 'yellow' &&
             marking?.dots[1]?.color === 'green' && (
               <>
@@ -97,7 +107,7 @@ const CheckCalendarDayComponent = ({
               <MultipleCalendarBox color="#D0E6A5" />
             </>
           )}
-        </>
+        </> */}
       </View>
     </TouchableOpacity>
   );
