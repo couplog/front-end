@@ -51,6 +51,15 @@ export interface CalendarDetailBoxType {
   noSchedule?: boolean;
 }
 
+export interface CheckCalendarDetailType {
+  selectedMonth: string;
+  selectedDay: string;
+  currentMonth: string;
+  currentDay: string;
+  myScheduleDetail: ScheduleDetailType[];
+  partnerScheduleDetail: ScheduleDetailType[];
+}
+
 export interface CheckMyPlanDetailType extends PlanPropsType {
   myMemberId: number | null;
   setMyScheduleDetail: Dispatch<SetStateAction<never[]>>;

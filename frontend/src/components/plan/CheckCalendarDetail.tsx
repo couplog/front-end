@@ -6,16 +6,7 @@ import CalendarDetailBox from './CalendarDetailBox';
 import { userState } from '../../state/atoms/userAtom';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import Arrow from '../../assets/images/common/arrow.svg';
-import { ScheduleDetailType } from '../../types/atom/scheduleDetailType';
-
-interface Props {
-  selectedMonth: string;
-  selectedDay: string;
-  currentMonth: string;
-  currentDay: string;
-  myScheduleDetail: ScheduleDetailType[];
-  partnerScheduleDetail: ScheduleDetailType[];
-}
+import { CheckCalendarDetailType } from '../../types/calendar/calendarType';
 
 const CheckCalendarDetail = ({
   selectedMonth,
@@ -24,7 +15,7 @@ const CheckCalendarDetail = ({
   currentDay,
   myScheduleDetail,
   partnerScheduleDetail,
-}: Props) => {
+}: CheckCalendarDetailType) => {
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const filterData = [
