@@ -9,6 +9,7 @@ const Repeat = ({
   setRepeatCode,
   startVisible,
   setStartVisible,
+  edit,
 }: RepeatProps) => {
   const startOptionVisible = () => {
     setStartVisible(!startVisible);
@@ -23,15 +24,19 @@ const Repeat = ({
     <>
       <View style={styles.inputView}>
         <Text style={styles.inputText}>반복</Text>
-
         <TouchableOpacity
-          onPress={startOptionVisible}
+          onPress={edit ? undefined : startOptionVisible}
           activeOpacity={1.0}
           style={styles.placeInputBox}
         >
-          <Text style={repeatTextStyle}>
-            {repeatStart ? repeatStart : '없음'}
-          </Text>
+          {/* 수정일때 분기처리 */}
+          {edit ? (
+            <Text style={repeatTextStyle}>반복 수정 불가</Text>
+          ) : (
+            <Text style={repeatTextStyle}>
+              {repeatStart ? repeatStart : '없음'}
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
 
