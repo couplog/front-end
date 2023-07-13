@@ -1,5 +1,4 @@
 import {
-  Animated,
   Keyboard,
   StyleSheet,
   Text,
@@ -27,6 +26,11 @@ import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import OptionArrow from '../../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from './CheckCalendarDetail';
+import { month } from '../../utils/plan/calendarText';
+import {
+  handleCheckMyPlanDetail,
+  handleCheckPartnerPlanDetail,
+} from '../../utils/plan/calendar';
 
 const CheckCalendar = ({
   detail,
@@ -58,21 +62,6 @@ const CheckCalendar = ({
   const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const month = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
   const coupleSchedule = [
     '2023-06-01',
     '2023-06-02',
@@ -123,100 +112,100 @@ const CheckCalendar = ({
     };
   }
 
-  // coupleSchedule.forEach((day) => {
-  //   newDaysObject = {
-  //     ...newDaysObject,
-  //     [day]: {
-  //       marked: true,
-  //       dots: [{ key: 'coupleSchedule', color: 'red' }],
-  //     },
-  //   };
-  // });
+  coupleSchedule.forEach((day) => {
+    newDaysObject = {
+      ...newDaysObject,
+      [day]: {
+        marked: true,
+        dots: [{ key: 'coupleSchedule', color: 'red' }],
+      },
+    };
+  });
 
-  // coupleSchedule.forEach((day) => {
-  //   newDaysObject = {
-  //     ...newDaysObject,
-  //     [day]: {
-  //       marked: true,
-  //       dots: [{ key: 'coupleSchedule', color: 'red' }],
-  //     },
-  //   };
-  // });
+  coupleSchedule.forEach((day) => {
+    newDaysObject = {
+      ...newDaysObject,
+      [day]: {
+        marked: true,
+        dots: [{ key: 'coupleSchedule', color: 'red' }],
+      },
+    };
+  });
 
-  // mySchedule.forEach((day) => {
-  //   Object.keys(newDaysObject).includes(day)
-  //     ? (newDaysObject = {
-  //         ...newDaysObject,
-  //         [day]: {
-  //           marked: true,
-  //           dots: [
-  //             { key: 'coupleSchedule', color: 'red' },
-  //             { key: 'partnerSchedule', color: 'yellow' },
-  //           ],
-  //         },
-  //       })
-  //     : (newDaysObject = {
-  //         ...newDaysObject,
-  //         [day]: {
-  //           marked: true,
-  //           dots: [{ key: 'partnerSchedule', color: 'yellow' }],
-  //         },
-  //       });
-  // });
+  mySchedule.forEach((day) => {
+    Object.keys(newDaysObject).includes(day)
+      ? (newDaysObject = {
+          ...newDaysObject,
+          [day]: {
+            marked: true,
+            dots: [
+              { key: 'coupleSchedule', color: 'red' },
+              { key: 'partnerSchedule', color: 'yellow' },
+            ],
+          },
+        })
+      : (newDaysObject = {
+          ...newDaysObject,
+          [day]: {
+            marked: true,
+            dots: [{ key: 'partnerSchedule', color: 'yellow' }],
+          },
+        });
+  });
 
-  // partnerSchedule.forEach((day) => {
-  //   if (Object.keys(newDaysObject).includes(day)) {
-  //     if (newDaysObject[day].dots.length === 2) {
-  //       newDaysObject = {
-  //         ...newDaysObject,
-  //         [day]: {
-  //           marked: true,
-  //           dots: [
-  //             { key: 'coupleSchedule', color: 'red' },
-  //             { key: 'partnerSchedule', color: 'yellow' },
-  //             { key: 'mySchedule', color: 'green' },
-  //           ],
-  //         },
-  //       };
-  //     } else if (
-  //       newDaysObject[day].dots.length === 1 &&
-  //       newDaysObject[day].dots[0]?.color === 'red'
-  //     ) {
-  //       newDaysObject = {
-  //         ...newDaysObject,
-  //         [day]: {
-  //           marked: true,
-  //           dots: [
-  //             { key: 'coupleSchedule', color: 'red' },
-  //             { key: 'mySchedule', color: 'green' },
-  //           ],
-  //         },
-  //       };
-  //     } else if (
-  //       newDaysObject[day].dots.length === 1 &&
-  //       newDaysObject[day].dots[0]?.color === 'yellow'
-  //     ) {
-  //       newDaysObject = {
-  //         ...newDaysObject,
-  //         [day]: {
-  //           marked: true,
-  //           dots: [
-  //             { key: 'coupleSchedule', color: 'yellow' },
-  //             { key: 'mySchedule', color: 'green' },
-  //           ],
-  //         },
-  //       };
-  //     }
-  //   } else {
-  //     newDaysObject = {
-  //       ...newDaysObject,
-  //       [day]: {
-  //         marked: true,
-  //         dots: [{ key: 'mySchedule', color: 'green' }],
-  //       },
-  //     };
-  //   }
-  // });
+  partnerSchedule.forEach((day) => {
+    if (Object.keys(newDaysObject).includes(day)) {
+      if (newDaysObject[day].dots.length === 2) {
+        newDaysObject = {
+          ...newDaysObject,
+          [day]: {
+            marked: true,
+            dots: [
+              { key: 'coupleSchedule', color: 'red' },
+              { key: 'partnerSchedule', color: 'yellow' },
+              { key: 'mySchedule', color: 'green' },
+            ],
+          },
+        };
+      } else if (
+        newDaysObject[day].dots.length === 1 &&
+        newDaysObject[day].dots[0]?.color === 'red'
+      ) {
+        newDaysObject = {
+          ...newDaysObject,
+          [day]: {
+            marked: true,
+            dots: [
+              { key: 'coupleSchedule', color: 'red' },
+              { key: 'mySchedule', color: 'green' },
+            ],
+          },
+        };
+      } else if (
+        newDaysObject[day].dots.length === 1 &&
+        newDaysObject[day].dots[0]?.color === 'yellow'
+      ) {
+        newDaysObject = {
+          ...newDaysObject,
+          [day]: {
+            marked: true,
+            dots: [
+              { key: 'coupleSchedule', color: 'yellow' },
+              { key: 'mySchedule', color: 'green' },
+            ],
+          },
+        };
+      }
+    } else {
+      newDaysObject = {
+        ...newDaysObject,
+        [day]: {
+          marked: true,
+          dots: [{ key: 'mySchedule', color: 'green' }],
+        },
+      };
+    }
+  });
 
   // 년도, 월 세팅하는 모달 보이게하는 함수
   const handleShowPicker = useCallback(
@@ -225,13 +214,10 @@ const CheckCalendar = ({
   );
 
   // 숫자로 들어오는 월 이름을 영어로 바꾸는 함수
-  const handleMonthName = useCallback(
-    (date: Date) => {
-      const index = date.getMonth();
-      return month[index];
-    },
-    [month]
-  );
+  const handleMonthName = useCallback((date: Date) => {
+    const index = date.getMonth();
+    return month[index];
+  }, []);
 
   // 년도, 월을 변경할 때 사용하는 함수
   const handleChangeValue = useCallback(
@@ -277,32 +263,6 @@ const CheckCalendar = ({
     }
   };
 
-  // 개인 일정 디테일 조회
-  const handleCheckMyPlanDetail = async (
-    { year, month, day }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlanDetail({ year, month, day }, memberId);
-      setMyScheduleDetail(res.data.data.schedules);
-    } catch (err: any) {
-      console.log(err.response.data.message);
-    }
-  };
-
-  // 상대방 일정 디테일 조회
-  const handleCheckPartnerPlanDetail = async (
-    { year, month, day }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlanDetail({ year, month, day }, memberId);
-      setPartnerScheduleDetail(res.data.data.schedules);
-    } catch (err: any) {
-      console.log(err.response.data.message);
-    }
-  };
-
   useEffect(() => {
     const year = selectedYear || currentYear;
     const month = selectedMonth || currentMonth;
@@ -311,10 +271,23 @@ const CheckCalendar = ({
     const partnerMemberId = partnerData.memberId;
 
     myMemberId && handleCheckMyPlan({ year, month }, myMemberId);
-    myMemberId && handleCheckMyPlanDetail({ year, month, day }, myMemberId);
+    myMemberId &&
+      handleCheckMyPlanDetail({
+        year,
+        month,
+        day,
+        myMemberId,
+        setMyScheduleDetail,
+      });
     partnerMemberId && handleCheckPartnerPlan({ year, month }, partnerMemberId);
     partnerMemberId &&
-      handleCheckPartnerPlanDetail({ year, month, day }, partnerMemberId);
+      handleCheckPartnerPlanDetail({
+        year,
+        month,
+        day,
+        partnerMemberId,
+        setPartnerScheduleDetail,
+      });
   }, [
     currentDay,
     currentMonth,

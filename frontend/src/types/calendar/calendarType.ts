@@ -43,3 +43,13 @@ export interface PlanPropsType {
   month?: string;
   day?: string;
 }
+
+export interface CheckMyPlanDetailType extends PlanPropsType {
+  myMemberId: number | null;
+  setMyScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}
+
+export interface CheckPartnerPlanDetailType extends PlanPropsType {
+  partnerMemberId: number | null;
+  setPartnerScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}

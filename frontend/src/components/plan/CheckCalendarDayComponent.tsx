@@ -54,7 +54,7 @@ const CheckCalendarDayComponent = ({
     <TouchableOpacity onPress={handelSelectDay}>
       <View style={detail ? planStyle : calendarDayStyle}>
         <Text style={calendarTextStyle}>{date?.day}</Text>
-        {/* <>
+        <>
           {marking?.dots?.length === 1 && marking?.dots[0]?.color === 'red' && (
             <MultipleCalendarBox color="#FC887B" />
           )}
@@ -107,7 +107,7 @@ const CheckCalendarDayComponent = ({
               <MultipleCalendarBox color="#D0E6A5" />
             </>
           )}
-        </> */}
+        </>
       </View>
     </TouchableOpacity>
   );

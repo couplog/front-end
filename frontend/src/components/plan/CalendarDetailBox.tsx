@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ScheduleDetailType } from '../../types/atom/scheduleDetailType';
 import { userState } from '../../state/atoms/userAtom';
@@ -21,6 +21,7 @@ interface Props {
 const CalendarDetailBox = ({ scheduleDetail, boxColor, noSchedule }: Props) => {
   const [openDetail, setOpenDetail] = useState(false);
   const { memberId } = useRecoilValue(userState);
+
   const scheduleId = scheduleDetail?.scheduleId;
   const colorViewStyle = {
     width: 13,
