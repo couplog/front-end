@@ -10,7 +10,10 @@ const ComeAnniversary = ({
   comeAnniversaries: AnniversaryComponentProps[];
 }) => {
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F8F8F8', marginTop: 15 }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={anniversaryGlobalStyles.scrollContainer}
+    >
       {comeAnniversaries.map((anniversary) => {
         const targetDate = new Date(anniversary.date);
         const currentDate = new Date();
