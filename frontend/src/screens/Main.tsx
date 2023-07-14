@@ -12,8 +12,6 @@ import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
 import Weather from '../components/main/Weather';
 
-// - 커플 배경 사진 등록 / 수정 / 삭제 / 조회
-
 const Main = () => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
   const setPartnerInfo = useSetRecoilState(partnerState);
@@ -104,6 +102,7 @@ const Main = () => {
       </View>
 
       {/* Footer UI */}
+      {/* 클릭시 기념일 페이지 navigation */}
       <Footer anniversaries={anniversaries} />
     </SafeAreaView>
   );
@@ -114,7 +113,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FF7869',
+    backgroundColor: '#FF6564',
   },
   margin: {
     marginLeft: 25,
