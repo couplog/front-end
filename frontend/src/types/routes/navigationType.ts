@@ -36,3 +36,16 @@ export type StackParamList = {
   PlanPlaceContentScreen: undefined;
   PlanRepeatScreen: undefined;
 };
+
+// bottom navigation
+export type BottomTabList = {
+  MainScreen: undefined;
+  PlanCalendarScreen: undefined;
+  LoginScreen: undefined;
+};
+
+export enum BottomScreens {
+  BottomLoginScreen = 'LoginScreen',
+  BottomMainScreen = 'MainScreen',
+  BottomPlanCalendarScreen = 'PlanCalendarScreen',
+}
