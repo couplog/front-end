@@ -17,11 +17,21 @@ const CheckCalendarDayComponent = ({
   const daySelected =
     date?.dateString === selected || (date?.dateString === today && !selected);
 
+  const borderColor =
+    !daySelected && state === 'disabled' ? '#EDF0F3' : '#667C92';
+
+  const borderWidth =
+    (date?.dateString === today && selected === today) ||
+    (!marking?.dots?.length && state === 'disabled') ||
+    date?.dateString === selected
+      ? 2
+      : 0;
+
   const calendarDayStyle = {
     ...styles.calendarDayView,
-    borderColor: daySelected ? '#667C92' : '#EDF0F3',
+    borderColor,
     backgroundColor: state === 'disabled' ? '#FFFFFF' : '#EDF0F3',
-    borderWidth: marking?.dots?.length ? 0 : 2,
+    borderWidth,
   };
 
   const calendarTextStyle = {
@@ -61,6 +71,8 @@ const CheckCalendarDayComponent = ({
             marking?.dots[0]?.color === 'green' && (
               <MultipleCalendarBox color="#D0E6A5" />
             )}
+          {marking?.dots?.length === 1 &&
+            marking?.dots[0]?.color === 'white' && <Text>heart</Text>}
           {marking?.dots?.length === 2 &&
             marking?.dots[0]?.color === 'red' &&
             marking?.dots[1]?.color === 'yellow' && (
@@ -75,6 +87,14 @@ const CheckCalendarDayComponent = ({
               <>
                 <MultipleCalendarBox color="#FC887B" />
                 <MultipleCalendarBox color="#D0E6A5" />
+              </>
+            )}
+          {marking?.dots?.length === 2 &&
+            marking?.dots[0]?.color === 'red' &&
+            marking?.dots[1]?.color === 'white' && (
+              <>
+                <MultipleCalendarBox color="#FC887B" />
+                <Text>heart</Text>
               </>
             )}
           {marking?.dots?.length === 2 &&
