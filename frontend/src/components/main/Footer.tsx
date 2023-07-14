@@ -3,8 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { format } from 'date-fns';
 import { DayInfo } from './DayInfo';
 import { AnniversaryComponentProps } from '../../types/main/mainPageTypes';
-import Calendar from '../../assets/images/main/calendar.svg';
-import Image from '../../assets/images/main/image.svg';
 
 const Footer = ({
   anniversaries,
@@ -14,7 +12,7 @@ const Footer = ({
   return (
     <View style={styles.footerView}>
       <Text style={styles.headText}>다가오는 기념일</Text>
-      <View>
+      <View style={{ marginBottom: 35 }}>
         {anniversaries.map((anniversary, index) => {
           let backgroundColor;
           let opacity;
@@ -40,20 +38,6 @@ const Footer = ({
             />
           );
         })}
-      </View>
-
-      {/* 구현 미정 */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 35,
-        }}
-      >
-        {/* 추후 일정 페이지 연결 */}
-        <Calendar />
-        {/* 추후 사진 페이지 연결 */}
-        <Image />
       </View>
     </View>
   );
