@@ -35,6 +35,12 @@ const Onboarding = ({ navigation }: Props) => {
           disabled={false}
           onPress={() => navigation.navigate('PlanCalendarScreen')}
         />
+        <ButtonComponent
+          text="기념일 페이지"
+          font="bold"
+          disabled={false}
+          onPress={() => navigation.navigate('AnniversaryRoute')}
+        />
       </View>
     </View>
   );
