@@ -22,12 +22,17 @@ import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
 import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
-import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
+import {
+  handleGetAnniversaryList,
+  handleGetPlan,
+  handleGetPlanDetail,
+} from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import OptionArrow from '../../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from './CheckCalendarDetail';
 import { month } from '../../utils/plan/calendarText';
 import {
+  handleCheckAnniversaryList,
   handleCheckCouplePlanDetail,
   handleCheckMyPlanDetail,
   handleCheckPartnerPlanDetail,
@@ -52,6 +57,7 @@ const CheckCalendar = ({
   const [partnerSchedule, setPartnerSchedule] = useState([]);
   const [myScheduleDetail, setMyScheduleDetail] = useState([]);
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
+  const [anniversaryList, setAnniversaryList] = useState([]);
   const [coupleScheduleDetail, setCoupleScheduleDetail] = useState([]);
   const addPlanData = [
     ['데이트', '#FC887B'],
@@ -298,6 +304,13 @@ const CheckCalendar = ({
       coupleId,
       setCoupleScheduleDetail,
     });
+    handleCheckAnniversaryList({
+      year,
+      month,
+      day,
+      coupleId,
+      setAnniversaryList,
+    });
   }, [
     coupleData,
     currentDay,
@@ -426,6 +439,7 @@ const CheckCalendar = ({
               currentDay={currentDay}
               myScheduleDetail={myScheduleDetail}
               partnerScheduleDetail={partnerScheduleDetail}
+              anniversaryList={anniversaryList}
             />
           )}
         </View>

@@ -60,6 +60,16 @@ export interface CheckCalendarDetailType {
   currentDay: string;
   myScheduleDetail: ScheduleDetailType[];
   partnerScheduleDetail: ScheduleDetailType[];
+  anniversaryList: AnniversaryListtype[];
+}
+
+interface AnniversaryListtype {
+  id: number;
+  title: string;
+  content: string;
+  repeatRule: 'NONE' | 'YEAR';
+  category: 'OTHER' | 'BIRTH' | 'FIRST_DATE';
+  date: string;
 }
 
 export interface CheckMyPlanDetailType extends PlanPropsType {
@@ -75,4 +85,9 @@ export interface CheckPartnerPlanDetailType extends PlanPropsType {
 export interface CheckCouplePlanDetailType extends PlanPropsType {
   coupleId: number | null;
   setCoupleScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}
+
+export interface CheckAnniversaryListType extends PlanPropsType {
+  coupleId: number | null;
+  setAnniversaryList: Dispatch<SetStateAction<never[]>>;
 }

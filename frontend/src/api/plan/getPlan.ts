@@ -37,3 +37,13 @@ export const handleGetDatePlanDetail = async (
     url: `/api/couples/${coupleId}/dating?year=${year}&month=${month}&day=${day}`,
   });
 };
+
+// 기념일 목록 조회
+export const handleGetAnniversaryList = async (
+  { year, month, day }: PlanPropsType,
+  coupleId: number | null
+) => {
+  return request({
+    url: `/api/couples/${coupleId}/anniversary?year=${year}&month=${month}&day=${day}`,
+  });
+};

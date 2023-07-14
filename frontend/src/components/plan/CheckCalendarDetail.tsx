@@ -18,6 +18,7 @@ const CheckCalendarDetail = ({
   currentDay,
   myScheduleDetail,
   partnerScheduleDetail,
+  anniversaryList,
 }: CheckCalendarDetailType) => {
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
@@ -96,14 +97,18 @@ const CheckCalendarDetail = ({
           {selectedMonth || handleMonth(currentMonth)}월
           {selectedDay || handleDay(currentDay)}일
         </Text>
-        <View style={styles.dividerView} />
-        <Text
-          style={{
-            ...styles.anniversaryDateText,
-          }}
-        >
-          300일
-        </Text>
+        {anniversaryList.length > 0 && <View style={styles.dividerView} />}
+        {anniversaryList.map((arr) => {
+          return (
+            <Text
+              style={{
+                ...styles.anniversaryDateText,
+              }}
+            >
+              {arr.title}
+            </Text>
+          );
+        })}
       </View>
       <View style={styles.dropdownContainerView}>
         <SelectDropdown
@@ -233,6 +238,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     color: '#FC887B',
+    marginRight: 20,
   },
   dropdownContainerView: {
     flexDirection: 'row',
