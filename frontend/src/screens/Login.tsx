@@ -48,7 +48,8 @@ const Login = ({ navigation }: Props) => {
 
       connection
         ? navigation.navigate('MainScreen')
-        : navigation.navigate('ConnectPartnerScreen');
+        : // navigation.navigate('PlanCalendarScreen')
+          navigation.navigate('ConnectPartnerScreen');
     } catch (err) {
       setError(true);
       console.log(err);

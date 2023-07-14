@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { ScheduleDetailType } from '../atom/scheduleDetailType';
 
 export interface DayType {
   [key: string]: {
@@ -18,6 +19,7 @@ export interface Props {
   marking?: MarkingType;
   setSelected: Dispatch<SetStateAction<string>>;
   selected: string;
+  detail: boolean | undefined;
 }
 
 export interface DateType {
@@ -35,4 +37,40 @@ export interface MarkingType {
 interface MarkingDotsType {
   key?: string;
   color: string;
+}
+
+export interface PlanPropsType {
+  year?: string;
+  month?: string;
+  day?: string;
+}
+
+export interface CalendarDetailBoxType {
+  scheduleDetail?: ScheduleDetailType;
+  boxColor?: '#FFDD95' | '#D0E6A5' | '#FC887B';
+  noSchedule?: boolean;
+}
+
+export interface CheckCalendarDetailType {
+  selectedMonth: string;
+  selectedDay: string;
+  currentMonth: string;
+  currentDay: string;
+  myScheduleDetail: ScheduleDetailType[];
+  partnerScheduleDetail: ScheduleDetailType[];
+}
+
+export interface CheckMyPlanDetailType extends PlanPropsType {
+  myMemberId: number | null;
+  setMyScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}
+
+export interface CheckPartnerPlanDetailType extends PlanPropsType {
+  partnerMemberId: number | null;
+  setPartnerScheduleDetail: Dispatch<SetStateAction<never[]>>;
+}
+
+export interface CheckCouplePlanDetailType extends PlanPropsType {
+  coupleId: number | null;
+  setCoupleScheduleDetail: Dispatch<SetStateAction<never[]>>;
 }
