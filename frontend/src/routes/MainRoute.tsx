@@ -1,7 +1,13 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { RouteScreens, StackParamList } from '../types/routes/navigationType';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomScreens,
+  BottomTabList,
+  RouteScreens,
+  StackParamList,
+} from '../types/routes/navigationType';
 import RegisterPhoneNum from '../screens/RegisterPhoneNum';
 import RegisterUserInfo from '../screens/RegisterUserInfo';
 import Login from '../screens/Login';
@@ -10,8 +16,12 @@ import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
 import PlanCalendar from '../screens/PlanCalendar';
+import Calendar from '../assets/images/main/calendar.svg';
+import Image from '../assets/images/main/image.svg';
+import Home from '../assets/images/main/Main.svg';
 
 const Stack = createStackNavigator<StackParamList>();
+const BottomTab = createBottomTabNavigator<BottomTabList>();
 
 const navTheme = {
   ...DefaultTheme,
@@ -19,6 +29,54 @@ const navTheme = {
     ...DefaultTheme.colors,
     background: 'white',
   },
+};
+
+// BottomTab //
+const ScreenTabRouter = () => {
+  return (
+    <BottomTab.Navigator
+      initialRouteName={BottomScreens.BottomMainScreen}
+      screenOptions={{
+        headerShown: false,
+        unmountOnBlur: true,
+        tabBarActiveTintColor: '#707070',
+        tabBarInactiveTintColor: '#707070',
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontFamily: 'Pretendard-Regular',
+        },
+      }}
+    >
+      <BottomTab.Screen
+        name={BottomScreens.BottomPlanCalendarScreen}
+        component={PlanCalendar}
+        options={{
+          tabBarIcon: Calendar,
+          tabBarLabel: '일정',
+        }}
+      />
+      <BottomTab.Screen
+        name={BottomScreens.BottomMainScreen}
+        component={Main}
+        options={{
+          tabBarIcon: Home,
+          tabBarLabel: '홈',
+        }}
+      />
+      <BottomTab.Screen
+        name={BottomScreens.BottomLoginScreen}
+        // 임시 -> 갤리로 수정
+        component={Login}
+        options={{
+          tabBarIcon: Image,
+          tabBarLabel: '갤러리',
+        }}
+      />
+    </BottomTab.Navigator>
+  );
 };
 
 const MainRoute = () => {
@@ -52,7 +110,7 @@ const MainRoute = () => {
         />
         <Stack.Screen
           name={RouteScreens.MainScreen}
-          component={Main}
+          component={ScreenTabRouter}
           options={{ headerShown: false }}
         />
         <Stack.Screen
