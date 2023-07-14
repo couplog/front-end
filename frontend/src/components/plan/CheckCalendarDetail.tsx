@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useRecoilValue } from 'recoil';
+import { Swipeable } from 'react-native-gesture-handler';
 import CalendarDetailBox from './CalendarDetailBox';
 import { userState } from '../../state/atoms/userAtom';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import Arrow from '../../assets/images/common/arrow.svg';
 import { CheckCalendarDetailType } from '../../types/calendar/calendarType';
+import SwipeButton from '../common/SwipeButton';
+import { handleDeletePlan } from '../../api/plan/deletePlan';
 
 const CheckCalendarDetail = ({
   selectedMonth,
@@ -25,6 +28,9 @@ const CheckCalendarDetail = ({
     [`${partnerData.name}`, '#D0E6A5'],
   ];
   const [selectedFilter, setSelectedFilter] = useState(0);
+  const [swipeStates, setSwipeStates] = useState(
+    myScheduleDetail.map(() => false)
+  );
   const noSchedule = true;
 
   // 한 자릿수 월 일 때 0을 삭제해 주는 함수
@@ -41,6 +47,42 @@ const CheckCalendarDetail = ({
       return day;
     }
     return day[1];
+  };
+
+  // swipe 상태 변경
+  const handleSwipe = (index: number, isOpen: boolean) => {
+    setSwipeStates((prevState) => {
+      const newState = [...prevState];
+      newState[index] = isOpen;
+      return newState;
+    });
+  };
+
+  // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
+  // alert 글자 색상 수정하는 부분 구현 못함
+  const handleDeleteAlert = (scheduleId: number | null) => {
+    const memberId = userData.memberId;
+    Alert.alert(
+      '일정 삭제',
+      '반복 일정을 모두 삭제할까요?',
+      [
+        {
+          text: '반복 일정 전체 삭제',
+          onPress: () => {
+            // 새로고침하는 기능 추가해야함
+            scheduleId && handleDeletePlan(memberId, scheduleId, true);
+          },
+          style: 'destructive',
+        },
+        {
+          text: '해당 일정만 삭제',
+          onPress: () =>
+            // 새로고침하는 기능 추가해야함
+            scheduleId && handleDeletePlan(memberId, scheduleId, false),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -107,27 +149,51 @@ const CheckCalendarDetail = ({
         />
       </View>
       {myScheduleDetail.length === 0 && partnerScheduleDetail.length === 0 && (
-        <CalendarDetailBox noSchedule={noSchedule} />
+        <CalendarDetailBox
+          noSchedule={noSchedule}
+          swipeStates={swipeStates}
+          idx={0}
+        />
       )}
-      {myScheduleDetail.length > 0 &&
-        (selectedFilter === 2 || selectedFilter === 0) &&
-        myScheduleDetail.map((arr) => {
-          return (
-            <CalendarDetailBox
-              key={arr.scheduleId}
-              scheduleDetail={arr}
-              boxColor="#FFDD95"
-            />
-          );
-        })}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {myScheduleDetail.length > 0 &&
+          (selectedFilter === 2 || selectedFilter === 0) &&
+          myScheduleDetail.map((arr, idx) => {
+            return (
+              <Swipeable
+                key={arr.scheduleId}
+                renderRightActions={() => (
+                  <SwipeButton
+                    onEdit={() => console.log('edit')}
+                    onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                  />
+                )}
+                overshootRight={false}
+                onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                onSwipeableWillClose={() => handleSwipe(idx, false)}
+              >
+                <CalendarDetailBox
+                  key={arr.scheduleId}
+                  scheduleDetail={arr}
+                  boxColor="#FFDD95"
+                  swipeStates={swipeStates}
+                  idx={idx}
+                />
+              </Swipeable>
+            );
+          })}
+      </ScrollView>
+
       {partnerScheduleDetail.length > 0 &&
         (selectedFilter === 3 || selectedFilter === 0) &&
-        partnerScheduleDetail.map((arr) => {
+        partnerScheduleDetail.map((arr, idx) => {
           return (
             <CalendarDetailBox
               key={arr.scheduleId}
               scheduleDetail={arr}
               boxColor="#D0E6A5"
+              swipeStates={swipeStates}
+              idx={idx}
             />
           );
         })}

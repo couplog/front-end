@@ -49,6 +49,8 @@ export interface CalendarDetailBoxType {
   scheduleDetail?: ScheduleDetailType;
   boxColor?: '#FFDD95' | '#D0E6A5' | '#FC887B';
   noSchedule?: boolean;
+  swipeStates: boolean[];
+  idx: number;
 }
 
 export interface CheckCalendarDetailType {
