@@ -1,10 +1,12 @@
 import {
   Alert,
   ScrollView,
+  StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -26,7 +28,12 @@ const CalendarDetailBox = ({
     backgroundColor: boxColor,
     borderColor: boxColor,
   };
-  const detailTextContainerViewStyle = {};
+  const detailTextContainerViewStyle: StyleProp<ViewStyle> = {
+    ...styles.detailTextContainerView,
+    flexDirection: openDetail ? 'column' : 'row',
+    paddingTop: openDetail ? 15 : 0,
+    alignItems: openDetail ? 'stretch' : 'center',
+  };
 
   // const rightSwipeActions = () => {
   //   return (
@@ -90,14 +97,7 @@ const CalendarDetailBox = ({
                   }}
                 >
                   <View style={colorViewStyle} />
-                  <View
-                    style={{
-                      ...styles.detailTextContainerView,
-                      flexDirection: openDetail ? 'column' : 'row',
-                      paddingTop: openDetail ? 15 : 0,
-                      alignItems: openDetail ? 'stretch' : 'center',
-                    }}
-                  >
+                  <View style={detailTextContainerViewStyle}>
                     <View
                       style={{
                         flex: openDetail ? 0 : 1,
