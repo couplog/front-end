@@ -3,6 +3,7 @@ import React from 'react';
 import { getFormattedDate } from '../../utils/formattedDate';
 import MultipleCalendarBox from './MultipleCalendarBox';
 import { Props } from '../../types/calendar/calendarType';
+import Heart from '../../assets/images/calendar/heart.svg';
 
 const CheckCalendarDayComponent = ({
   date,
@@ -72,7 +73,9 @@ const CheckCalendarDayComponent = ({
               <MultipleCalendarBox color="#D0E6A5" />
             )}
           {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.key === 'anniversary' && <Text>heart</Text>}
+            marking?.dots[0]?.key === 'anniversary' && (
+              <Heart style={styles.heartView} />
+            )}
           {marking?.dots?.length === 2 &&
             marking?.dots[0]?.key === 'datingSchedule' &&
             marking?.dots[1]?.key === 'mySchedule' && (
@@ -94,7 +97,7 @@ const CheckCalendarDayComponent = ({
             marking?.dots[1]?.key === 'anniversary' && (
               <>
                 <MultipleCalendarBox color="#FC887B" />
-                <Text>heart</Text>
+                <Heart style={styles.heartView} />
               </>
             )}
           {marking?.dots?.length === 2 &&
@@ -122,6 +125,7 @@ const CheckCalendarDayComponent = ({
               <>
                 <MultipleCalendarBox color="#FC887B" />
                 <MultipleCalendarBox color="#FFDD95" />
+                <Heart style={styles.heartView} />
               </>
             )}
           {marking?.dots?.length === 3 &&
@@ -131,6 +135,7 @@ const CheckCalendarDayComponent = ({
               <>
                 <MultipleCalendarBox color="#FC887B" />
                 <MultipleCalendarBox color="#D0E6A5" />
+                <Heart style={styles.heartView} />
               </>
             )}
           {marking?.dots?.length === 3 &&
@@ -140,6 +145,7 @@ const CheckCalendarDayComponent = ({
               <>
                 <MultipleCalendarBox color="#FFDD95" />
                 <MultipleCalendarBox color="#D0E6A5" />
+                <Heart style={styles.heartView} />
               </>
             )}
           {marking?.dots?.length === 4 &&
@@ -151,6 +157,7 @@ const CheckCalendarDayComponent = ({
                 <MultipleCalendarBox color="#FC887B" />
                 <MultipleCalendarBox color="#FFDD95" />
                 <MultipleCalendarBox color="#D0E6A5" />
+                <Heart style={styles.heartView} />
               </>
             )}
         </>
@@ -178,5 +185,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     zIndex: 50,
+  },
+  heartView: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
   },
 });
