@@ -17,8 +17,8 @@ import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
 import PlanCalendar from '../screens/PlanCalendar';
 import Calendar from '../assets/images/main/calendar.svg';
-import Image from '../assets/images/main/image.svg';
-import Home from '../assets/images/main/Main.svg';
+import Anniversary from '../assets/images/main/anniversary.svg';
+import BottomTabButton from '../components/design/BottomTabButton';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -31,8 +31,8 @@ const navTheme = {
   },
 };
 
-// BottomTab //
-const ScreenTabRouter = () => {
+// BottomTab
+const MainScreenBottomTabRouter = () => {
   return (
     <BottomTab.Navigator
       initialRouteName={BottomScreens.BottomMainScreen}
@@ -41,12 +41,15 @@ const ScreenTabRouter = () => {
         unmountOnBlur: true,
         tabBarActiveTintColor: '#707070',
         tabBarInactiveTintColor: '#707070',
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-        },
         tabBarLabelStyle: {
           fontSize: 12,
           fontFamily: 'Pretendard-Regular',
+        },
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          height: 90,
+          borderTopWidth: 1,
+          borderTopColor: '#dfdfdfe1',
         },
       }}
     >
@@ -56,23 +59,30 @@ const ScreenTabRouter = () => {
         options={{
           tabBarIcon: Calendar,
           tabBarLabel: '일정',
+          tabBarIconStyle: {
+            marginTop: 10,
+          },
         }}
       />
       <BottomTab.Screen
         name={BottomScreens.BottomMainScreen}
         component={Main}
         options={{
-          tabBarIcon: Home,
-          tabBarLabel: '홈',
+          tabBarButton: ({ onPress }) => (
+            <BottomTabButton onPress={onPress} label="홈" />
+          ),
         }}
       />
       <BottomTab.Screen
+        // 추후 기념일 페이지로 수정 (현재 임시)
         name={BottomScreens.BottomLoginScreen}
-        // 임시 -> 갤리로 수정
         component={Login}
         options={{
-          tabBarIcon: Image,
-          tabBarLabel: '갤러리',
+          tabBarIcon: Anniversary,
+          tabBarLabel: '기념일',
+          tabBarIconStyle: {
+            marginTop: 10,
+          },
         }}
       />
     </BottomTab.Navigator>
@@ -109,8 +119,8 @@ const MainRoute = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name={RouteScreens.MainScreen}
-          component={ScreenTabRouter}
+          name={RouteScreens.MainBottomTabScreen}
+          component={MainScreenBottomTabRouter}
           options={{ headerShown: false }}
         />
         <Stack.Screen
