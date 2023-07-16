@@ -1,5 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ScheduleDetailType } from '../atom/scheduleDetailType';
+import {
+  DateScheduleDetailType,
+  ScheduleDetailType,
+} from '../atom/scheduleDetailType';
 
 export interface SchedulesType {
   [key: string]: ScheduleNameType[];
@@ -55,7 +58,7 @@ export interface PlanPropsType {
 }
 
 export interface CalendarDetailBoxType {
-  scheduleDetail?: ScheduleDetailType;
+  scheduleDetail?: ScheduleDetailType | DateScheduleDetailType;
   boxColor?: '#FFDD95' | '#D0E6A5' | '#FC887B';
   noSchedule?: boolean;
   swipeStates: boolean[];
@@ -69,6 +72,7 @@ export interface CheckCalendarDetailType {
   currentDay: string;
   myScheduleDetail: ScheduleDetailType[];
   partnerScheduleDetail: ScheduleDetailType[];
+  coupleScheduleDetail: DateScheduleDetailType[];
   anniversaryList: AnniversaryListtype[];
 }
 

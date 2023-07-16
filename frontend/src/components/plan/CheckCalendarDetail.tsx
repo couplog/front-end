@@ -18,6 +18,7 @@ const CheckCalendarDetail = ({
   currentDay,
   myScheduleDetail,
   partnerScheduleDetail,
+  coupleScheduleDetail,
   anniversaryList,
 }: CheckCalendarDetailType) => {
   const userData = useRecoilValue(userState);
@@ -161,7 +162,35 @@ const CheckCalendarDetail = ({
         />
       )}
       <ScrollView showsVerticalScrollIndicator={false}>
-        {myScheduleDetail.length > 0 &&
+        {coupleScheduleDetail?.length > 0 &&
+          (selectedFilter === 1 || selectedFilter === 0) &&
+          coupleScheduleDetail.map((arr, idx) => {
+            return (
+              <Swipeable
+                key={arr.datingId}
+                renderRightActions={() => (
+                  <SwipeButton
+                    onEdit={() => console.log('edit')}
+                    onDelete={() => handleDeleteAlert(arr.datingId)}
+                  />
+                )}
+                overshootRight={false}
+                onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                onSwipeableWillClose={() => handleSwipe(idx, false)}
+              >
+                <CalendarDetailBox
+                  key={arr.datingId}
+                  scheduleDetail={arr}
+                  boxColor="#FC887B"
+                  swipeStates={swipeStates}
+                  idx={idx}
+                />
+              </Swipeable>
+            );
+          })}
+      </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {myScheduleDetail?.length > 0 &&
           (selectedFilter === 2 || selectedFilter === 0) &&
           myScheduleDetail.map((arr, idx) => {
             return (
@@ -189,7 +218,7 @@ const CheckCalendarDetail = ({
           })}
       </ScrollView>
 
-      {partnerScheduleDetail.length > 0 &&
+      {partnerScheduleDetail?.length > 0 &&
         (selectedFilter === 3 || selectedFilter === 0) &&
         partnerScheduleDetail.map((arr, idx) => {
           return (

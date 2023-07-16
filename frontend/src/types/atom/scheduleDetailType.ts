@@ -7,3 +7,12 @@ export interface ScheduleDetailType {
   location: string;
   RepeatRule: string;
 }
+
+export interface DateScheduleDetailType {
+  datingId: number | null;
+  startDateTime: string;
+  endDateTime: string;
+  title: string;
+  content: string;
+  location: string;
+}
