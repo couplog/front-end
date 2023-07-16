@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { format } from 'date-fns';
 import { DayInfo } from './DayInfo';
 import { AnniversaryComponentProps } from '../../types/main/mainPageTypes';
+import Right from '../../assets/images/common/rightAngle.svg';
 
 const Footer = ({
   anniversaries,
@@ -10,8 +11,12 @@ const Footer = ({
   anniversaries: AnniversaryComponentProps[];
 }) => {
   return (
+    // 기념일 onPress => 기념일 페이지 navigation
     <View style={styles.footerView}>
-      <Text style={styles.headText}>다가오는 기념일</Text>
+      <View style={styles.textFlex}>
+        <Text style={styles.headText}>다가오는 기념일</Text>
+        <Right />
+      </View>
       <View style={{ marginBottom: 35 }}>
         {anniversaries.map((anniversary, index) => {
           let backgroundColor;
@@ -63,11 +68,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 25,
   },
+  textFlex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+    marginBottom: 3,
+  },
   headText: {
     fontSize: 18,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     color: '#FFFFFF',
-    marginBottom: 3,
   },
 });
