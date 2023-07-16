@@ -139,7 +139,6 @@ const CheckCalendar = ({
   }
 
   for (let i = 0; i < schedules.length; i++) {
-    console.log(Object.keys(schedules[i]));
     newDaysObject = {
       ...newDaysObject,
       [Object.keys(schedules[i])[0]]: {
@@ -314,6 +313,7 @@ const CheckCalendar = ({
               currentDay={currentDay}
               myScheduleDetail={myScheduleDetail}
               partnerScheduleDetail={partnerScheduleDetail}
+              coupleScheduleDetail={coupleScheduleDetail}
               anniversaryList={anniversaryList}
             />
           )}

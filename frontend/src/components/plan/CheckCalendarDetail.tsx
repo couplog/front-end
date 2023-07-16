@@ -86,7 +86,6 @@ const CheckCalendarDetail = ({
       { cancelable: true }
     );
   };
-
   return (
     <View style={styles.calendarDetailView}>
       <View style={styles.calendarDetailHeaderView}>
@@ -161,76 +160,81 @@ const CheckCalendarDetail = ({
           idx={0}
         />
       )}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {coupleScheduleDetail?.length > 0 &&
-          (selectedFilter === 1 || selectedFilter === 0) &&
-          coupleScheduleDetail.map((arr, idx) => {
-            return (
-              <Swipeable
-                key={arr.datingId}
-                renderRightActions={() => (
-                  <SwipeButton
-                    onEdit={() => console.log('edit')}
-                    onDelete={() => handleDeleteAlert(arr.datingId)}
-                  />
-                )}
-                overshootRight={false}
-                onSwipeableWillOpen={() => handleSwipe(idx, true)}
-                onSwipeableWillClose={() => handleSwipe(idx, false)}
-              >
-                <CalendarDetailBox
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.rowScrollView}
+      >
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {coupleScheduleDetail?.length > 0 &&
+            (selectedFilter === 1 || selectedFilter === 0) &&
+            coupleScheduleDetail.map((arr, idx) => {
+              return (
+                <Swipeable
                   key={arr.datingId}
-                  scheduleDetail={arr}
-                  boxColor="#FC887B"
-                  swipeStates={swipeStates}
-                  idx={idx}
-                />
-              </Swipeable>
-            );
-          })}
-      </ScrollView>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {myScheduleDetail?.length > 0 &&
-          (selectedFilter === 2 || selectedFilter === 0) &&
-          myScheduleDetail.map((arr, idx) => {
-            return (
-              <Swipeable
-                key={arr.scheduleId}
-                renderRightActions={() => (
-                  <SwipeButton
-                    onEdit={() => console.log('edit')}
-                    onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                  renderRightActions={() => (
+                    <SwipeButton
+                      onEdit={() => console.log('edit')}
+                      onDelete={() => handleDeleteAlert(arr.datingId)}
+                    />
+                  )}
+                  overshootRight={false}
+                  onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                  onSwipeableWillClose={() => handleSwipe(idx, false)}
+                >
+                  <CalendarDetailBox
+                    key={arr.datingId}
+                    scheduleDetail={arr}
+                    boxColor="#FC887B"
+                    swipeStates={swipeStates}
+                    idx={idx}
                   />
-                )}
-                overshootRight={false}
-                onSwipeableWillOpen={() => handleSwipe(idx, true)}
-                onSwipeableWillClose={() => handleSwipe(idx, false)}
-              >
-                <CalendarDetailBox
+                </Swipeable>
+              );
+            })}
+        </ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {myScheduleDetail?.length > 0 &&
+            (selectedFilter === 2 || selectedFilter === 0) &&
+            myScheduleDetail.map((arr, idx) => {
+              return (
+                <Swipeable
                   key={arr.scheduleId}
-                  scheduleDetail={arr}
-                  boxColor="#FFDD95"
-                  swipeStates={swipeStates}
-                  idx={idx}
-                />
-              </Swipeable>
+                  renderRightActions={() => (
+                    <SwipeButton
+                      onEdit={() => console.log('edit')}
+                      onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                    />
+                  )}
+                  overshootRight={false}
+                  onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                  onSwipeableWillClose={() => handleSwipe(idx, false)}
+                >
+                  <CalendarDetailBox
+                    key={arr.scheduleId}
+                    scheduleDetail={arr}
+                    boxColor="#FFDD95"
+                    swipeStates={swipeStates}
+                    idx={idx}
+                  />
+                </Swipeable>
+              );
+            })}
+        </ScrollView>
+
+        {partnerScheduleDetail?.length > 0 &&
+          (selectedFilter === 3 || selectedFilter === 0) &&
+          partnerScheduleDetail.map((arr, idx) => {
+            return (
+              <CalendarDetailBox
+                key={arr.scheduleId}
+                scheduleDetail={arr}
+                boxColor="#D0E6A5"
+                swipeStates={swipeStates}
+                idx={idx}
+              />
             );
           })}
       </ScrollView>
-
-      {partnerScheduleDetail?.length > 0 &&
-        (selectedFilter === 3 || selectedFilter === 0) &&
-        partnerScheduleDetail.map((arr, idx) => {
-          return (
-            <CalendarDetailBox
-              key={arr.scheduleId}
-              scheduleDetail={arr}
-              boxColor="#D0E6A5"
-              swipeStates={swipeStates}
-              idx={idx}
-            />
-          );
-        })}
     </View>
   );
 };
@@ -325,5 +329,8 @@ const styles = StyleSheet.create({
   rowDividerView: {
     height: 32,
     borderBottomColor: '#EDF0F3',
+  },
+  rowScrollView: {
+    height: 250,
   },
 });
