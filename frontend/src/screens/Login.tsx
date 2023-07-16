@@ -47,7 +47,7 @@ const Login = ({ navigation }: Props) => {
       handleUserInfo();
 
       connection
-        ? navigation.navigate('MainScreen')
+        ? navigation.navigate('MainBottomTabScreen')
         : navigation.navigate('ConnectPartnerScreen');
     } catch (err) {
       setError(true);
