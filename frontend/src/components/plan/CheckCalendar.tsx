@@ -21,12 +21,12 @@ import { userState } from '../../state/atoms/userAtom';
 import { getFormattedDate } from '../../utils/formattedDate';
 import Plus from '../../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from './CheckCalendarDayComponent';
-import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
 import {
-  handleGetAnniversaryList,
-  handleGetPlan,
-  handleGetPlanDetail,
-} from '../../api/plan/getPlan';
+  DayType,
+  PlanPropsType,
+  SchedulesType,
+} from '../../types/calendar/calendarType';
+import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import OptionArrow from '../../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from './CheckCalendarDetail';
@@ -53,8 +53,7 @@ const CheckCalendar = ({
   const [selected, setSelected] = useState(today);
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [mySchedule, setMySchedule] = useState([]);
-  const [partnerSchedule, setPartnerSchedule] = useState([]);
+  const [scheduleList, setScheduleList] = useState<any[]>([]);
   const [myScheduleDetail, setMyScheduleDetail] = useState([]);
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
   const [anniversaryList, setAnniversaryList] = useState([]);
@@ -72,35 +71,7 @@ const CheckCalendar = ({
   const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
 
-  const coupleSchedule = [
-    '2023-06-01',
-    '2023-06-02',
-    '2023-06-13',
-    '2023-06-16',
-    '2023-06-26',
-    '2023-07-05',
-  ];
-
-  const schedules = {
-    '2023-07-01': [{ key: 'anniversaries', color: 'white' }],
-    '2023-07-13': [
-      { key: 'coupleSchedule', color: 'red' },
-      { key: 'partnerSchedule', color: 'green' },
-      { key: 'anniversaries', color: 'white' },
-    ],
-    '2023-07-23': [
-      { key: 'mySchedule', color: 'yellow' },
-      { key: 'partnerSchedule', color: 'green' },
-    ],
-    '2023-07-24': [
-      { key: 'coupleSchedule', color: 'red' },
-      { key: 'mySchedule', color: 'yellow' },
-    ],
-    '2023-07-26': [
-      { key: 'mySchedule', color: 'yellow' },
-      { key: 'anniversaries', color: 'white' },
-    ],
-  };
+  const schedules: SchedulesType[] = [];
 
   let newDaysObject: DayType = {};
 
@@ -111,111 +82,6 @@ const CheckCalendar = ({
       setDaySelected(date);
     }
   };
-
-  for (let i = 0; i < Object.keys(schedules).length; i++) {
-    newDaysObject = {
-      ...newDaysObject,
-      [Object.keys(schedules)[i]]: {
-        marked: true,
-        dots: Object.values(schedules)[i],
-      },
-    };
-  }
-
-  coupleSchedule.forEach((day) => {
-    newDaysObject = {
-      ...newDaysObject,
-      [day]: {
-        marked: true,
-        dots: [{ key: 'coupleSchedule', color: 'red' }],
-      },
-    };
-  });
-
-  coupleSchedule.forEach((day) => {
-    newDaysObject = {
-      ...newDaysObject,
-      [day]: {
-        marked: true,
-        dots: [{ key: 'coupleSchedule', color: 'red' }],
-      },
-    };
-  });
-
-  mySchedule.forEach((day) => {
-    Object.keys(newDaysObject).includes(day)
-      ? (newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'partnerSchedule', color: 'yellow' },
-            ],
-          },
-        })
-      : (newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [{ key: 'partnerSchedule', color: 'yellow' }],
-          },
-        });
-  });
-
-  partnerSchedule.forEach((day) => {
-    if (Object.keys(newDaysObject).includes(day)) {
-      if (newDaysObject[day].dots.length === 2) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'partnerSchedule', color: 'yellow' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      } else if (
-        newDaysObject[day].dots.length === 1 &&
-        newDaysObject[day].dots[0]?.color === 'red'
-      ) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      } else if (
-        newDaysObject[day].dots.length === 1 &&
-        newDaysObject[day].dots[0]?.color === 'yellow'
-      ) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'yellow' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      }
-    } else {
-      newDaysObject = {
-        ...newDaysObject,
-        [day]: {
-          marked: true,
-          dots: [{ key: 'mySchedule', color: 'green' }],
-        },
-      };
-    }
-  });
 
   // 년도, 월 세팅하는 모달 보이게하는 함수
   const handleShowPicker = useCallback(
@@ -247,31 +113,41 @@ const CheckCalendar = ({
     [date, handleMonthName, handleShowPicker, selected, today]
   );
 
-  // 개인 일정 조회
-  const handleCheckMyPlan = async (
+  // 일정 조회
+  const handleCheckPlan = async (
     { year, month }: PlanPropsType,
     memberId: number | null
   ) => {
     try {
       const res = await handleGetPlan({ year, month }, memberId);
-      setMySchedule(res.data.data.scheduleDates);
+      setScheduleList(res.data.data.schedules);
     } catch (err: any) {
       console.log(err.response.data.message);
     }
   };
 
-  // 상대방 일정 조회
-  const handleCheckPartnerPlan = async (
-    { year, month }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlan({ year, month }, memberId);
-      setPartnerSchedule(res.data.data.scheduleDates);
-    } catch (err: any) {
-      console.log(err.response.data.message);
+  for (let i = 0; i < scheduleList.length; i++) {
+    schedules.push({
+      [scheduleList[i].date]: [],
+    });
+    for (let j = 0; j < scheduleList[i].events.length; j++) {
+      schedules[i][scheduleList[i].date].push({
+        key: scheduleList[i].events[j],
+        color: 'white',
+      });
     }
-  };
+  }
+
+  for (let i = 0; i < schedules.length; i++) {
+    console.log(Object.keys(schedules[i]));
+    newDaysObject = {
+      ...newDaysObject,
+      [Object.keys(schedules[i])[0]]: {
+        marked: true,
+        dots: Object.values(schedules[i])[0],
+      },
+    };
+  }
 
   useEffect(() => {
     const year = selectedYear || currentYear;
@@ -281,7 +157,7 @@ const CheckCalendar = ({
     const partnerMemberId = partnerData.memberId;
     const { coupleId } = coupleData;
 
-    handleCheckMyPlan({ year, month }, myMemberId);
+    handleCheckPlan({ year, month }, myMemberId);
     handleCheckMyPlanDetail({
       year,
       month,
@@ -289,7 +165,6 @@ const CheckCalendar = ({
       myMemberId,
       setMyScheduleDetail,
     });
-    handleCheckPartnerPlan({ year, month }, partnerMemberId);
     handleCheckPartnerPlanDetail({
       year,
       month,

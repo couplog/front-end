@@ -1,6 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ScheduleDetailType } from '../atom/scheduleDetailType';
 
+export interface SchedulesType {
+  [key: string]: ScheduleNameType[];
+}
+
+interface ScheduleNameType {
+  key: string;
+  color: string;
+}
+
 export interface DayType {
   [key: string]: {
     marked: boolean;
