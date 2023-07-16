@@ -10,7 +10,6 @@ import { AnniversaryComponentProps } from '../types/main/mainPageTypes';
 import Header from '../components/main/Header';
 import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
-import Weather from '../components/main/Weather';
 
 const Main = () => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
@@ -98,7 +97,8 @@ const Main = () => {
 
         {/* 날씨 & 연애 day UI */}
         <Profile meetDate={coupleInfo.firstDate} />
-        <Weather />
+
+        {/* 날씨는 다음 version 업데이트 */}
       </View>
 
       {/* Footer UI */}
