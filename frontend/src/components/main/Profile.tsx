@@ -30,9 +30,9 @@ const Profile = ({ meetDate }: ProfileComponentProps) => {
     <>
       <View style={styles.coupleView}>
         <View style={styles.profileView}>
-          <Text style={styles.nameText}>{userInfo.nickname}</Text>
+          <Text style={styles.nameText}>{userInfo.name}</Text>
           <Heart />
-          <Text style={styles.nameText}>{partnerInfo.nickname}</Text>
+          <Text style={styles.nameText}>{partnerInfo.name}</Text>
         </View>
         <Text style={styles.dayText}>+{daysDifference}</Text>
       </View>
