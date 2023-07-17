@@ -84,9 +84,8 @@ const MainScreenBottomTabRouter = () => {
         }}
       />
       <BottomTab.Screen
-        // 추후 기념일 페이지로 수정 (현재 임시)
-        name={BottomScreens.BottomLoginScreen}
-        component={Login}
+        name={BottomScreens.BottomAnniversaryRoute}
+        component={AnniversaryRoute}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <CustomTabIcon

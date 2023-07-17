@@ -53,11 +53,11 @@ export type StackParamList = {
 export type BottomTabList = {
   MainScreen: undefined;
   PlanCalendarScreen: undefined;
-  LoginScreen: undefined;
+  AnniversaryRoute: undefined;
 };
 
 export enum BottomScreens {
-  BottomLoginScreen = 'LoginScreen',
+  BottomAnniversaryRoute = 'AnniversaryRoute',
   BottomMainScreen = 'MainScreen',
   BottomPlanCalendarScreen = 'PlanCalendarScreen',
 }
