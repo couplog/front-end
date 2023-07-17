@@ -78,9 +78,10 @@ const CheckCalendarDetail = ({
         },
         {
           text: '해당 일정만 삭제',
-          onPress: () =>
+          onPress: () => {
             // 새로고침하는 기능 추가해야함
-            scheduleId && handleDeletePlan(memberId, scheduleId, false),
+            scheduleId && handleDeletePlan(memberId, scheduleId, false);
+          },
         },
       ],
       { cancelable: true }

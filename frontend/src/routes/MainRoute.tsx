@@ -9,8 +9,8 @@ import Onboarding from '../screens/Onboarding';
 import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
-import PlanCalendar from '../screens/PlanCalendar';
 import AnniversaryRoute from './AnniversaryRoute';
+import CheckCalendar from '../screens/CheckCalendar';
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -58,7 +58,7 @@ const MainRoute = () => {
         />
         <Stack.Screen
           name={RouteScreens.PlanCalendarScreen}
-          component={PlanCalendar}
+          component={CheckCalendar}
           options={{ headerShown: false }}
         />
         {/* 일정 추가 route */}
