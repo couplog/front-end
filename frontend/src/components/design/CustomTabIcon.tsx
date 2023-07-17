@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { BottomTabCustomIconProps } from '../../types/routes/bottomTabTyps';
 
@@ -18,12 +18,14 @@ const CustomTabIcon = ({ focused, icon }: BottomTabCustomIconProps) => {
 
 export default CustomTabIcon;
 
+const bottom = Platform.OS === 'android' ? 44 : 15;
+
 const styles = StyleSheet.create({
   activeTabIcon: {
     borderTopWidth: 3,
     borderTopColor: '#FF6564',
     width: 72,
-    bottom: 8,
+    marginBottom: bottom,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',

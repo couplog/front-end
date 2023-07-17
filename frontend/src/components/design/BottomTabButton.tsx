@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import Home from '../../assets/images/main/Main.svg';
 import { BottomTabCustomButtonProps } from '../../types/routes/bottomTabTyps';
@@ -20,10 +26,13 @@ const BottomTabButton = ({ label, onPress }: BottomTabCustomButtonProps) => {
 
 export default BottomTabButton;
 
+const bottom = Platform.OS === 'android' ? 5 : 27;
+const top = Platform.OS === 'android' ? 40 : 15;
+
 const styles = StyleSheet.create({
   tabButtonContainer: {
     flex: 1,
-    top: 15,
+    marginTop: bottom,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -41,6 +50,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Pretendard-Regular',
     position: 'absolute',
-    top: 28,
+    top: top,
   },
 });
