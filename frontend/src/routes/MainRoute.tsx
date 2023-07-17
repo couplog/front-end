@@ -52,9 +52,11 @@ const MainScreenBottomTabRouter = () => {
           bottom: Platform.OS === 'android' ? 30 : undefined,
         },
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
           height: 90,
+          borderRadius: Platform.OS === 'ios' ? 15 : undefined,
+          borderWidth: 1.5,
           borderColor: '#dfdfdfe1',
+          backgroundColor: '#FFFFFF',
         },
       }}
     >
