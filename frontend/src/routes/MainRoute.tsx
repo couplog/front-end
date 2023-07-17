@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,8 +18,11 @@ import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
 import PlanCalendar from '../screens/PlanCalendar';
 import Calendar from '../assets/images/main/calendar.svg';
+import OnCalendar from '../assets/images/main/onCalendar.svg';
 import Anniversary from '../assets/images/main/anniversary.svg';
+import OnAnniversary from '../assets/images/main/onAnniversary.svg';
 import BottomTabButton from '../components/design/BottomTabButton';
+import CustomTabIcon from '../components/design/CustomTabIcon';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -39,30 +43,33 @@ const MainScreenBottomTabRouter = () => {
       screenOptions={{
         headerShown: false,
         unmountOnBlur: true,
-        tabBarActiveTintColor: '#707070',
+        tabBarActiveTintColor: '#FC887B',
         tabBarInactiveTintColor: '#707070',
         tabBarLabelStyle: {
           fontSize: 12,
+          fontWeight: '600',
           fontFamily: 'Pretendard-Regular',
+          bottom: Platform.OS === 'android' ? 30 : undefined,
         },
         tabBarStyle: {
           backgroundColor: '#FFFFFF',
           height: 90,
-          borderTopWidth: 1,
-          borderTopColor: '#dfdfdfe1',
+          borderColor: '#dfdfdfe1',
         },
       }}
     >
       <BottomTab.Screen
         name={BottomScreens.BottomPlanCalendarScreen}
         component={PlanCalendar}
-        options={{
-          tabBarIcon: Calendar,
-          tabBarLabel: '일정',
-          tabBarIconStyle: {
-            marginTop: 10,
-          },
-        }}
+        options={() => ({
+          tabBarIcon: ({ focused }) => (
+            <CustomTabIcon
+              icon={focused ? <OnCalendar /> : <Calendar />}
+              focused={focused}
+            />
+          ),
+          tabBarLabel: '기념일',
+        })}
       />
       <BottomTab.Screen
         name={BottomScreens.BottomMainScreen}
@@ -77,18 +84,21 @@ const MainScreenBottomTabRouter = () => {
         // 추후 기념일 페이지로 수정 (현재 임시)
         name={BottomScreens.BottomLoginScreen}
         component={Login}
-        options={{
-          tabBarIcon: Anniversary,
+        options={() => ({
+          tabBarIcon: ({ focused }) => (
+            <CustomTabIcon
+              icon={focused ? <OnAnniversary /> : <Anniversary />}
+              focused={focused}
+            />
+          ),
           tabBarLabel: '기념일',
-          tabBarIconStyle: {
-            marginTop: 10,
-          },
-        }}
+        })}
       />
     </BottomTab.Navigator>
   );
 };
 
+// 메인 라우트
 const MainRoute = () => {
   return (
     <NavigationContainer theme={navTheme}>
