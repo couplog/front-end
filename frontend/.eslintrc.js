@@ -43,6 +43,7 @@ module.exports = {
     'no-unneeded-ternary': 'off',
     'object-shorthand': 'off',
     'react/jsx-curly-brace-presence': 'off',
+    'prefer-destructuring': 'off',
   },
   settings: {
     'import/resolver': {

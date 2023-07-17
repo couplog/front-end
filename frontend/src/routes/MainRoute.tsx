@@ -23,6 +23,7 @@ import Anniversary from '../assets/images/main/anniversary.svg';
 import OnAnniversary from '../assets/images/main/onAnniversary.svg';
 import BottomTabButton from '../components/design/BottomTabButton';
 import CustomTabIcon from '../components/design/CustomTabIcon';
+import AnniversaryRoute from './AnniversaryRoute';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -144,6 +145,12 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.PlanRoute}
           component={PlanRoute}
+          options={{ headerShown: false }}
+        />
+        {/* 기념일 route */}
+        <Stack.Screen
+          name={RouteScreens.AnniversaryRoute}
+          component={AnniversaryRoute}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

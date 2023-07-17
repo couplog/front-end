@@ -15,6 +15,11 @@ export enum RouteScreens {
   PlanEndScreen = 'PlanEndScreen',
   PlanPlaceContentScreen = 'PlanPlaceContentScreen',
   PlanRepeatScreen = 'PlanRepeatScreen',
+
+  // 기념일 페이지
+  AnniversaryRoute = 'AnniversaryRoute',
+  AnniversaryMainScreen = 'AnniversaryMainScreen',
+  AnniversaryCreateScreen = 'AnniversaryCreateScreen',
 }
 
 // 필요한 파라미터가 없는 상태
@@ -37,6 +42,11 @@ export type StackParamList = {
   PlanEndScreen: undefined;
   PlanPlaceContentScreen: undefined;
   PlanRepeatScreen: undefined;
+
+  // 기념일 페이지 route
+  AnniversaryRoute: undefined;
+  AnniversaryMainScreen: undefined;
+  AnniversaryCreateScreen: undefined;
 };
 
 // bottom navigation
