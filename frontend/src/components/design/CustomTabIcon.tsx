@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   activeTabIcon: {
     borderTopWidth: 3,
     borderTopColor: '#FF6564',
-    width: 80,
+    width: 72,
     bottom: 8,
     justifyContent: 'center',
     alignSelf: 'center',
