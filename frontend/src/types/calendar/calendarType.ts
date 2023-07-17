@@ -66,6 +66,7 @@ export interface CalendarDetailBoxType {
 }
 
 export interface CheckCalendarDetailType {
+  navigation?: any;
   selectedMonth: string;
   selectedDay: string;
   currentMonth: string;

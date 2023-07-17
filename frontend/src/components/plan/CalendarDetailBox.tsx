@@ -35,6 +35,10 @@ const CalendarDetailBox = ({
       borderBottomRightRadius: swipeStates[idx] ? 0 : 8, // swipe 상태에 따라 조건부 스타일 적용
     },
   ];
+  const detailHeaderViewStyle = {
+    ...styles.detailHeaderView,
+    flex: openDetail ? 0 : 1,
+  };
 
   return (
     <View style={detailScrollStyle}>
@@ -45,21 +49,14 @@ const CalendarDetailBox = ({
       ) : (
         <View style={{ flex: 1 }}>
           {boxColor !== '#D0E6A5' ? (
-            <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
-              <View
-                style={{
-                  ...styles.detailBoxView,
-                }}
-              >
+            <TouchableOpacity
+              onPress={() => setOpenDetail((prev) => !prev)}
+              activeOpacity={1.0}
+            >
+              <View style={styles.detailBoxView}>
                 <View style={colorViewStyle} />
                 <View style={detailTextContainerViewStyle}>
-                  <View
-                    style={{
-                      flex: openDetail ? 0 : 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                  <View style={detailHeaderViewStyle}>
                     <Text style={styles.detailHeaderText}>
                       {scheduleDetail?.title}
                     </Text>
@@ -113,28 +110,14 @@ const CalendarDetailBox = ({
               </View>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={() => setOpenDetail((prev) => !prev)}>
-              <View
-                style={{
-                  ...styles.detailBoxView,
-                }}
-              >
+            <TouchableOpacity
+              onPress={() => setOpenDetail((prev) => !prev)}
+              activeOpacity={1.0}
+            >
+              <View style={styles.detailBoxView}>
                 <View style={colorViewStyle} />
-                <View
-                  style={{
-                    ...styles.detailTextContainerView,
-                    flexDirection: openDetail ? 'column' : 'row',
-                    paddingTop: openDetail ? 15 : 0,
-                    alignItems: openDetail ? 'stretch' : 'center',
-                  }}
-                >
-                  <View
-                    style={{
-                      flex: openDetail ? 0 : 1,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                <View style={detailTextContainerViewStyle}>
+                  <View style={detailHeaderViewStyle}>
                     <Text style={styles.detailHeaderText}>
                       {scheduleDetail?.title}
                     </Text>
@@ -206,6 +189,7 @@ const styles = StyleSheet.create({
     borderColor: '#EDF0F3',
     borderWidth: 1,
     borderRadius: 8,
+    backgroundColor: '#FFFFFF',
   },
   noScheduleBoxView: {
     flex: 1,
@@ -292,5 +276,9 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 14,
     color: '#000000',
+  },
+  detailHeaderView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
