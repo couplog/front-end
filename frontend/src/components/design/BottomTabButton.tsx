@@ -11,7 +11,7 @@ const BottomTabButton = ({ label, onPress }: BottomTabCustomButtonProps) => {
       style={styles.tabButtonContainer}
     >
       <View style={styles.buttonView}>
-        <Home color="#FFFFFF" style={{ marginBottom: 15 }} />
+        <Home color="#FFFFFF" style={{ marginBottom: 35 }} />
       </View>
       <Text style={styles.buttonText}>{label}</Text>
     </TouchableOpacity>
@@ -23,14 +23,14 @@ export default BottomTabButton;
 const styles = StyleSheet.create({
   tabButtonContainer: {
     flex: 1,
-    marginBottom: 100,
+    top: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonView: {
-    width: 73,
-    height: 73,
-    borderRadius: 50,
+    width: 112,
+    height: 112,
+    borderRadius: 100,
     backgroundColor: '#FF9696',
     alignItems: 'center',
     justifyContent: 'center',
@@ -38,8 +38,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontSize: 12,
+    fontWeight: '600',
     fontFamily: 'Pretendard-Regular',
     position: 'absolute',
-    top: 10,
+    top: 28,
   },
 });
