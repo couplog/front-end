@@ -55,7 +55,7 @@ export const handleCheckCouplePlanDetail = async ({
 }: CheckCouplePlanDetailType) => {
   try {
     const res = await handleGetDatePlanDetail({ year, month, day }, coupleId);
-    setCoupleScheduleDetail(res.data.data.schedules);
+    setCoupleScheduleDetail(res.data.data.datingList);
   } catch (err: any) {
     console.log(err.response.data.message);
   }

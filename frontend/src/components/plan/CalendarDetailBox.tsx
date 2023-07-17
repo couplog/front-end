@@ -48,129 +48,66 @@ const CalendarDetailBox = ({
         </View>
       ) : (
         <View style={{ flex: 1 }}>
-          {boxColor !== '#D0E6A5' ? (
-            <TouchableOpacity
-              onPress={() => setOpenDetail((prev) => !prev)}
-              activeOpacity={1.0}
-            >
-              <View style={styles.detailBoxView}>
-                <View style={colorViewStyle} />
-                <View style={detailTextContainerViewStyle}>
-                  <View style={detailHeaderViewStyle}>
-                    <Text style={styles.detailHeaderText}>
-                      {scheduleDetail?.title}
-                    </Text>
-                    <Text style={styles.placeText}>
-                      {scheduleDetail?.location}
-                    </Text>
-                  </View>
-                  {openDetail && (
-                    <>
-                      <View style={styles.detailTimeView}>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginRight: 4,
-                          }}
-                        >
-                          {scheduleDetail?.startDateTime.substring(0, 10)}
-                        </Text>
-                        <Text style={styles.detailTimeText}>
-                          {scheduleDetail?.startDateTime.substring(11, 16)}
-                        </Text>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginLeft: 4,
-                            marginRight: 4,
-                          }}
-                        >
-                          -
-                        </Text>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginRight: 4,
-                          }}
-                        >
-                          {scheduleDetail?.endDateTime.substring(0, 10)}
-                        </Text>
-                        <Text style={styles.detailTimeText}>
-                          {scheduleDetail?.endDateTime.substring(11, 16)}
-                        </Text>
-                      </View>
-                      <View style={styles.detailContentView}>
-                        <Text style={styles.detailContentText}>
-                          {scheduleDetail?.content}
-                        </Text>
-                      </View>
-                    </>
-                  )}
+          <TouchableOpacity
+            onPress={() => setOpenDetail((prev) => !prev)}
+            activeOpacity={1.0}
+          >
+            <View style={styles.detailBoxView}>
+              <View style={colorViewStyle} />
+              <View style={detailTextContainerViewStyle}>
+                <View style={detailHeaderViewStyle}>
+                  <Text style={styles.detailHeaderText}>
+                    {scheduleDetail?.title}
+                  </Text>
+                  <Text style={styles.placeText}>
+                    {scheduleDetail?.location}
+                  </Text>
                 </View>
+                {openDetail && (
+                  <>
+                    <View style={styles.detailTimeView}>
+                      <Text
+                        style={{
+                          ...styles.detailTimeText,
+                          marginRight: 4,
+                        }}
+                      >
+                        {scheduleDetail?.startDateTime.substring(0, 10)}
+                      </Text>
+                      <Text style={styles.detailTimeText}>
+                        {scheduleDetail?.startDateTime.substring(11, 16)}
+                      </Text>
+                      <Text
+                        style={{
+                          ...styles.detailTimeText,
+                          marginLeft: 4,
+                          marginRight: 4,
+                        }}
+                      >
+                        -
+                      </Text>
+                      <Text
+                        style={{
+                          ...styles.detailTimeText,
+                          marginRight: 4,
+                        }}
+                      >
+                        {scheduleDetail?.endDateTime.substring(0, 10)}
+                      </Text>
+                      <Text style={styles.detailTimeText}>
+                        {scheduleDetail?.endDateTime.substring(11, 16)}
+                      </Text>
+                    </View>
+                    <View style={styles.detailContentView}>
+                      <Text style={styles.detailContentText}>
+                        {scheduleDetail?.content}
+                      </Text>
+                    </View>
+                  </>
+                )}
               </View>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => setOpenDetail((prev) => !prev)}
-              activeOpacity={1.0}
-            >
-              <View style={styles.detailBoxView}>
-                <View style={colorViewStyle} />
-                <View style={detailTextContainerViewStyle}>
-                  <View style={detailHeaderViewStyle}>
-                    <Text style={styles.detailHeaderText}>
-                      {scheduleDetail?.title}
-                    </Text>
-                    <Text style={styles.placeText}>
-                      {scheduleDetail?.location}
-                    </Text>
-                  </View>
-                  {openDetail && (
-                    <>
-                      <View style={styles.detailTimeView}>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginRight: 4,
-                          }}
-                        >
-                          {scheduleDetail?.startDateTime.substring(0, 10)}
-                        </Text>
-                        <Text style={styles.detailTimeText}>
-                          {scheduleDetail?.startDateTime.substring(11, 16)}
-                        </Text>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginLeft: 4,
-                            marginRight: 4,
-                          }}
-                        >
-                          -
-                        </Text>
-                        <Text
-                          style={{
-                            ...styles.detailTimeText,
-                            marginRight: 4,
-                          }}
-                        >
-                          {scheduleDetail?.endDateTime.substring(0, 10)}
-                        </Text>
-                        <Text style={styles.detailTimeText}>
-                          {scheduleDetail?.endDateTime.substring(11, 16)}
-                        </Text>
-                      </View>
-                      <View style={styles.detailContentView}>
-                        <Text style={styles.detailContentText}>
-                          {scheduleDetail?.content}
-                        </Text>
-                      </View>
-                    </>
-                  )}
-                </View>
-              </View>
-            </TouchableOpacity>
-          )}
+            </View>
+          </TouchableOpacity>
         </View>
       )}
     </View>
