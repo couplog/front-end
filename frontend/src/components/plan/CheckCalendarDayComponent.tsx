@@ -56,7 +56,10 @@ const CheckCalendarDayComponent = ({
     }
   };
   return (
-    <TouchableOpacity onPress={handelSelectDay}>
+    <TouchableOpacity
+      onPress={handelSelectDay}
+      disabled={state === 'disabled' ? true : false}
+    >
       <View style={detail ? planStyle : calendarDayStyle}>
         <Text style={calendarTextStyle}>{date?.day}</Text>
         <>
