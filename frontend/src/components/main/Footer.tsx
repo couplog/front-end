@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   footerView: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: 20,
+    marginBottom: 35,
     marginLeft: 25,
     marginRight: 25,
   },
