@@ -1,6 +1,7 @@
 import {
   handleGetAnniversaryList,
   handleGetDatePlanDetail,
+  handleGetPlan,
   handleGetPlanDetail,
 } from '../../api/plan/getPlan';
 import {
@@ -8,7 +9,23 @@ import {
   CheckCouplePlanDetailType,
   CheckMyPlanDetailType,
   CheckPartnerPlanDetailType,
+  CheckPlanType,
 } from '../../types/calendar/calendarType';
+
+// 일정 조회
+export const handleCheckPlan = async ({
+  year,
+  month,
+  myMemberId,
+  setScheduleList,
+}: CheckPlanType) => {
+  try {
+    const res = await handleGetPlan({ year, month }, myMemberId);
+    setScheduleList(res.data.data.schedules);
+  } catch (err: any) {
+    console.log(err.response.data.message);
+  }
+};
 
 // 개인 일정 디테일 조회
 export const handleCheckMyPlanDetail = async ({

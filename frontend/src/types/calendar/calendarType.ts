@@ -67,14 +67,14 @@ export interface CalendarDetailBoxType {
 
 export interface CheckCalendarDetailType {
   navigation?: any;
+  selectedYear: string;
   selectedMonth: string;
   selectedDay: string;
   currentMonth: string;
   currentDay: string;
-  myScheduleDetail: ScheduleDetailType[];
   partnerScheduleDetail: ScheduleDetailType[];
-  coupleScheduleDetail: DateScheduleDetailType[];
   anniversaryList: AnniversaryListtype[];
+  setFocus: Dispatch<SetStateAction<boolean>>;
 }
 
 interface AnniversaryListtype {
@@ -86,9 +86,14 @@ interface AnniversaryListtype {
   date: string;
 }
 
+export interface CheckPlanType extends PlanPropsType {
+  myMemberId: number | null;
+  setScheduleList: Dispatch<SetStateAction<any[]>>;
+}
+
 export interface CheckMyPlanDetailType extends PlanPropsType {
   myMemberId: number | null;
-  setMyScheduleDetail: Dispatch<SetStateAction<never[]>>;
+  setMyScheduleDetail: Dispatch<SetStateAction<any[]>>;
 }
 
 export interface CheckPartnerPlanDetailType extends PlanPropsType {
@@ -98,7 +103,7 @@ export interface CheckPartnerPlanDetailType extends PlanPropsType {
 
 export interface CheckCouplePlanDetailType extends PlanPropsType {
   coupleId: number | null;
-  setCoupleScheduleDetail: Dispatch<SetStateAction<never[]>>;
+  setCoupleScheduleDetail: Dispatch<SetStateAction<any[]>>;
 }
 
 export interface CheckAnniversaryListType extends PlanPropsType {

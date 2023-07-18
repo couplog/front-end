@@ -22,21 +22,15 @@ import { userState } from '../state/atoms/userAtom';
 import { getFormattedDate } from '../utils/formattedDate';
 import Plus from '../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from '../components/plan/CheckCalendarDayComponent';
-import {
-  DayType,
-  PlanPropsType,
-  SchedulesType,
-} from '../types/calendar/calendarType';
-import { handleGetPlan, handleGetPlanDetail } from '../api/plan/getPlan';
+import { DayType, SchedulesType } from '../types/calendar/calendarType';
 import { partnerState } from '../state/atoms/partnerAtom';
 import OptionArrow from '../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from '../components/plan/CheckCalendarDetail';
 import { month } from '../utils/plan/calendarText';
 import {
   handleCheckAnniversaryList,
-  handleCheckCouplePlanDetail,
-  handleCheckMyPlanDetail,
   handleCheckPartnerPlanDetail,
+  handleCheckPlan,
 } from '../utils/plan/calendar';
 import { coupleState } from '../state/atoms/coupleAtom';
 
@@ -53,14 +47,13 @@ const CheckCalendar = ({
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
   const today = getFormattedDate(new Date());
+  const [focus, setFocus] = useState(false);
   const [selected, setSelected] = useState(today);
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [scheduleList, setScheduleList] = useState<any[]>([]);
-  const [myScheduleDetail, setMyScheduleDetail] = useState([]);
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
   const [anniversaryList, setAnniversaryList] = useState([]);
-  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState([]);
   const addPlanData = [
     ['데이트', '#FC887B'],
     ['내 일정', '#FFDD95'],
@@ -116,19 +109,6 @@ const CheckCalendar = ({
     [date, handleMonthName, handleShowPicker, selected, today]
   );
 
-  // 일정 조회
-  const handleCheckPlan = async (
-    { year, month }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlan({ year, month }, memberId);
-      setScheduleList(res.data.data.schedules);
-    } catch (err: any) {
-      console.log(err.response.data.message);
-    }
-  };
-
   for (let i = 0; i < scheduleList.length; i++) {
     schedules.push({
       [scheduleList[i].date]: [],
@@ -164,27 +144,13 @@ const CheckCalendar = ({
     const partnerMemberId = partnerData.memberId;
     const { coupleId } = coupleData;
 
-    handleCheckPlan({ year, month }, myMemberId);
-    handleCheckMyPlanDetail({
-      year,
-      month,
-      day,
-      myMemberId,
-      setMyScheduleDetail,
-    });
+    handleCheckPlan({ year, month, myMemberId, setScheduleList });
     handleCheckPartnerPlanDetail({
       year,
       month,
       day,
       partnerMemberId,
       setPartnerScheduleDetail,
-    });
-    handleCheckCouplePlanDetail({
-      year,
-      month,
-      day,
-      coupleId,
-      setCoupleScheduleDetail,
     });
     handleCheckAnniversaryList({
       year,
@@ -205,6 +171,7 @@ const CheckCalendar = ({
     selectedYear,
     today,
     userData.memberId,
+    focus,
   ]);
 
   const marginContainerStyle = {
@@ -319,14 +286,14 @@ const CheckCalendar = ({
           {detail ? null : (
             <CheckCalendarDetail
               navigation={navigation}
+              selectedYear={selectedYear}
               selectedMonth={selectedMonth}
               selectedDay={selectedDay}
               currentMonth={currentMonth}
               currentDay={currentDay}
-              myScheduleDetail={myScheduleDetail}
               partnerScheduleDetail={partnerScheduleDetail}
-              coupleScheduleDetail={coupleScheduleDetail}
               anniversaryList={anniversaryList}
+              setFocus={setFocus}
             />
           )}
         </View>
