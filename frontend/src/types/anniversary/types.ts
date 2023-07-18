@@ -5,6 +5,7 @@ export interface HeaderProps {
   create?: boolean;
   edit?: boolean;
   isDisabled?: boolean;
+  handleMain: () => void;
 }
 
 export interface TitleInputProps {
