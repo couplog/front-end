@@ -17,7 +17,7 @@ const AnniversaryMainScreen = ({ navigation }: Props) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <Header
-          goback={() => navigation.navigate('MainScreen')}
+          handleMain={() => navigation.navigate('MainScreen')}
           onPress={() => navigation.navigate('AnniversaryCreateScreen')}
         />
 
