@@ -1,6 +1,8 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/routes/navigationType';
 import { handleCoupleInfo } from '../api/couple/coupleInfo';
 import { coupleState } from '../state/atoms/coupleAtom';
 import { handlePartnerInfo } from '../api/couple/partnerInfo';
@@ -10,8 +12,11 @@ import { AnniversaryComponentProps } from '../types/main/mainPageTypes';
 import Header from '../components/main/Header';
 import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
+import backgroundImage from '../assets/images/main/backgroundMain.png';
 
-const Main = () => {
+type Props = StackScreenProps<StackParamList, 'MainScreen'>;
+
+const Main = ({ navigation }: Props) => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
   const setPartnerInfo = useSetRecoilState(partnerState);
   const [anniversaries, setAnniversaries] = useState<
@@ -92,21 +97,27 @@ const Main = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.margin}>
-        {/* Header UI */}
-        <Header />
+    <ImageBackground
+      source={backgroundImage}
+      style={{ width: '100%', height: '100%', zIndex: 100 }}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.margin}>
+          {/* Header UI */}
+          <Header />
 
-        {/* 날씨 & 연애 day UI */}
-        <Profile meetDate={coupleInfo.firstDate} />
+          {/* 날씨 & 연애 day UI */}
+          <Profile meetDate={coupleInfo.firstDate} />
 
-        {/* 날씨는 다음 version 업데이트 */}
-      </View>
+          {/* 날씨는 다음 version 업데이트 */}
+        </View>
 
-      {/* Footer UI */}
-      {/* 클릭시 기념일 페이지 navigation */}
-      <Footer anniversaries={anniversaries} />
-    </SafeAreaView>
+        {/* Footer UI */}
+        {/* 클릭시 기념일 페이지 navigation */}
+        <Footer navigation={navigation} anniversaries={anniversaries} />
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -115,7 +126,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FF6564',
+    backgroundColor: 'transparent',
   },
   margin: {
     marginLeft: 25,
