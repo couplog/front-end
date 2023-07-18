@@ -8,7 +8,7 @@ import { HeaderProps } from '../../types/anniversary/types';
 import XButton from '../../assets/images/common/xButton.svg';
 import { editAnniversaryState } from '../../state/atoms/editAnniversary';
 
-const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
+const Header = ({ onPress, create, edit, isDisabled, goback }: HeaderProps) => {
   const navigation = useNavigation();
   const reset = useResetRecoilState(editAnniversaryState);
 
@@ -28,7 +28,7 @@ const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
       <TouchableOpacity
         activeOpacity={1.0}
         hitSlop={styles.hitSlop}
-        onPress={edit ? handleBack : () => navigation.goBack()}
+        onPress={edit || create ? handleBack : goback}
       >
         {create || edit ? <XButton /> : <Back />}
       </TouchableOpacity>
