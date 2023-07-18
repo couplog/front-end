@@ -6,6 +6,7 @@ export enum RouteScreens {
   ConnectPartnerScreen = 'ConnectPartnerScreen',
   MainScreen = 'MainScreen',
   PlanCalendarScreen = 'PlanCalendarScreen',
+  MainBottomTabScreen = 'MainBottomTabScreen',
 
   // 일정 생성 페이지 route
   PlanRoute = 'PlanRoute',
@@ -32,6 +33,7 @@ export type StackParamList = {
   ConnectPartnerScreen: undefined;
   MainScreen: undefined;
   PlanCalendarScreen: undefined;
+  MainBottomTabScreen: undefined;
 
   // 일정 생성 페이지 route
   PlanRoute: undefined;
@@ -46,3 +48,16 @@ export type StackParamList = {
   AnniversaryMainScreen: undefined;
   AnniversaryCreateScreen: undefined;
 };
+
+// bottom navigation
+export type BottomTabList = {
+  MainScreen: undefined;
+  PlanCalendarScreen: undefined;
+  AnniversaryRoute: undefined;
+};
+
+export enum BottomScreens {
+  BottomAnniversaryRoute = 'AnniversaryRoute',
+  BottomMainScreen = 'MainScreen',
+  BottomPlanCalendarScreen = 'PlanCalendarScreen',
+}

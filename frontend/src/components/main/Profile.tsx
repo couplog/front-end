@@ -44,9 +44,9 @@ const Profile = ({ meetDate, anniversary }: ProfileComponentProps) => {
     <>
       <View style={styles.coupleView}>
         <View style={styles.profileView}>
-          <Text style={textStyle}>{userInfo.nickname}</Text>
+          <Text style={textStyle}>{userInfo.name}</Text>
           {anniversary ? <BlackHeart /> : <Heart />}
-          <Text style={textStyle}>{partnerInfo.nickname}</Text>
+          <Text style={textStyle}>{partnerInfo.name}</Text>
         </View>
         <Text style={dayTextStyle}>
           {anniversary ? `D+${daysDifference}` : `+${daysDifference}`}

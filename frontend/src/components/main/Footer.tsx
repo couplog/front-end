@@ -3,8 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { format } from 'date-fns';
 import { DayInfo } from './DayInfo';
 import { AnniversaryComponentProps } from '../../types/main/mainPageTypes';
-import Calendar from '../../assets/images/main/calendar.svg';
-import Image from '../../assets/images/main/image.svg';
+import Right from '../../assets/images/common/rightAngle.svg';
 
 const Footer = ({
   anniversaries,
@@ -12,9 +11,13 @@ const Footer = ({
   anniversaries: AnniversaryComponentProps[];
 }) => {
   return (
+    // 기념일 onPress => 기념일 페이지 navigation
     <View style={styles.footerView}>
-      <Text style={styles.headText}>다가오는 기념일</Text>
-      <View>
+      <View style={styles.textFlex}>
+        <Text style={styles.headText}>다가오는 기념일</Text>
+        <Right />
+      </View>
+      <View style={{ marginBottom: 35 }}>
         {anniversaries.map((anniversary, index) => {
           let backgroundColor;
           let opacity;
@@ -41,20 +44,6 @@ const Footer = ({
           );
         })}
       </View>
-
-      {/* 구현 미정 */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 35,
-        }}
-      >
-        {/* 추후 일정 페이지 연결 */}
-        <Calendar />
-        {/* 추후 사진 페이지 연결 */}
-        <Image />
-      </View>
     </View>
   );
 };
@@ -65,7 +54,7 @@ const styles = StyleSheet.create({
   footerView: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: 20,
+    marginBottom: 35,
     marginLeft: 25,
     marginRight: 25,
   },
@@ -79,11 +68,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 25,
   },
+  textFlex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 13,
+    marginBottom: 3,
+  },
   headText: {
     fontSize: 18,
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     color: '#FFFFFF',
-    marginBottom: 3,
   },
 });
