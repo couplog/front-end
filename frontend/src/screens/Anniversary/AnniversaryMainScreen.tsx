@@ -17,8 +17,11 @@ const AnniversaryMainScreen = ({ navigation }: Props) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <Header
+          goback={() => navigation.navigate('MainScreen')}
           onPress={() => navigation.navigate('AnniversaryCreateScreen')}
         />
+
+        <View style={styles.margin} />
 
         <Profile meetDate={coupleInfo.firstDate} anniversary />
 
@@ -39,5 +42,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 25,
     marginRight: 25,
+  },
+  margin: {
+    marginBottom: 30,
   },
 });
