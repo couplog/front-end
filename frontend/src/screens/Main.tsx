@@ -114,7 +114,6 @@ const Main = ({ navigation }: Props) => {
         </View>
 
         {/* Footer UI */}
-        {/* 클릭시 기념일 페이지 navigation */}
         <Footer navigation={navigation} anniversaries={anniversaries} />
       </SafeAreaView>
     </ImageBackground>
