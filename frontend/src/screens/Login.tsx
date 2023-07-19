@@ -15,11 +15,13 @@ import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
-import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/login/loginFormType';
 import { handleLogin, handleMemberInfo } from '../api/login/login';
 import { storeData } from '../utils/storage';
 import { userState } from '../state/atoms/userAtom';
+import Logo from '../assets/images/login/logo.svg';
+import UnCheck from '../assets/images/login/unCheck.svg';
+import Check from '../assets/images/login/check.svg';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
@@ -77,9 +79,8 @@ const Login = ({ navigation }: Props) => {
       <View style={styles.marginContainer}>
         <SafeAreaView style={styles.rootContainer}>
           {/* 헤더 UI  */}
-          {/* 임시 */}
           <View style={styles.logoView}>
-            <Text style={styles.logo}>로고</Text>
+            <Logo />
           </View>
 
           {/* Input Field UI */}
@@ -93,6 +94,7 @@ const Login = ({ navigation }: Props) => {
               value={phone}
               keyboardType="phone-pad"
             />
+
             <Text style={styles.label}>비밀번호</Text>
             <View style={styles.passwordView}>
               <TextInput
@@ -112,13 +114,13 @@ const Login = ({ navigation }: Props) => {
                 {eyeClick ? <OnEye /> : <OffEye />}
               </TouchableOpacity>
             </View>
-            <View style={styles.checkboxView}>
-              <Checkbox
-                checked={checked}
-                onPress={() => setChecked(!checked)}
-                label="자동 로그인"
-              />
-            </View>
+
+            <TouchableWithoutFeedback onPress={() => setChecked(!checked)}>
+              <View style={styles.checkboxView}>
+                {checked ? <Check /> : <UnCheck />}
+                <Text>자동 로그인</Text>
+              </View>
+            </TouchableWithoutFeedback>
             {error && (
               <Text style={styles.errorText}>
                 유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
@@ -134,7 +136,7 @@ const Login = ({ navigation }: Props) => {
             activeOpacity={1.0}
             onPress={() => navigation.navigate('RegisterPhoneScreen')}
           >
-            <Text style={styles.signupText}>회원가입하기</Text>
+            <Text style={styles.signUpText}>회원가입하기</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonView}>
@@ -162,12 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logoView: {
-    width: 200,
-    height: 100,
-    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#E7E7E7',
     marginTop: 80,
   },
   logo: {
@@ -213,11 +210,14 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 10,
+    gap: 10,
+    marginTop: 20,
+    alignItems: 'center',
   },
-  signupText: {
+  signUpText: {
     color: '#909090',
     textDecorationLine: 'underline',
+    fontWeight: '600',
     fontFamily: 'Pretendard-Regular',
     marginBottom: 25,
   },
