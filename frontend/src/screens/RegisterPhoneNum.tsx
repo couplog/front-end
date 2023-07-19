@@ -113,10 +113,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
           {/* 헤더 UI */}
-          <Back
-            onPress={() => navigation.navigate('LoginScreen')}
-            style={{ marginTop: 30 }}
-          />
+          <Back onPress={() => navigation.goBack()} style={{ marginTop: 30 }} />
           <Text style={styles.headText}>
             회원가입을 위해{'\n'}
             휴대폰 번호를 인증해주세요
