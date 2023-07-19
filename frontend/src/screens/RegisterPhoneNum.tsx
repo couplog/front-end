@@ -167,10 +167,7 @@ const RegisterPhoneNum = ({ navigation }: Props) => {
                       <TouchableOpacity
                         disabled={isPhoneNumberValid}
                         activeOpacity={1.0}
-                        style={{
-                          ...styles.sendButton,
-                          opacity: isPhoneNumberValid ? 0.3 : 1.0,
-                        }}
+                        style={styles.sendButton}
                         onPress={() => handleRequest(getValues().phoneNumber)}
                       >
                         <Text style={styles.sendText}>
@@ -262,7 +259,7 @@ const styles = StyleSheet.create({
   sendText: {
     fontSize: 12,
     fontFamily: 'Pretendard-Regular',
-    color: '#000000',
+    color: '#FFFFFF',
   },
   errorText: {
     fontSize: 12,
@@ -292,7 +289,7 @@ const styles = StyleSheet.create({
     width: '22%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#FF9696',
     borderRadius: 4,
   },
 });
