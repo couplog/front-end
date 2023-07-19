@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#FF9696',
   },
   disabledButtonContainer: {
     backgroundColor: '#FFFFFF',
