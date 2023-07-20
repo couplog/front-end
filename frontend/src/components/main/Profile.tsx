@@ -61,7 +61,7 @@ export default Profile;
 const styles = StyleSheet.create({
   coupleView: {
     alignItems: 'flex-start',
-    marginTop: 80,
+    marginTop: 55,
   },
   profileView: {
     flexDirection: 'row',
