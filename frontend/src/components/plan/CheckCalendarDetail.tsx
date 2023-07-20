@@ -1,4 +1,11 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import { useRecoilValue } from 'recoil';
@@ -123,6 +130,10 @@ const CheckCalendarDetail = ({
     navigation.navigate('PlanRoute', { detail });
   };
 
+  const handleCheckAnniversary = () => {
+    navigation.navigate('AnniversaryRoute');
+  };
+
   // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
   // alert 글자 색상 수정하는 부분 구현 못함
   const handleDeleteAlert = (scheduleId: number | null) => {
@@ -172,18 +183,25 @@ const CheckCalendarDetail = ({
           {selectedDay || handleDay(currentDay)}일
         </Text>
         {anniversaryList.length > 0 && <View style={styles.dividerView} />}
-        {anniversaryList.map((arr) => {
-          return (
-            <Text
-              key={arr.id}
-              style={{
-                ...styles.anniversaryDateText,
-              }}
-            >
-              {arr.title}
-            </Text>
-          );
-        })}
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+          {anniversaryList.map((arr) => {
+            return (
+              <TouchableOpacity
+                key={arr.id}
+                onPress={handleCheckAnniversary}
+                style={styles.anniversaryScrollView}
+              >
+                <Text
+                  style={{
+                    ...styles.anniversaryDateText,
+                  }}
+                >
+                  {arr.title}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
       <View style={styles.dropdownContainerView}>
         <SelectDropdown
@@ -241,94 +259,96 @@ const CheckCalendarDetail = ({
           showsVerticalScrollIndicator={false}
           style={styles.rowScrollView}
         >
-          {coupleScheduleDetail?.length > 0 &&
-            (selectedFilter === 1 || selectedFilter === 0) &&
-            coupleScheduleDetail.map((arr, idx) => {
-              return (
-                <Swipeable
-                  key={arr.datingId}
-                  renderRightActions={() => (
-                    <SwipeButton
-                      onEdit={() => handleAddPlan(arr)}
-                      onDelete={() => handleDateDelete(arr.datingId)}
-                    />
-                  )}
-                  overshootRight={false}
-                  onSwipeableWillOpen={() => handleSwipe(idx, true)}
-                  onSwipeableWillClose={() => handleSwipe(idx, false)}
-                >
-                  <CalendarDetailBox
+          <View>
+            {coupleScheduleDetail?.length > 0 &&
+              (selectedFilter === 1 || selectedFilter === 0) &&
+              coupleScheduleDetail.map((arr, idx) => {
+                return (
+                  <Swipeable
                     key={arr.datingId}
-                    scheduleDetail={arr}
-                    boxColor="#FC887B"
-                    swipeStates={swipeStates}
-                    idx={idx}
-                  />
-                </Swipeable>
-              );
-            })}
-          {coupleScheduleDetail?.length === 0 && selectedFilter === 1 && (
-            <CalendarDetailBox
-              swipeStates={swipeStates}
-              idx={0}
-              noSchedule={noSchedule}
-            />
-          )}
-
-          {myScheduleDetail?.length > 0 &&
-            (selectedFilter === 2 || selectedFilter === 0) &&
-            myScheduleDetail.map((arr, idx) => {
-              return (
-                <Swipeable
-                  key={arr.scheduleId}
-                  renderRightActions={() => (
-                    <SwipeButton
-                      onEdit={() => handleAddPlan(arr)}
-                      onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                    renderRightActions={() => (
+                      <SwipeButton
+                        onEdit={() => handleAddPlan(arr)}
+                        onDelete={() => handleDateDelete(arr.datingId)}
+                      />
+                    )}
+                    overshootRight={false}
+                    onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                    onSwipeableWillClose={() => handleSwipe(idx, false)}
+                  >
+                    <CalendarDetailBox
+                      key={arr.datingId}
+                      scheduleDetail={arr}
+                      boxColor="#FC887B"
+                      swipeStates={swipeStates}
+                      idx={idx}
                     />
-                  )}
-                  overshootRight={false}
-                  onSwipeableWillOpen={() => handleSwipe(idx, true)}
-                  onSwipeableWillClose={() => handleSwipe(idx, false)}
-                >
+                  </Swipeable>
+                );
+              })}
+            {coupleScheduleDetail?.length === 0 && selectedFilter === 1 && (
+              <CalendarDetailBox
+                swipeStates={swipeStates}
+                idx={0}
+                noSchedule={noSchedule}
+              />
+            )}
+
+            {myScheduleDetail?.length > 0 &&
+              (selectedFilter === 2 || selectedFilter === 0) &&
+              myScheduleDetail.map((arr, idx) => {
+                return (
+                  <Swipeable
+                    key={arr.scheduleId}
+                    renderRightActions={() => (
+                      <SwipeButton
+                        onEdit={() => handleAddPlan(arr)}
+                        onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                      />
+                    )}
+                    overshootRight={false}
+                    onSwipeableWillOpen={() => handleSwipe(idx, true)}
+                    onSwipeableWillClose={() => handleSwipe(idx, false)}
+                  >
+                    <CalendarDetailBox
+                      key={arr.scheduleId}
+                      scheduleDetail={arr}
+                      boxColor="#FFDD95"
+                      swipeStates={swipeStates}
+                      idx={idx}
+                    />
+                  </Swipeable>
+                );
+              })}
+            {myScheduleDetail?.length === 0 && selectedFilter === 2 && (
+              <CalendarDetailBox
+                swipeStates={swipeStates}
+                idx={0}
+                noSchedule={noSchedule}
+              />
+            )}
+
+            {partnerScheduleDetail?.length > 0 &&
+              (selectedFilter === 3 || selectedFilter === 0) &&
+              partnerScheduleDetail.map((arr, idx) => {
+                return (
                   <CalendarDetailBox
                     key={arr.scheduleId}
                     scheduleDetail={arr}
-                    boxColor="#FFDD95"
+                    boxColor="#D0E6A5"
                     swipeStates={swipeStates}
                     idx={idx}
                   />
-                </Swipeable>
-              );
-            })}
-          {myScheduleDetail?.length === 0 && selectedFilter === 2 && (
-            <CalendarDetailBox
-              swipeStates={swipeStates}
-              idx={0}
-              noSchedule={noSchedule}
-            />
-          )}
-
-          {partnerScheduleDetail?.length > 0 &&
-            (selectedFilter === 3 || selectedFilter === 0) &&
-            partnerScheduleDetail.map((arr, idx) => {
-              return (
-                <CalendarDetailBox
-                  key={arr.scheduleId}
-                  scheduleDetail={arr}
-                  boxColor="#D0E6A5"
-                  swipeStates={swipeStates}
-                  idx={idx}
-                />
-              );
-            })}
-          {partnerScheduleDetail?.length === 0 && selectedFilter === 3 && (
-            <CalendarDetailBox
-              swipeStates={swipeStates}
-              idx={0}
-              noSchedule={noSchedule}
-            />
-          )}
+                );
+              })}
+            {partnerScheduleDetail?.length === 0 && selectedFilter === 3 && (
+              <CalendarDetailBox
+                swipeStates={swipeStates}
+                idx={0}
+                noSchedule={noSchedule}
+              />
+            )}
+          </View>
         </ScrollView>
       )}
     </View>
@@ -428,5 +448,8 @@ const styles = StyleSheet.create({
   },
   rowScrollView: {
     height: 250,
+  },
+  anniversaryScrollView: {
+    flexDirection: 'row',
   },
 });
