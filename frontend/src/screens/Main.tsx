@@ -117,10 +117,8 @@ const Main = () => {
         {/* Header UI */}
         <Header />
 
-        {/* 날씨 & 연애 day UI */}
+        {/* Day UI */}
         <Profile meetDate={coupleInfo.firstDate} />
-
-        {/* 날씨는 다음 version 업데이트 */}
       </View>
 
       {/* Footer UI */}
