@@ -190,6 +190,7 @@ const CheckCalendarDetail = ({
                 key={arr.id}
                 onPress={handleCheckAnniversary}
                 style={styles.anniversaryScrollView}
+                activeOpacity={1.0}
               >
                 <Text
                   style={{
