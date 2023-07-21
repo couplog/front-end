@@ -78,7 +78,7 @@ export const handleCheckCouplePlanDetail = async ({
   }
 };
 
-// 커플 일정 디테일 조회
+// 기념일 리스트 조회
 export const handleCheckAnniversaryList = async ({
   year,
   month,
