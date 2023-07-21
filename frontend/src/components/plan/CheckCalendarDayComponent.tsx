@@ -63,108 +63,27 @@ const CheckCalendarDayComponent = ({
     >
       <View style={detail ? planStyle : calendarDayStyle}>
         <Text style={calendarTextStyle}>{date?.day}</Text>
-        <>
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.key === 'datingSchedule' && (
-              <MultipleCalendarBox color="#FC887B" />
-            )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.key === 'mySchedule' && (
-              <MultipleCalendarBox color="#FFDD95" />
-            )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.key === 'partnerSchedule' && (
-              <MultipleCalendarBox color="#D0E6A5" />
-            )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.key === 'anniversary' && (
-              <Heart style={styles.heartView} />
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'mySchedule' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#FFDD95" />
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'partnerSchedule' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#D0E6A5" />
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'anniversary' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <Heart style={styles.heartView} />
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.key === 'mySchedule' &&
-            marking?.dots[1]?.key === 'partnerSchedule' && (
-              <>
-                <MultipleCalendarBox color="#FFDD95" />
-                <MultipleCalendarBox color="#D0E6A5" />
-              </>
-            )}
-          {marking?.dots?.length === 3 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'mySchedule' &&
-            marking?.dots[2]?.key === 'partnerSchedule' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#FFDD95" />
-                <MultipleCalendarBox color="#D0E6A5" />
-              </>
-            )}
-          {marking?.dots?.length === 3 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'mySchedule' &&
-            marking?.dots[2]?.key === 'anniversary' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#FFDD95" />
-                <Heart style={styles.heartView} />
-              </>
-            )}
-          {marking?.dots?.length === 3 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'partnerSchedule' &&
-            marking?.dots[2]?.key === 'anniversary' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#D0E6A5" />
-                <Heart style={styles.heartView} />
-              </>
-            )}
-          {marking?.dots?.length === 3 &&
-            marking?.dots[0]?.key === 'mySchedule' &&
-            marking?.dots[1]?.key === 'partnerSchedule' &&
-            marking?.dots[2]?.key === 'anniversary' && (
-              <>
-                <MultipleCalendarBox color="#FFDD95" />
-                <MultipleCalendarBox color="#D0E6A5" />
-                <Heart style={styles.heartView} />
-              </>
-            )}
-          {marking?.dots?.length === 4 &&
-            marking?.dots[0]?.key === 'datingSchedule' &&
-            marking?.dots[1]?.key === 'mySchedule' &&
-            marking?.dots[2]?.key === 'partnerSchedule' &&
-            marking?.dots[3]?.key === 'anniversary' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#FFDD95" />
-                <MultipleCalendarBox color="#D0E6A5" />
-                <Heart style={styles.heartView} />
-              </>
-            )}
-        </>
+        {marking?.dots?.map((dot, index) => {
+          let content = null;
+          switch (dot.key) {
+            case 'datingSchedule':
+              content = <MultipleCalendarBox color="#FC887B" />;
+              break;
+            case 'mySchedule':
+              content = <MultipleCalendarBox color="#FFDD95" />;
+              break;
+            case 'partnerSchedule':
+              content = <MultipleCalendarBox color="#D0E6A5" />;
+              break;
+            case 'anniversary':
+              content = <Heart style={styles.heartView} />;
+              break;
+            default:
+              break;
+          }
+          // eslint-disable-next-line react/no-array-index-key
+          return <React.Fragment key={index}>{content}</React.Fragment>;
+        })}
       </View>
     </TouchableOpacity>
   );
