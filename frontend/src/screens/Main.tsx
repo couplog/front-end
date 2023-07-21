@@ -10,15 +10,18 @@ import { AnniversaryComponentProps } from '../types/main/mainPageTypes';
 import Header from '../components/main/Header';
 import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
+import { handleMemberInfo } from '../api/login/login';
+import { userState } from '../state/atoms/userAtom';
 
 const Main = () => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const setPartnerInfo = useSetRecoilState(partnerState);
   const [anniversaries, setAnniversaries] = useState<
     AnniversaryComponentProps[]
   >([]);
 
-  // 커플 정보 불러오기
+  // 커플 & 본인 정보 불러오기
   const fetchCoupleInfo = async () => {
     try {
       const coupleInfoResponse = await handleCoupleInfo();
@@ -36,6 +39,7 @@ const Main = () => {
       }));
 
       fetchAnniversaryComing(updatedCoupleInfo.coupleId, 3);
+      fetchUserInfo();
       fetchPartnerInfo();
     } catch (error) {
       console.log(error);
@@ -84,7 +88,23 @@ const Main = () => {
     }
   };
 
-  // 메인화면 접근 -> 커플 정보 조회, 상대방 유저 정보 조회 -> 상태관리 저장(atom)
+  const fetchUserInfo = async () => {
+    const memberRes = await handleMemberInfo();
+    const memberInfo = memberRes?.data.data;
+    const updateUserInfo = {
+      ...userInfo,
+      memberId: memberInfo.memberId,
+      name: memberInfo.name,
+      nickname: memberInfo.nickname,
+      phone: memberInfo.phone,
+      birth: memberInfo.birth,
+      gender: memberInfo.gender,
+      profileImageUrl: memberInfo.profileImageURL,
+    };
+    setUserInfo(updateUserInfo);
+  };
+
+  // 메인화면 접근 -> 커플 정보 조회, 상대방 유저 정보 조회, 본인 정보 조회 -> 상태관리 저장(atom)
   // + 다가올 기념일 3개 조회
   useEffect(() => {
     fetchCoupleInfo();
