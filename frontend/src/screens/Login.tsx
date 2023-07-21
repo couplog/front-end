@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
@@ -17,7 +18,7 @@ import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import { LoginFormData } from '../types/login/loginFormType';
 import { handleLogin, handleMemberInfo } from '../api/login/login';
-import { getData, storeData } from '../utils/storage';
+import { getData, removeData, storeData } from '../utils/storage';
 import { userState } from '../state/atoms/userAtom';
 import Logo from '../assets/images/login/logo.svg';
 import UnCheck from '../assets/images/login/unCheck.svg';
@@ -42,17 +43,33 @@ const Login = ({ navigation }: Props) => {
   const checkAutoLogin = async () => {
     // refresh 만료되면 다시 로그인해야함
     const refreshToken = await getData('refreshToken');
-    if (refreshToken) {
-      const autoLogin = await getData('autoLogin');
-      if (autoLogin) {
-        handleUserInfo();
+    const connection = await getData('connection');
 
-        navigation.navigate('MainBottomTabScreen');
+    if (refreshToken) {
+      // refresh 만료 체크
+      const decodedToken = jwtDecode(refreshToken) as JwtPayload;
+      const tokenExpirationTime = decodedToken.exp as number;
+
+      const currentTime = Math.floor(Date.now() / 1000);
+
+      if (tokenExpirationTime > currentTime) {
+        // refreshToken이 만료되지 않은 경우에만 자동 로그인을 진행합니다.
+        const autoLogin = await getData('autoLogin');
+        if (autoLogin) {
+          handleUserInfo();
+
+          // 자동로그인 시에도 연결 안되어있는 경우 분기처리
+          connection
+            ? navigation.navigate('MainBottomTabScreen')
+            : navigation.navigate('ConnectPartnerScreen');
+        }
+      } else {
+        removeData('refreshToken');
       }
     }
   };
 
-  // 로그인 버튼
+  // 로그인 기능
   const handleComplete = async (data: LoginFormData) => {
     try {
       // 로그인 API 호출
@@ -67,8 +84,9 @@ const Login = ({ navigation }: Props) => {
       }
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
+      await storeData('connection', connection);
 
-      // 현재 로그인 회원 정보 조회 및 저장
+      // memberID & 연결 여부 조회 및 저장
       handleUserInfo();
 
       connection
@@ -80,19 +98,13 @@ const Login = ({ navigation }: Props) => {
     }
   };
 
-  // 로그인 성공 시, 유저 정보 저장
+  // 로그인 성공 시, memberID 정보 우선 저장(상대방과 연결 페이지 이동을 생각해서)
   const handleUserInfo = async () => {
     const memberRes = await handleMemberInfo();
     const memberInfo = memberRes?.data.data;
     const updateUserInfo = {
       ...userInfo,
       memberId: memberInfo.memberId,
-      name: memberInfo.name,
-      nickname: memberInfo.nickname,
-      phone: memberInfo.phone,
-      birth: memberInfo.birth,
-      gender: memberInfo.gender,
-      profileImageUrl: memberInfo.profileImageURL,
     };
     setUserInfo(updateUserInfo);
   };
