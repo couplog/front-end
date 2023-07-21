@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
@@ -17,7 +17,7 @@ import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
 import { LoginFormData } from '../types/login/loginFormType';
 import { handleLogin, handleMemberInfo } from '../api/login/login';
-import { storeData } from '../utils/storage';
+import { getData, storeData } from '../utils/storage';
 import { userState } from '../state/atoms/userAtom';
 import Logo from '../assets/images/login/logo.svg';
 import UnCheck from '../assets/images/login/unCheck.svg';
@@ -33,15 +33,38 @@ const Login = ({ navigation }: Props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    checkAutoLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 자동 로그인 check
+  const checkAutoLogin = async () => {
+    // refresh 만료되면 다시 로그인해야함
+    const refreshToken = await getData('refreshToken');
+    if (refreshToken) {
+      const autoLogin = await getData('autoLogin');
+      if (autoLogin) {
+        handleUserInfo();
+
+        navigation.navigate('MainBottomTabScreen');
+      }
+    }
+  };
+
   // 로그인 버튼
   const handleComplete = async (data: LoginFormData) => {
     try {
       // 로그인 API 호출
       const res = await handleLogin(data);
-      const connection = res?.data.data.isConnected;
-      const token = res?.headers.authorization;
-      const refreshToken = res?.headers.refreshtoken;
+      const connection = res.data.data.isConnected;
+      const token = res.headers.authorization;
+      const refreshToken = res.headers.refreshtoken;
 
+      // 자동 로그인 체크 시, 저장된 자동 로그인 상태를 변경
+      if (checked) {
+        await storeData('autoLogin', 'true');
+      }
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
 
