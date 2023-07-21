@@ -174,11 +174,7 @@ const CheckCalendarDetail = ({
   return (
     <View style={styles.calendarDetailView}>
       <View style={styles.calendarDetailHeaderView}>
-        <Text
-          style={{
-            ...styles.selectedDateText,
-          }}
-        >
+        <Text style={styles.selectedDateText}>
           {selectedMonth || handleMonth(currentMonth)}월
           {selectedDay || handleDay(currentDay)}일
         </Text>
@@ -192,13 +188,7 @@ const CheckCalendarDetail = ({
                 style={styles.anniversaryScrollView}
                 activeOpacity={1.0}
               >
-                <Text
-                  style={{
-                    ...styles.anniversaryDateText,
-                  }}
-                >
-                  {arr.title}
-                </Text>
+                <Text style={styles.anniversaryDateText}>{arr.title}</Text>
               </TouchableOpacity>
             );
           })}
