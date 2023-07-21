@@ -1,7 +1,7 @@
 import request from '../base';
 
 // 개인 일정 삭제
-export const handleDeleteMyPlan = async (
+export const handleDeleteMyPlan = (
   memberId: number | null,
   scheduleId: number | null,
   deleteRepeat: boolean
@@ -13,7 +13,7 @@ export const handleDeleteMyPlan = async (
 };
 
 // 데이트 일정 삭제
-export const handleDeleteDatePlan = async (
+export const handleDeleteDatePlan = (
   coupleId: number | null,
   datingId: number | null
 ) => {

@@ -2,7 +2,7 @@ import { PlanPropsType } from '../../types/calendar/calendarType';
 import request from '../base';
 
 // 일정 날짜 조회
-export const handleGetPlan = async (
+export const handleGetPlan = (
   { year, month }: PlanPropsType,
   memberId: number | null
 ) => {
@@ -12,7 +12,7 @@ export const handleGetPlan = async (
 };
 
 // 개인 일정 디테일 조회
-export const handleGetPlanDetail = async (
+export const handleGetPlanDetail = (
   { year, month, day }: PlanPropsType,
   memberId: number | null
 ) => {
@@ -22,14 +22,14 @@ export const handleGetPlanDetail = async (
 };
 
 // 데이트 일정 날짜 조회
-export const handleGetDatePlan = async (coupleId: number | null) => {
+export const handleGetDatePlan = (coupleId: number | null) => {
   return request({
     url: `/api/couples/${coupleId}/dating/dates`,
   });
 };
 
 // 데이트 일정 디테일 조회
-export const handleGetDatePlanDetail = async (
+export const handleGetDatePlanDetail = (
   { year, month, day }: PlanPropsType,
   coupleId: number | null
 ) => {
@@ -39,7 +39,7 @@ export const handleGetDatePlanDetail = async (
 };
 
 // 기념일 목록 조회
-export const handleGetAnniversaryList = async (
+export const handleGetAnniversaryList = (
   { year, month, day }: PlanPropsType,
   coupleId: number | null
 ) => {
