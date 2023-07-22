@@ -33,11 +33,11 @@ export const handleCheckMyPlanDetail = async ({
   month,
   day,
   myMemberId,
-  setMyScheduleDetail,
+  setScheduleDetail,
 }: CheckMyPlanDetailType) => {
   try {
     const res = await handleGetPlanDetail({ year, month, day }, myMemberId);
-    setMyScheduleDetail(res.data.data.schedules);
+    setScheduleDetail((prev) => [...prev, res.data.data.schedules]);
   } catch (err: any) {
     console.log(err.response.data.message);
   }
@@ -49,14 +49,14 @@ export const handleCheckPartnerPlanDetail = async ({
   month,
   day,
   partnerMemberId,
-  setPartnerScheduleDetail,
+  setScheduleDetail,
 }: CheckPartnerPlanDetailType) => {
   try {
     const res = await handleGetPlanDetail(
       { year, month, day },
       partnerMemberId
     );
-    setPartnerScheduleDetail(res.data.data.schedules);
+    setScheduleDetail((prev) => [...prev, res.data.data.schedules]);
   } catch (err: any) {
     console.log(err.response.data.message);
   }
@@ -68,11 +68,11 @@ export const handleCheckCouplePlanDetail = async ({
   month,
   day,
   coupleId,
-  setCoupleScheduleDetail,
+  setScheduleDetail,
 }: CheckCouplePlanDetailType) => {
   try {
     const res = await handleGetDatePlanDetail({ year, month, day }, coupleId);
-    setCoupleScheduleDetail(res.data.data.datingList);
+    setScheduleDetail((prev) => [...prev, res.data.data.datingList]);
   } catch (err: any) {
     console.log(err.response.data.message);
   }

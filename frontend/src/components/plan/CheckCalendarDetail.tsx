@@ -24,7 +24,12 @@ import { coupleState } from '../../state/atoms/coupleAtom';
 import {
   handleCheckCouplePlanDetail,
   handleCheckMyPlanDetail,
+  handleCheckPartnerPlanDetail,
 } from '../../utils/plan/calendar';
+import {
+  DateScheduleDetailType,
+  ScheduleDetailType,
+} from '../../types/atom/scheduleDetailType';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -33,7 +38,6 @@ const CheckCalendarDetail = ({
   selectedDay,
   currentMonth,
   currentDay,
-  partnerScheduleDetail,
   anniversaryList,
   setFocus,
 }: CheckCalendarDetailType) => {
@@ -42,8 +46,19 @@ const CheckCalendarDetail = ({
   const coupleData = useRecoilValue(coupleState);
   const memberId = userData.memberId;
   const coupleId = coupleData.coupleId;
-  const [myScheduleDetail, setMyScheduleDetail] = useState<any[]>([]);
-  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState<any[]>([]);
+  const partnerId = partnerData.memberId;
+  const [myScheduleDetail, setMyScheduleDetail] = useState<
+    ScheduleDetailType[]
+  >([]);
+  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState<
+    DateScheduleDetailType[]
+  >([]);
+  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
+    ScheduleDetailType[]
+  >([]);
+  const [scheduleDetail, setScheduleDetail] = useState<
+    ScheduleDetailType[] | DateScheduleDetailType[]
+  >([]);
   const filterData = [
     ['전체', '#EDF0F3'],
     ['데이트', '#FC887B'],
@@ -55,48 +70,42 @@ const CheckCalendarDetail = ({
     myScheduleDetail.map(() => false)
   );
   const noSchedule = true;
-
-  useEffect(() => {
+  const handleCheckPlanDetail = () => {
     handleCheckMyPlanDetail({
       year: selectedYear,
       month: selectedMonth,
       day: selectedDay,
       myMemberId: memberId,
-      setMyScheduleDetail,
+      setScheduleDetail,
     });
     handleCheckCouplePlanDetail({
       year: selectedYear,
       month: selectedMonth,
       day: selectedDay,
       coupleId,
-      setCoupleScheduleDetail,
+      setScheduleDetail,
     });
-  }, [
-    coupleData.coupleId,
-    coupleId,
-    memberId,
-    selectedDay,
-    selectedMonth,
-    selectedYear,
-    userData.memberId,
-  ]);
+    handleCheckPartnerPlanDetail({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+      partnerMemberId: partnerId,
+      setScheduleDetail,
+    });
+  };
+
+  useEffect(() => {
+    setScheduleDetail([]);
+    handleCheckPlanDetail();
+
+    console.log(scheduleDetail);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coupleId, memberId, partnerId, selectedDay, selectedMonth, selectedYear]);
 
   // 삭제 후 새로고침
   const handleReload = () => {
-    handleCheckMyPlanDetail({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-      myMemberId: memberId,
-      setMyScheduleDetail,
-    });
-    handleCheckCouplePlanDetail({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-      coupleId,
-      setCoupleScheduleDetail,
-    });
+    setScheduleDetail([]);
+    handleCheckPlanDetail();
     setFocus((prev) => !prev);
   };
 

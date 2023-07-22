@@ -52,7 +52,6 @@ const CheckCalendar = ({
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [scheduleList, setScheduleList] = useState<any[]>([]);
-  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
   const [anniversaryList, setAnniversaryList] = useState([]);
   const addPlanData = [
     ['데이트', '#FC887B'],
@@ -145,13 +144,6 @@ const CheckCalendar = ({
     const { coupleId } = coupleData;
 
     handleCheckPlan({ year, month, myMemberId, setScheduleList });
-    handleCheckPartnerPlanDetail({
-      year,
-      month,
-      day,
-      partnerMemberId,
-      setPartnerScheduleDetail,
-    });
     handleCheckAnniversaryList({
       year,
       month,
@@ -291,7 +283,6 @@ const CheckCalendar = ({
               selectedDay={selectedDay}
               currentMonth={currentMonth}
               currentDay={currentDay}
-              partnerScheduleDetail={partnerScheduleDetail}
               anniversaryList={anniversaryList}
               setFocus={setFocus}
             />

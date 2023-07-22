@@ -72,7 +72,6 @@ export interface CheckCalendarDetailType {
   selectedDay: string;
   currentMonth: string;
   currentDay: string;
-  partnerScheduleDetail: ScheduleDetailType[];
   anniversaryList: AnniversaryListtype[];
   setFocus: Dispatch<SetStateAction<boolean>>;
 }
@@ -93,17 +92,23 @@ export interface CheckPlanType extends PlanPropsType {
 
 export interface CheckMyPlanDetailType extends PlanPropsType {
   myMemberId: number | null;
-  setMyScheduleDetail: Dispatch<SetStateAction<any[]>>;
+  setScheduleDetail: Dispatch<
+    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
+  >;
 }
 
 export interface CheckPartnerPlanDetailType extends PlanPropsType {
   partnerMemberId: number | null;
-  setPartnerScheduleDetail: Dispatch<SetStateAction<never[]>>;
+  setScheduleDetail: Dispatch<
+    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
+  >;
 }
 
 export interface CheckCouplePlanDetailType extends PlanPropsType {
   coupleId: number | null;
-  setCoupleScheduleDetail: Dispatch<SetStateAction<any[]>>;
+  setScheduleDetail: Dispatch<
+    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
+  >;
 }
 
 export interface CheckAnniversaryListType extends PlanPropsType {
