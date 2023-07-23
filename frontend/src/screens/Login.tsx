@@ -44,8 +44,9 @@ const Login = ({ navigation }: Props) => {
     // refresh 만료되면 다시 로그인해야함
     const refreshToken = await getData('refreshToken');
     const connection = await getData('connection');
+    const autoLogin = await getData('autoLogin');
 
-    if (refreshToken) {
+    if (autoLogin) {
       // refresh 만료 체크
       const decodedToken = jwtDecode(refreshToken) as JwtPayload;
       const tokenExpirationTime = decodedToken.exp as number;
