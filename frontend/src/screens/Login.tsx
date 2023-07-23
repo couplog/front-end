@@ -8,18 +8,21 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
 import ButtonComponent from '../components/design/ButtonComponent';
 import OffEye from '../assets/images/register/off_eye.svg';
 import OnEye from '../assets/images/register/on_eye.svg';
-import Checkbox from '../components/design/CheckBoxComponent';
 import { LoginFormData } from '../types/login/loginFormType';
 import { handleLogin, handleMemberInfo } from '../api/login/login';
-import { storeData } from '../utils/storage';
+import { getData, removeData, storeData } from '../utils/storage';
 import { userState } from '../state/atoms/userAtom';
+import Logo from '../assets/images/login/logo.svg';
+import UnCheck from '../assets/images/login/unCheck.svg';
+import Check from '../assets/images/login/check.svg';
 
 type Props = StackScreenProps<StackParamList, 'LoginScreen'>;
 
@@ -31,19 +34,61 @@ const Login = ({ navigation }: Props) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
 
-  // 로그인 버튼
+  useEffect(() => {
+    checkAutoLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 자동 로그인 check
+  const checkAutoLogin = async () => {
+    // refresh 만료되면 다시 로그인해야함
+    const refreshToken = await getData('refreshToken');
+    const connection = await getData('connection');
+    const autoLogin = await getData('autoLogin');
+
+    if (autoLogin) {
+      // refresh 만료 체크
+      const decodedToken = jwtDecode(refreshToken) as JwtPayload;
+      const tokenExpirationTime = decodedToken.exp as number;
+
+      const currentTime = Math.floor(Date.now() / 1000);
+
+      if (tokenExpirationTime > currentTime) {
+        // refreshToken이 만료되지 않은 경우에만 자동 로그인을 진행합니다.
+        const autoLogin = await getData('autoLogin');
+        if (autoLogin) {
+          handleUserInfo();
+
+          // 자동로그인 시에도 연결 안되어있는 경우 분기처리
+          connection
+            ? navigation.navigate('MainBottomTabScreen')
+            : navigation.navigate('ConnectPartnerScreen');
+        }
+      } else {
+        // 만료되었을 경우에는 만료된 토큰 삭제후 다시 로그인 진행
+        removeData('refreshToken');
+      }
+    }
+  };
+
+  // 로그인 기능
   const handleComplete = async (data: LoginFormData) => {
     try {
       // 로그인 API 호출
       const res = await handleLogin(data);
-      const connection = res?.data.data.isConnected;
-      const token = res?.headers.authorization;
-      const refreshToken = res?.headers.refreshtoken;
+      const connection = res.data.data.isConnected;
+      const token = res.headers.authorization;
+      const refreshToken = res.headers.refreshtoken;
 
+      // 자동 로그인 체크 시, 저장된 자동 로그인 상태를 변경
+      if (checked) {
+        await storeData('autoLogin', 'true');
+      }
       await storeData('token', token);
       await storeData('refreshToken', refreshToken);
+      await storeData('connection', connection);
 
-      // 현재 로그인 회원 정보 조회 및 저장
+      // memberID & 연결 여부 조회 및 저장
       handleUserInfo();
 
       connection
@@ -55,19 +100,13 @@ const Login = ({ navigation }: Props) => {
     }
   };
 
-  // 로그인 성공 시, 유저 정보 저장
+  // 로그인 성공 시, memberID 정보 우선 저장(상대방과 연결 페이지 이동을 생각해서)
   const handleUserInfo = async () => {
     const memberRes = await handleMemberInfo();
     const memberInfo = memberRes?.data.data;
     const updateUserInfo = {
       ...userInfo,
       memberId: memberInfo.memberId,
-      name: memberInfo.name,
-      nickname: memberInfo.nickname,
-      phone: memberInfo.phone,
-      birth: memberInfo.birth,
-      gender: memberInfo.gender,
-      profileImageUrl: memberInfo.profileImageURL,
     };
     setUserInfo(updateUserInfo);
   };
@@ -77,9 +116,8 @@ const Login = ({ navigation }: Props) => {
       <View style={styles.marginContainer}>
         <SafeAreaView style={styles.rootContainer}>
           {/* 헤더 UI  */}
-          {/* 임시 */}
           <View style={styles.logoView}>
-            <Text style={styles.logo}>로고</Text>
+            <Logo />
           </View>
 
           {/* Input Field UI */}
@@ -93,6 +131,7 @@ const Login = ({ navigation }: Props) => {
               value={phone}
               keyboardType="phone-pad"
             />
+
             <Text style={styles.label}>비밀번호</Text>
             <View style={styles.passwordView}>
               <TextInput
@@ -112,13 +151,13 @@ const Login = ({ navigation }: Props) => {
                 {eyeClick ? <OnEye /> : <OffEye />}
               </TouchableOpacity>
             </View>
-            <View style={styles.checkboxView}>
-              <Checkbox
-                checked={checked}
-                onPress={() => setChecked(!checked)}
-                label="자동 로그인"
-              />
-            </View>
+
+            <TouchableWithoutFeedback onPress={() => setChecked(!checked)}>
+              <View style={styles.checkboxView}>
+                {checked ? <Check /> : <UnCheck />}
+                <Text>자동 로그인</Text>
+              </View>
+            </TouchableWithoutFeedback>
             {error && (
               <Text style={styles.errorText}>
                 유저의 번호 또는 비밀번호를 잘못 입력했습니다.{'\n'}입력하신
@@ -134,7 +173,7 @@ const Login = ({ navigation }: Props) => {
             activeOpacity={1.0}
             onPress={() => navigation.navigate('RegisterPhoneScreen')}
           >
-            <Text style={styles.signupText}>회원가입하기</Text>
+            <Text style={styles.signUpText}>회원가입하기</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonView}>
@@ -162,12 +201,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logoView: {
-    width: 200,
-    height: 100,
-    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#E7E7E7',
     marginTop: 80,
   },
   logo: {
@@ -213,11 +247,14 @@ const styles = StyleSheet.create({
   },
   checkboxView: {
     flexDirection: 'row',
-    marginTop: 10,
+    gap: 10,
+    marginTop: 20,
+    alignItems: 'center',
   },
-  signupText: {
+  signUpText: {
     color: '#909090',
     textDecorationLine: 'underline',
+    fontWeight: '600',
     fontFamily: 'Pretendard-Regular',
     marginBottom: 25,
   },
