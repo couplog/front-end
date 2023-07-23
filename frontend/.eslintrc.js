@@ -41,6 +41,7 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
     'no-unneeded-ternary': 'off',
+    'prefer-destructuring': 'off',
   },
   settings: {
     'import/resolver': {

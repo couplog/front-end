@@ -27,13 +27,19 @@ const Onboarding = ({ navigation }: Props) => {
           text="일정(디테일 이동 임시 구현)"
           font="bold"
           disabled={false}
-          onPress={() => navigation.navigate('PlanRoute')}
+          onPress={() => navigation.navigate('PlanRoute', { id: null })}
         />
         <ButtonComponent
           text="PlanCalendarScreen"
           font="bold"
           disabled={false}
           onPress={() => navigation.navigate('PlanCalendarScreen')}
+        />
+        <ButtonComponent
+          text="기념일 페이지"
+          font="bold"
+          disabled={false}
+          onPress={() => navigation.navigate('AnniversaryRoute')}
         />
       </View>
     </View>

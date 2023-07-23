@@ -1,6 +1,7 @@
 // profile component
 export interface ProfileComponentProps {
   meetDate: string;
+  anniversary?: boolean;
 }
 
 // 기념일 박스
@@ -9,6 +10,13 @@ export interface AnniversaryComponentProps {
   title: string;
   date: string;
   content: string | null;
+}
+
+export interface OurAnniversaryComponentProps
+  extends AnniversaryComponentProps {
+  content: string | null;
+  repeatRule: string;
+  category: string;
 }
 
 export interface DayInfoProps {

@@ -1,5 +1,6 @@
 import {
   Keyboard,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,27 +18,28 @@ import { useRecoilValue } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
 import SelectDropdown from 'react-native-select-dropdown';
-import { userState } from '../../state/atoms/userAtom';
-import { getFormattedDate } from '../../utils/formattedDate';
-import Plus from '../../assets/images/common/plus.svg';
-import CheckCalendarDayComponent from './CheckCalendarDayComponent';
-import { DayType, PlanPropsType } from '../../types/calendar/calendarType';
-import { handleGetPlan, handleGetPlanDetail } from '../../api/plan/getPlan';
-import { partnerState } from '../../state/atoms/partnerAtom';
-import OptionArrow from '../../assets/images/common/optionArrow.svg';
-import CheckCalendarDetail from './CheckCalendarDetail';
-import { month } from '../../utils/plan/calendarText';
+import { userState } from '../state/atoms/userAtom';
+import { getFormattedDate } from '../utils/formattedDate';
+import Plus from '../assets/images/common/plus.svg';
+import CheckCalendarDayComponent from '../components/plan/CheckCalendarDayComponent';
+import { DayType, SchedulesType } from '../types/calendar/calendarType';
+import { partnerState } from '../state/atoms/partnerAtom';
+import OptionArrow from '../assets/images/common/optionArrow.svg';
+import CheckCalendarDetail from '../components/plan/CheckCalendarDetail';
+import { month } from '../utils/plan/calendarText';
 import {
-  handleCheckCouplePlanDetail,
-  handleCheckMyPlanDetail,
+  handleCheckAnniversaryList,
   handleCheckPartnerPlanDetail,
-} from '../../utils/plan/calendar';
-import { coupleState } from '../../state/atoms/coupleAtom';
+  handleCheckPlan,
+} from '../utils/plan/calendar';
+import { coupleState } from '../state/atoms/coupleAtom';
 
 const CheckCalendar = ({
+  navigation,
   detail,
   setDaySelected,
 }: {
+  navigation?: any;
   detail?: boolean;
   setDaySelected?: Dispatch<SetStateAction<string>>;
 }) => {
@@ -45,14 +47,12 @@ const CheckCalendar = ({
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
   const today = getFormattedDate(new Date());
+  const [focus, setFocus] = useState(false);
   const [selected, setSelected] = useState(today);
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [mySchedule, setMySchedule] = useState([]);
-  const [partnerSchedule, setPartnerSchedule] = useState([]);
-  const [myScheduleDetail, setMyScheduleDetail] = useState([]);
-  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState([]);
-  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState([]);
+  const [scheduleList, setScheduleList] = useState<any[]>([]);
+  const [anniversaryList, setAnniversaryList] = useState([]);
   const addPlanData = [
     ['데이트', '#FC887B'],
     ['내 일정', '#FFDD95'],
@@ -66,35 +66,7 @@ const CheckCalendar = ({
   const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
 
-  const coupleSchedule = [
-    '2023-06-01',
-    '2023-06-02',
-    '2023-06-13',
-    '2023-06-16',
-    '2023-06-26',
-    '2023-07-05',
-  ];
-
-  const schedules = {
-    '2023-07-01': [{ key: 'anniversaries', color: 'white' }],
-    '2023-07-13': [
-      { key: 'coupleSchedule', color: 'red' },
-      { key: 'partnerSchedule', color: 'green' },
-      { key: 'anniversaries', color: 'white' },
-    ],
-    '2023-07-23': [
-      { key: 'mySchedule', color: 'yellow' },
-      { key: 'partnerSchedule', color: 'green' },
-    ],
-    '2023-07-24': [
-      { key: 'coupleSchedule', color: 'red' },
-      { key: 'mySchedule', color: 'yellow' },
-    ],
-    '2023-07-26': [
-      { key: 'mySchedule', color: 'yellow' },
-      { key: 'anniversaries', color: 'white' },
-    ],
-  };
+  const schedules: SchedulesType[] = [];
 
   let newDaysObject: DayType = {};
 
@@ -105,111 +77,6 @@ const CheckCalendar = ({
       setDaySelected(date);
     }
   };
-
-  for (let i = 0; i < Object.keys(schedules).length; i++) {
-    newDaysObject = {
-      ...newDaysObject,
-      [Object.keys(schedules)[i]]: {
-        marked: true,
-        dots: Object.values(schedules)[i],
-      },
-    };
-  }
-
-  coupleSchedule.forEach((day) => {
-    newDaysObject = {
-      ...newDaysObject,
-      [day]: {
-        marked: true,
-        dots: [{ key: 'coupleSchedule', color: 'red' }],
-      },
-    };
-  });
-
-  coupleSchedule.forEach((day) => {
-    newDaysObject = {
-      ...newDaysObject,
-      [day]: {
-        marked: true,
-        dots: [{ key: 'coupleSchedule', color: 'red' }],
-      },
-    };
-  });
-
-  mySchedule.forEach((day) => {
-    Object.keys(newDaysObject).includes(day)
-      ? (newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'partnerSchedule', color: 'yellow' },
-            ],
-          },
-        })
-      : (newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [{ key: 'partnerSchedule', color: 'yellow' }],
-          },
-        });
-  });
-
-  partnerSchedule.forEach((day) => {
-    if (Object.keys(newDaysObject).includes(day)) {
-      if (newDaysObject[day].dots.length === 2) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'partnerSchedule', color: 'yellow' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      } else if (
-        newDaysObject[day].dots.length === 1 &&
-        newDaysObject[day].dots[0]?.color === 'red'
-      ) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'red' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      } else if (
-        newDaysObject[day].dots.length === 1 &&
-        newDaysObject[day].dots[0]?.color === 'yellow'
-      ) {
-        newDaysObject = {
-          ...newDaysObject,
-          [day]: {
-            marked: true,
-            dots: [
-              { key: 'coupleSchedule', color: 'yellow' },
-              { key: 'mySchedule', color: 'green' },
-            ],
-          },
-        };
-      }
-    } else {
-      newDaysObject = {
-        ...newDaysObject,
-        [day]: {
-          marked: true,
-          dots: [{ key: 'mySchedule', color: 'green' }],
-        },
-      };
-    }
-  });
 
   // 년도, 월 세팅하는 모달 보이게하는 함수
   const handleShowPicker = useCallback(
@@ -241,30 +108,31 @@ const CheckCalendar = ({
     [date, handleMonthName, handleShowPicker, selected, today]
   );
 
-  // 개인 일정 조회
-  const handleCheckMyPlan = async (
-    { year, month }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlan({ year, month }, memberId);
-      setMySchedule(res.data.data.scheduleDates);
-    } catch (err: any) {
-      console.log(err.response.data.message);
+  for (let i = 0; i < scheduleList.length; i++) {
+    schedules.push({
+      [scheduleList[i].date]: [],
+    });
+    for (let j = 0; j < scheduleList[i].events.length; j++) {
+      schedules[i][scheduleList[i].date].push({
+        key: scheduleList[i].events[j],
+        color: 'white',
+      });
     }
-  };
+  }
 
-  // 상대방 일정 조회
-  const handleCheckPartnerPlan = async (
-    { year, month }: PlanPropsType,
-    memberId: number | null
-  ) => {
-    try {
-      const res = await handleGetPlan({ year, month }, memberId);
-      setPartnerSchedule(res.data.data.scheduleDates);
-    } catch (err: any) {
-      console.log(err.response.data.message);
-    }
+  for (let i = 0; i < schedules.length; i++) {
+    newDaysObject = {
+      ...newDaysObject,
+      [Object.keys(schedules[i])[0]]: {
+        marked: true,
+        dots: Object.values(schedules[i])[0],
+      },
+    };
+  }
+
+  // 일정 추가 페이지로 넘어가기
+  const handleAddPlan = (id: number | null) => {
+    navigation.navigate('PlanRoute', { id });
   };
 
   useEffect(() => {
@@ -275,28 +143,13 @@ const CheckCalendar = ({
     const partnerMemberId = partnerData.memberId;
     const { coupleId } = coupleData;
 
-    handleCheckMyPlan({ year, month }, myMemberId);
-    handleCheckMyPlanDetail({
-      year,
-      month,
-      day,
-      myMemberId,
-      setMyScheduleDetail,
-    });
-    handleCheckPartnerPlan({ year, month }, partnerMemberId);
-    handleCheckPartnerPlanDetail({
-      year,
-      month,
-      day,
-      partnerMemberId,
-      setPartnerScheduleDetail,
-    });
-    handleCheckCouplePlanDetail({
+    handleCheckPlan({ year, month, myMemberId, setScheduleList });
+    handleCheckAnniversaryList({
       year,
       month,
       day,
       coupleId,
-      setCoupleScheduleDetail,
+      setAnniversaryList,
     });
   }, [
     coupleData,
@@ -310,6 +163,7 @@ const CheckCalendar = ({
     selectedYear,
     today,
     userData.memberId,
+    focus,
   ]);
 
   const marginContainerStyle = {
@@ -319,7 +173,7 @@ const CheckCalendar = ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={marginContainerStyle}>
+      <SafeAreaView style={marginContainerStyle}>
         <View style={detail ? undefined : styles.calendarView}>
           {/* 플랜 생성 페이지 분기처리 */}
           {detail ? (
@@ -377,6 +231,9 @@ const CheckCalendar = ({
                   rowStyle={styles.rowDividerView}
                   onSelect={(selectedItem, index) => {
                     setSelectedFilter(index);
+                    index === 0
+                      ? handleAddPlan(coupleData.coupleId)
+                      : handleAddPlan(userData.memberId);
                   }}
                   buttonTextAfterSelection={(selectedItem) => {
                     return selectedItem[0];
@@ -420,12 +277,14 @@ const CheckCalendar = ({
 
           {detail ? null : (
             <CheckCalendarDetail
+              navigation={navigation}
+              selectedYear={selectedYear}
               selectedMonth={selectedMonth}
               selectedDay={selectedDay}
               currentMonth={currentMonth}
               currentDay={currentDay}
-              myScheduleDetail={myScheduleDetail}
-              partnerScheduleDetail={partnerScheduleDetail}
+              anniversaryList={anniversaryList}
+              setFocus={setFocus}
             />
           )}
         </View>
@@ -439,7 +298,7 @@ const CheckCalendar = ({
             locale="en"
           />
         )}
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
