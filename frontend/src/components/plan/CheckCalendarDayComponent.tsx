@@ -3,6 +3,7 @@ import React from 'react';
 import { getFormattedDate } from '../../utils/formattedDate';
 import MultipleCalendarBox from './MultipleCalendarBox';
 import { Props } from '../../types/calendar/calendarType';
+import Heart from '../../assets/images/calendar/heart.svg';
 
 const CheckCalendarDayComponent = ({
   date,
@@ -54,65 +55,35 @@ const CheckCalendarDayComponent = ({
       setSelected(date?.dateString);
     }
   };
-
   return (
-    <TouchableOpacity onPress={handelSelectDay}>
+    <TouchableOpacity
+      onPress={handelSelectDay}
+      disabled={state === 'disabled' ? true : false}
+      activeOpacity={1.0}
+    >
       <View style={detail ? planStyle : calendarDayStyle}>
         <Text style={calendarTextStyle}>{date?.day}</Text>
-        <>
-          {marking?.dots?.length === 1 && marking?.dots[0]?.color === 'red' && (
-            <MultipleCalendarBox color="#FC887B" />
-          )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.color === 'yellow' && (
-              <MultipleCalendarBox color="#FFDD95" />
-            )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.color === 'green' && (
-              <MultipleCalendarBox color="#D0E6A5" />
-            )}
-          {marking?.dots?.length === 1 &&
-            marking?.dots[0]?.color === 'white' && <Text>heart</Text>}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.color === 'red' &&
-            marking?.dots[1]?.color === 'yellow' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#FFDD95" />
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.color === 'red' &&
-            marking?.dots[1]?.color === 'green' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <MultipleCalendarBox color="#D0E6A5" />
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.color === 'red' &&
-            marking?.dots[1]?.color === 'white' && (
-              <>
-                <MultipleCalendarBox color="#FC887B" />
-                <Text>heart</Text>
-              </>
-            )}
-          {marking?.dots?.length === 2 &&
-            marking?.dots[0]?.color === 'yellow' &&
-            marking?.dots[1]?.color === 'green' && (
-              <>
-                <MultipleCalendarBox color="#FFDD95" />
-                <MultipleCalendarBox color="#D0E6A5" />
-              </>
-            )}
-          {marking?.dots?.length === 3 && (
-            <>
-              <MultipleCalendarBox color="#FC887B" />
-              <MultipleCalendarBox color="#FFDD95" />
-              <MultipleCalendarBox color="#D0E6A5" />
-            </>
-          )}
-        </>
+        {marking?.dots?.map((dot, index) => {
+          let content = null;
+          switch (dot.key) {
+            case 'datingSchedule':
+              content = <MultipleCalendarBox color="#FC887B" />;
+              break;
+            case 'mySchedule':
+              content = <MultipleCalendarBox color="#FFDD95" />;
+              break;
+            case 'partnerSchedule':
+              content = <MultipleCalendarBox color="#D0E6A5" />;
+              break;
+            case 'anniversary':
+              content = <Heart style={styles.heartView} />;
+              break;
+            default:
+              break;
+          }
+          // eslint-disable-next-line react/no-array-index-key
+          return <React.Fragment key={index}>{content}</React.Fragment>;
+        })}
       </View>
     </TouchableOpacity>
   );
@@ -137,5 +108,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     zIndex: 50,
+  },
+  heartView: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
   },
 });

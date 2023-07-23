@@ -16,7 +16,6 @@ import Onboarding from '../screens/Onboarding';
 import ConnectPartner from '../screens/ConnectPartner';
 import Main from '../screens/Main';
 import PlanRoute from './PlanRoute';
-import PlanCalendar from '../screens/PlanCalendar';
 import Calendar from '../assets/images/main/calendar.svg';
 import OnCalendar from '../assets/images/main/onCalendar.svg';
 import Anniversary from '../assets/images/main/anniversary.svg';
@@ -24,6 +23,7 @@ import OnAnniversary from '../assets/images/main/onAnniversary.svg';
 import BottomTabButton from '../components/design/BottomTabButton';
 import CustomTabIcon from '../components/design/CustomTabIcon';
 import AnniversaryRoute from './AnniversaryRoute';
+import CheckCalendar from '../screens/CheckCalendar';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -63,7 +63,7 @@ const MainScreenBottomTabRouter = () => {
     >
       <BottomTab.Screen
         name={BottomScreens.BottomPlanCalendarScreen}
-        component={PlanCalendar}
+        component={CheckCalendar}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <CustomTabIcon
@@ -137,7 +137,7 @@ const MainRoute = () => {
         />
         <Stack.Screen
           name={RouteScreens.PlanCalendarScreen}
-          component={PlanCalendar}
+          component={CheckCalendar}
           options={{ headerShown: false }}
         />
         {/* 일정 추가 route */}

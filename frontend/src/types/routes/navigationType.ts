@@ -5,7 +5,10 @@ export enum RouteScreens {
   LoginScreen = 'LoginScreen',
   ConnectPartnerScreen = 'ConnectPartnerScreen',
   MainScreen = 'MainScreen',
+
+  // 일정 확인 페이지
   PlanCalendarScreen = 'PlanCalendarScreen',
+  PlanDetailScreen = 'PlanDetailScreen',
   MainBottomTabScreen = 'MainBottomTabScreen',
 
   // 일정 생성 페이지 route
@@ -32,11 +35,14 @@ export type StackParamList = {
   LoginScreen: undefined;
   ConnectPartnerScreen: undefined;
   MainScreen: undefined;
+
+  // 일정 확인 페이지 route
   PlanCalendarScreen: undefined;
+  PlanDetailScreen: undefined;
   MainBottomTabScreen: undefined;
 
   // 일정 생성 페이지 route
-  PlanRoute: undefined;
+  PlanRoute: { id?: number | null; detail?: object };
   PlanTitleScreen: undefined;
   PlanStartScreen: undefined;
   PlanEndScreen: undefined;

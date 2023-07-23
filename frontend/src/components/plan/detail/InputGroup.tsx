@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import DatePicker from 'react-native-date-picker';
 import { DetailInputProps } from '../../../types/plan/planDetailTypes';
-import CheckCalendar from '../CheckCalendar';
+import CheckCalendar from '../../../screens/CheckCalendar';
 
 const InputGroup = ({
   text,
