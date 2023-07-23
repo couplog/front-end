@@ -92,23 +92,17 @@ export interface CheckPlanType extends PlanPropsType {
 
 export interface CheckMyPlanDetailType extends PlanPropsType {
   myMemberId: number | null;
-  setScheduleDetail: Dispatch<
-    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
-  >;
+  setMyScheduleDetail: Dispatch<SetStateAction<ScheduleDetailType[]>>;
 }
 
 export interface CheckPartnerPlanDetailType extends PlanPropsType {
   partnerMemberId: number | null;
-  setScheduleDetail: Dispatch<
-    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
-  >;
+  setPartnerScheduleDetail: Dispatch<SetStateAction<ScheduleDetailType[]>>;
 }
 
 export interface CheckCouplePlanDetailType extends PlanPropsType {
   coupleId: number | null;
-  setScheduleDetail: Dispatch<
-    SetStateAction<ScheduleDetailType[] | DateScheduleDetailType[]>
-  >;
+  setCoupleScheduleDetail: Dispatch<SetStateAction<DateScheduleDetailType[]>>;
 }
 
 export interface CheckAnniversaryListType extends PlanPropsType {

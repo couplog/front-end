@@ -56,9 +56,7 @@ const CheckCalendarDetail = ({
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
     ScheduleDetailType[]
   >([]);
-  const [scheduleDetail, setScheduleDetail] = useState<
-    ScheduleDetailType[] | DateScheduleDetailType[]
-  >([]);
+
   const filterData = [
     ['전체', '#EDF0F3'],
     ['데이트', '#FC887B'],
@@ -69,6 +67,7 @@ const CheckCalendarDetail = ({
   const [swipeStates, setSwipeStates] = useState(
     myScheduleDetail.map(() => false)
   );
+
   const noSchedule = true;
   const handleCheckPlanDetail = () => {
     handleCheckMyPlanDetail({
@@ -76,35 +75,31 @@ const CheckCalendarDetail = ({
       month: selectedMonth,
       day: selectedDay,
       myMemberId: memberId,
-      setScheduleDetail,
+      setMyScheduleDetail,
     });
     handleCheckCouplePlanDetail({
       year: selectedYear,
       month: selectedMonth,
       day: selectedDay,
       coupleId,
-      setScheduleDetail,
+      setCoupleScheduleDetail,
     });
     handleCheckPartnerPlanDetail({
       year: selectedYear,
       month: selectedMonth,
       day: selectedDay,
       partnerMemberId: partnerId,
-      setScheduleDetail,
+      setPartnerScheduleDetail,
     });
   };
 
   useEffect(() => {
-    setScheduleDetail([]);
     handleCheckPlanDetail();
-
-    console.log(scheduleDetail);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coupleId, memberId, partnerId, selectedDay, selectedMonth, selectedYear]);
 
   // 삭제 후 새로고침
   const handleReload = () => {
-    setScheduleDetail([]);
     handleCheckPlanDetail();
     setFocus((prev) => !prev);
   };
