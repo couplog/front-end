@@ -9,13 +9,13 @@ export const formFields = [
   {
     key: 'name',
     title: '이름',
-    placeholder: '2-10자 한글',
+    placeholder: '2-5자 한글',
     validate: validateNameWrapper('이름'),
   },
   {
     key: 'nickname',
     title: '닉네임',
-    placeholder: '2-10자 한글',
+    placeholder: '2-5자 한글',
     validate: validateNameWrapper('닉네임'),
   },
   {

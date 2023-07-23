@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     width: '75%',
     height: '75%',
     borderRadius: 12,
-    backgroundColor: '#000000',
+    backgroundColor: '#FF9696',
   },
   titleText: {
     color: '#000000',

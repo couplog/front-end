@@ -41,7 +41,10 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
     'no-unneeded-ternary': 'off',
+    'object-shorthand': 'off',
+    'react/jsx-curly-brace-presence': 'off',
     'prefer-destructuring': 'off',
+    'no-underscore-dangle': 'off',
   },
   settings: {
     'import/resolver': {

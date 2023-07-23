@@ -1,6 +1,8 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/routes/navigationType';
 import { handleCoupleInfo } from '../api/couple/coupleInfo';
 import { coupleState } from '../state/atoms/coupleAtom';
 import { handlePartnerInfo } from '../api/couple/partnerInfo';
@@ -10,16 +12,21 @@ import { AnniversaryComponentProps } from '../types/main/mainPageTypes';
 import Header from '../components/main/Header';
 import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
-import Weather from '../components/main/Weather';
+import { handleMemberInfo } from '../api/login/login';
+import { userState } from '../state/atoms/userAtom';
+import backgroundImage from '../assets/images/main/backgroundMain.png';
 
-const Main = () => {
+type Props = StackScreenProps<StackParamList, 'MainScreen'>;
+
+const Main = ({ navigation }: Props) => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const setPartnerInfo = useSetRecoilState(partnerState);
   const [anniversaries, setAnniversaries] = useState<
     AnniversaryComponentProps[]
   >([]);
 
-  // 커플 정보 불러오기
+  // 커플 & 본인 정보 불러오기
   const fetchCoupleInfo = async () => {
     try {
       const coupleInfoResponse = await handleCoupleInfo();
@@ -37,6 +44,9 @@ const Main = () => {
       }));
 
       fetchAnniversaryComing(updatedCoupleInfo.coupleId, 3);
+
+      // 해당 함수 실행과 동시에 본인 & 상대방 정보 불러오기 API 실행
+      fetchUserInfo();
       fetchPartnerInfo();
     } catch (error) {
       console.log(error);
@@ -85,7 +95,24 @@ const Main = () => {
     }
   };
 
-  // 메인화면 접근 -> 커플 정보 조회, 상대방 유저 정보 조회 -> 상태관리 저장(atom)
+  // 본인 정보 불러오기
+  const fetchUserInfo = async () => {
+    const memberRes = await handleMemberInfo();
+    const memberInfo = memberRes?.data.data;
+    const updateUserInfo = {
+      ...userInfo,
+      memberId: memberInfo.memberId,
+      name: memberInfo.name,
+      nickname: memberInfo.nickname,
+      phone: memberInfo.phone,
+      birth: memberInfo.birth,
+      gender: memberInfo.gender,
+      profileImageUrl: memberInfo.profileImageURL,
+    };
+    setUserInfo(updateUserInfo);
+  };
+
+  // 메인화면 접근 -> 커플 정보 조회, 상대방 유저 정보 조회, 본인 정보 조회 -> 상태관리 저장(atom)
   // + 다가올 기념일 3개 조회
   useEffect(() => {
     fetchCoupleInfo();
@@ -93,19 +120,24 @@ const Main = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.margin}>
-        {/* Header UI */}
-        <Header />
+    <ImageBackground
+      source={backgroundImage}
+      style={{ width: '100%', height: '100%', zIndex: 100 }}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.margin}>
+          {/* Header UI */}
+          <Header />
 
-        {/* 날씨 & 연애 day UI */}
-        <Profile meetDate={coupleInfo.firstDate} />
-        <Weather />
-      </View>
+          {/* Day UI */}
+          <Profile meetDate={coupleInfo.firstDate} />
+        </View>
 
-      {/* Footer UI */}
-      <Footer anniversaries={anniversaries} />
-    </SafeAreaView>
+        {/* Footer UI */}
+        <Footer navigation={navigation} anniversaries={anniversaries} />
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -114,7 +146,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FF7869',
+    backgroundColor: 'transparent',
   },
   margin: {
     marginLeft: 25,
