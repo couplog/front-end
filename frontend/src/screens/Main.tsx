@@ -1,6 +1,8 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { StackScreenProps } from '@react-navigation/stack';
+import { StackParamList } from '../types/routes/navigationType';
 import { handleCoupleInfo } from '../api/couple/coupleInfo';
 import { coupleState } from '../state/atoms/coupleAtom';
 import { handlePartnerInfo } from '../api/couple/partnerInfo';
@@ -12,8 +14,11 @@ import Profile from '../components/main/Profile';
 import Footer from '../components/main/Footer';
 import { handleMemberInfo } from '../api/login/login';
 import { userState } from '../state/atoms/userAtom';
+import backgroundImage from '../assets/images/main/backgroundMain.png';
 
-const Main = () => {
+type Props = StackScreenProps<StackParamList, 'MainScreen'>;
+
+const Main = ({ navigation }: Props) => {
   const [coupleInfo, setCoupleInfo] = useRecoilState(coupleState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const setPartnerInfo = useSetRecoilState(partnerState);
@@ -39,6 +44,8 @@ const Main = () => {
       }));
 
       fetchAnniversaryComing(updatedCoupleInfo.coupleId, 3);
+
+      // 해당 함수 실행과 동시에 본인 & 상대방 정보 불러오기 API 실행
       fetchUserInfo();
       fetchPartnerInfo();
     } catch (error) {
@@ -88,6 +95,7 @@ const Main = () => {
     }
   };
 
+  // 본인 정보 불러오기
   const fetchUserInfo = async () => {
     const memberRes = await handleMemberInfo();
     const memberInfo = memberRes?.data.data;
@@ -112,19 +120,24 @@ const Main = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.margin}>
-        {/* Header UI */}
-        <Header />
+    <ImageBackground
+      source={backgroundImage}
+      style={{ width: '100%', height: '100%', zIndex: 100 }}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.margin}>
+          {/* Header UI */}
+          <Header />
 
-        {/* Day UI */}
-        <Profile meetDate={coupleInfo.firstDate} />
-      </View>
+          {/* Day UI */}
+          <Profile meetDate={coupleInfo.firstDate} />
+        </View>
 
-      {/* Footer UI */}
-      {/* 클릭시 기념일 페이지 navigation */}
-      <Footer anniversaries={anniversaries} />
-    </SafeAreaView>
+        {/* Footer UI */}
+        <Footer navigation={navigation} anniversaries={anniversaries} />
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -133,7 +146,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FF6564',
+    backgroundColor: 'transparent',
   },
   margin: {
     marginLeft: 25,
