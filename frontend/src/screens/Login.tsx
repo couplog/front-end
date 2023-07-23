@@ -65,6 +65,7 @@ const Login = ({ navigation }: Props) => {
             : navigation.navigate('ConnectPartnerScreen');
         }
       } else {
+        // 만료되었을 경우에는 만료된 토큰 삭제후 다시 로그인 진행
         removeData('refreshToken');
       }
     }
