@@ -1,4 +1,5 @@
 import {
+  Keyboard,
   SafeAreaView,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -68,6 +69,11 @@ const AnniversaryCreateScreen = ({ navigation }: Props) => {
     }
   };
 
+  const handleTouchScreen = () => {
+    Keyboard.dismiss();
+    setStartVisible(false);
+  };
+
   // 기념일 수정히기
   const handleOnEdit = async () => {
     try {
@@ -86,7 +92,7 @@ const AnniversaryCreateScreen = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => setStartVisible(false)}>
+      <TouchableWithoutFeedback onPress={handleTouchScreen}>
         <View style={styles.wrapper}>
           {editMode ? (
             <Header isDisabled={isDisabled} edit onPress={handleOnEdit} />
