@@ -104,13 +104,15 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
       <View style={{ flex: 1 }}>
         <SafeAreaView style={styles.container}>
           {/* 헤더 UI */}
-          <TouchableOpacity
-            activeOpacity={1.0}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backText}>가입취소</Text>
-          </TouchableOpacity>
-          <Text style={styles.headText}>회원정보를 입력해주세요</Text>
+          <View style={styles.headerView}>
+            <Text style={styles.headText}>회원정보를 입력해주세요</Text>
+            <TouchableOpacity
+              activeOpacity={1.0}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.backText}>취소</Text>
+            </TouchableOpacity>
+          </View>
 
           {/* Input UI */}
           <View style={styles.inputView}>
@@ -263,8 +265,13 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
   },
-  headText: {
+  headerView: {
+    flexDirection: 'row',
     marginTop: 30,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headText: {
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     fontSize: 24,
@@ -317,11 +324,9 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontFamily: 'Pretendard-Regular',
-    fontWeight: '700',
+    fontWeight: '500',
     fontSize: 14,
     color: '#FF6564',
-    position: 'absolute',
-    right: 0,
   },
 });
 
