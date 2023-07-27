@@ -20,7 +20,6 @@ export enum RouteScreens {
   PlanRepeatScreen = 'PlanRepeatScreen',
 
   // 기념일 페이지
-  AnniversaryRoute = 'AnniversaryRoute',
   AnniversaryMainScreen = 'AnniversaryMainScreen',
   AnniversaryCreateScreen = 'AnniversaryCreateScreen',
 
@@ -47,7 +46,7 @@ export type StackParamList = {
   MainBottomTabScreen: undefined;
 
   // 일정 생성 페이지 route
-  PlanRoute: { id?: number | null; detail?: object };
+  PlanRoute: undefined;
   PlanTitleScreen: undefined;
   PlanStartScreen: undefined;
   PlanEndScreen: undefined;
@@ -55,7 +54,6 @@ export type StackParamList = {
   PlanRepeatScreen: undefined;
 
   // 기념일 페이지 route
-  AnniversaryRoute: undefined;
   AnniversaryMainScreen: undefined;
   AnniversaryCreateScreen: undefined;
 
@@ -69,11 +67,11 @@ export type StackParamList = {
 export type BottomTabList = {
   MainScreen: undefined;
   PlanCalendarScreen: undefined;
-  AnniversaryRoute: undefined;
+  AnniversaryMainScreen: undefined;
 };
 
 export enum BottomScreens {
-  BottomAnniversaryRoute = 'AnniversaryRoute',
+  BottomAnniversaryScreen = 'AnniversaryMainScreen',
   BottomMainScreen = 'MainScreen',
   BottomPlanCalendarScreen = 'PlanCalendarScreen',
 }
