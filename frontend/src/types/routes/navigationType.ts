@@ -23,6 +23,11 @@ export enum RouteScreens {
   AnniversaryRoute = 'AnniversaryRoute',
   AnniversaryMainScreen = 'AnniversaryMainScreen',
   AnniversaryCreateScreen = 'AnniversaryCreateScreen',
+
+  // 마이 페이지
+  MyPageRoute = 'MyPageRoute',
+  MyPageScreen = 'MyPageScreen',
+  ChangePasswordScreen = 'ChangePasswordScreen',
 }
 
 // 필요한 파라미터가 없는 상태
@@ -53,6 +58,11 @@ export type StackParamList = {
   AnniversaryRoute: undefined;
   AnniversaryMainScreen: undefined;
   AnniversaryCreateScreen: undefined;
+
+  // 마이 페이지
+  MyPageRoute: undefined;
+  MyPageScreen: undefined;
+  ChangePasswordScreen: undefined;
 };
 
 // bottom navigation
