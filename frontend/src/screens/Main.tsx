@@ -25,6 +25,7 @@ const Main = ({ navigation }: Props) => {
   const [anniversaries, setAnniversaries] = useState<
     AnniversaryComponentProps[]
   >([]);
+  const [showScreen, setShowScreen] = useState(false);
 
   // 커플 & 본인 정보 불러오기
   const fetchCoupleInfo = async () => {
@@ -119,24 +120,35 @@ const Main = ({ navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 데이터 로딩 처리
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowScreen(true);
+    }, 600);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <ImageBackground
       source={backgroundImage}
-      style={{ width: '100%', height: '100%', zIndex: 100 }}
+      style={styles.image}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.margin}>
-          {/* Header UI */}
-          <Header />
+      {showScreen && (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.margin}>
+            {/* Header UI */}
+            <Header onPress={() => navigation.navigate('MyPageRoute')} />
 
-          {/* Day UI */}
-          <Profile meetDate={coupleInfo.firstDate} />
-        </View>
+            {/* Day UI */}
+            <Profile meetDate={coupleInfo.firstDate} />
+          </View>
 
-        {/* Footer UI */}
-        <Footer navigation={navigation} anniversaries={anniversaries} />
-      </SafeAreaView>
+          {/* Footer UI */}
+          <Footer navigation={navigation} anniversaries={anniversaries} />
+        </SafeAreaView>
+      )}
     </ImageBackground>
   );
 };
@@ -151,5 +163,10 @@ const styles = StyleSheet.create({
   margin: {
     marginLeft: 25,
     marginRight: 25,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    zIndex: 100,
   },
 });
