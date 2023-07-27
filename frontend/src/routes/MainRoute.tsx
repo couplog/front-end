@@ -24,6 +24,7 @@ import BottomTabButton from '../components/design/BottomTabButton';
 import CustomTabIcon from '../components/design/CustomTabIcon';
 import AnniversaryRoute from './AnniversaryRoute';
 import CheckCalendar from '../screens/CheckCalendar';
+import MyPageRoute from './MyPageRoute';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -100,7 +101,7 @@ const MainScreenBottomTabRouter = () => {
   );
 };
 
-// 메인 라우트
+// Main Route
 const MainRoute = () => {
   return (
     <NavigationContainer theme={navTheme}>
@@ -150,6 +151,12 @@ const MainRoute = () => {
         <Stack.Screen
           name={RouteScreens.AnniversaryRoute}
           component={AnniversaryRoute}
+          options={{ headerShown: false }}
+        />
+        {/* 마이 페이지 route */}
+        <Stack.Screen
+          name={RouteScreens.MyPageRoute}
+          component={MyPageRoute}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
