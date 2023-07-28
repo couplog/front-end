@@ -29,7 +29,6 @@ import {
   handleCheckAnniversaryList,
   handleCheckPlan,
 } from '../utils/plan/calendar';
-
 import { coupleState } from '../state/atoms/coupleAtom';
 import { modeState } from '../state/atoms/creatModeAtom';
 

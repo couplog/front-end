@@ -10,11 +10,12 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { StackParamList } from '../../types/routes/navigationType';
 import { planState } from '../../state/atoms/userPlanDetail';
 import Header from '../../components/plan/detail/Header';
 import Footer from '../../components/plan/detail/Footer';
+import { editModeState } from '../../state/atoms/createEditModeAtom';
 
 type Props = StackScreenProps<StackParamList, 'PlanTitleScreen'>;
 
@@ -22,6 +23,10 @@ const PlanTitle = ({ navigation }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
   const focused = useIsFocused();
   const [title, setTitle] = useState('');
+  const createEditMode = useRecoilValue(editModeState);
+
+  // 넘어오는 일정이 있을 때 확인코드
+  console.log(createEditMode);
 
   const handleTitleComplete = () => {
     setPlanAtom((prevPlan) => ({

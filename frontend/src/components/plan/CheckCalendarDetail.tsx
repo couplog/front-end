@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Swipeable } from 'react-native-gesture-handler';
 import CalendarDetailBox from './CalendarDetailBox';
 import { userState } from '../../state/atoms/userAtom';
@@ -27,6 +27,7 @@ import {
   ScheduleDetailType,
 } from '../../types/atom/scheduleDetailType';
 import DeleteAlertModal from './DeleteAlertModal';
+import { editModeState } from '../../state/atoms/createEditModeAtom';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -54,6 +55,7 @@ const CheckCalendarDetail = ({
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
     ScheduleDetailType[]
   >([]);
+  const setCreateEditMode = useSetRecoilState(editModeState);
 
   const filterData = [
     ['전체', '#EDF0F3'],
@@ -128,8 +130,8 @@ const CheckCalendarDetail = ({
   };
 
   // 일정 수정 페이지로 넘어가기
-  const handleEditPlan = (detail: object) => {
-    console.log(detail);
+  const handleEditPlan = (mode: string, detail: object) => {
+    setCreateEditMode({ mode, detail });
     navigation.navigate('PlanRoute');
   };
 
@@ -227,7 +229,7 @@ const CheckCalendarDetail = ({
                     key={arr.datingId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleEditPlan(arr)}
+                        onEdit={() => handleEditPlan('date', arr)}
                         onDelete={() => handleDateDelete(arr.datingId)}
                       />
                     )}
@@ -261,7 +263,7 @@ const CheckCalendarDetail = ({
                     key={arr.scheduleId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleEditPlan(arr)}
+                        onEdit={() => handleEditPlan('mine', arr)}
                         onDelete={() => setShowModal(true)}
                       />
                     )}
