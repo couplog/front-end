@@ -21,3 +21,9 @@ export interface ProfileProps {
   birth: string;
   phone: string;
 }
+
+export interface MyPageHeaderProps {
+  password?: boolean;
+  onPress?: () => void;
+  disabled?: boolean;
+}
