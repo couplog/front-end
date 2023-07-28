@@ -1,4 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../types/routes/navigationType';
@@ -8,11 +14,16 @@ type Props = StackScreenProps<StackParamList, 'OnboardingScreen'>;
 
 const Onboarding = ({ navigation }: Props) => {
   return (
-    <View style={{ flex: 1 }}>
+    <ImageBackground
+      source={require('../assets/images/onboarding/backgroundStart.png')}
+      resizeMode="contain"
+      style={{ flex: 1 }}
+    >
       <SafeAreaView style={styles.container}>
-        <Text style={styles.headFont}>함께하는 즐거움</Text>
-        <Text style={styles.subFont}>좋은 하루를 만들어보아요.</Text>
-        <View style={styles.hug} />
+        <Text style={styles.headFont}>함께 쓰는 커플로그</Text>
+        <Text style={styles.subFont}>
+          둘만의 이야기를 기록하고 기억해보세요.
+        </Text>
       </SafeAreaView>
       <View style={styles.buttonView}>
         <ButtonComponent
@@ -22,27 +33,7 @@ const Onboarding = ({ navigation }: Props) => {
           onPress={() => navigation.navigate('LoginScreen')}
         />
       </View>
-      <View style={styles.buttonView}>
-        <ButtonComponent
-          text="일정(디테일 이동 임시 구현)"
-          font="bold"
-          disabled={false}
-          onPress={() => navigation.navigate('PlanRoute', { id: null })}
-        />
-        <ButtonComponent
-          text="PlanCalendarScreen"
-          font="bold"
-          disabled={false}
-          onPress={() => navigation.navigate('PlanCalendarScreen')}
-        />
-        <ButtonComponent
-          text="기념일 페이지"
-          font="bold"
-          disabled={false}
-          onPress={() => navigation.navigate('AnniversaryRoute')}
-        />
-      </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -59,7 +50,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard-Medium',
     fontWeight: '700',
     fontSize: 32,
-    color: '#000000',
+    color: '#FF6564',
   },
   subFont: {
     fontFamily: 'Pretendard-Medium',
@@ -72,12 +63,5 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     marginLeft: 25,
     marginRight: 25,
-  },
-  // 임시 일러스트
-  hug: {
-    width: 327,
-    height: 378,
-    backgroundColor: '#E7E7E7',
-    marginTop: 40,
   },
 });

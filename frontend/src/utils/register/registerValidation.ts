@@ -22,7 +22,7 @@ export const validateCode = (value: string) => {
   return true;
 };
 
-// # ResgisterUserInfo
+// RegisterUserInfo
 
 // 이름, 닉네임 정규식
 const validateName = (value: string, fieldName: string) => {
@@ -30,7 +30,7 @@ const validateName = (value: string, fieldName: string) => {
     return '';
   }
   if (value.length < 2 || value.length > 10 || !/^[가-힣]+$/.test(value)) {
-    return `잘못된 ${fieldName} 형식입니다. 2-10자 한글`;
+    return `잘못된 ${fieldName} 형식입니다. 2-5자 한글`;
   }
   return true;
 };

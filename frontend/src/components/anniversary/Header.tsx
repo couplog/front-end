@@ -8,7 +8,13 @@ import { HeaderProps } from '../../types/anniversary/types';
 import XButton from '../../assets/images/common/xButton.svg';
 import { editAnniversaryState } from '../../state/atoms/editAnniversary';
 
-const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
+const Header = ({
+  onPress,
+  create,
+  edit,
+  isDisabled,
+  handleMain,
+}: HeaderProps) => {
   const navigation = useNavigation();
   const reset = useResetRecoilState(editAnniversaryState);
 
@@ -19,7 +25,7 @@ const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
 
   // 화면 뒤로 이동 및, 값 reset
   const handleBack = () => {
-    reset();
+    edit && reset(); // edit이 true일 때만 초기환
     navigation.goBack();
   };
 
@@ -28,7 +34,7 @@ const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
       <TouchableOpacity
         activeOpacity={1.0}
         hitSlop={styles.hitSlop}
-        onPress={edit ? handleBack : () => navigation.goBack()}
+        onPress={edit || create ? handleBack : handleMain}
       >
         {create || edit ? <XButton /> : <Back />}
       </TouchableOpacity>
@@ -42,7 +48,7 @@ const Header = ({ onPress, create, edit, isDisabled }: HeaderProps) => {
         {create || edit ? (
           <Text style={styles.createText}>{edit ? '수정' : '추가'}</Text>
         ) : (
-          <Plus />
+          <Plus style={{ left: 10 }} />
         )}
       </TouchableOpacity>
     </View>

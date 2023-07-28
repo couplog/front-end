@@ -44,9 +44,9 @@ const Profile = ({ meetDate, anniversary }: ProfileComponentProps) => {
     <>
       <View style={styles.coupleView}>
         <View style={styles.profileView}>
-          <Text style={textStyle}>{userInfo.nickname}</Text>
+          <Text style={textStyle}>{userInfo.name}</Text>
           {anniversary ? <BlackHeart /> : <Heart />}
-          <Text style={textStyle}>{partnerInfo.nickname}</Text>
+          <Text style={textStyle}>{partnerInfo.name}</Text>
         </View>
         <Text style={dayTextStyle}>
           {anniversary ? `D+${daysDifference}` : `+${daysDifference}`}
@@ -61,7 +61,7 @@ export default Profile;
 const styles = StyleSheet.create({
   coupleView: {
     alignItems: 'flex-start',
-    marginTop: 80,
+    marginTop: 55,
   },
   profileView: {
     flexDirection: 'row',
