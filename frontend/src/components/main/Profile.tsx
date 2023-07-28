@@ -40,6 +40,11 @@ const Profile = ({ meetDate, anniversary }: ProfileComponentProps) => {
     fontWeight: anniversary ? '500' : ('900' as '500' | '900'),
   };
 
+  // 최초 로딩시 NaN으로 처리되는 date loading 처리
+  if (Number.isNaN(daysDifference) || !userInfo.name || !partnerInfo.name) {
+    return null; // Return null to not render the component.
+  }
+
   return (
     <>
       <View style={styles.coupleView}>

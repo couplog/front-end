@@ -12,3 +12,15 @@ export const handleCreatePlan = (
     data: planData,
   });
 };
+
+// 데이트 생성
+export const handleCreateDate = (
+  planData: UserPlanDetailProps,
+  coupleId: number | null
+) => {
+  return request({
+    method: 'POST',
+    url: `/api/couples/${coupleId}/dating`,
+    data: planData,
+  });
+};

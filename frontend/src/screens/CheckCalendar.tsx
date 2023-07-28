@@ -7,14 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { SetStateAction, useCallback, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -23,25 +17,28 @@ import { userState } from '../state/atoms/userAtom';
 import { getFormattedDate } from '../utils/formattedDate';
 import Plus from '../assets/images/common/plus.svg';
 import CheckCalendarDayComponent from '../components/plan/CheckCalendarDayComponent';
-import { DayType, SchedulesType } from '../types/calendar/calendarType';
+import {
+  CalendarProps,
+  DayType,
+  SchedulesType,
+} from '../types/calendar/calendarType';
 import { partnerState } from '../state/atoms/partnerAtom';
 import OptionArrow from '../assets/images/common/optionArrow.svg';
 import CheckCalendarDetail from '../components/plan/CheckCalendarDetail';
 import { month } from '../utils/plan/calendarText';
 import {
   handleCheckAnniversaryList,
-  handleCheckPartnerPlanDetail,
   handleCheckPlan,
 } from '../utils/plan/calendar';
-import { coupleState } from '../state/atoms/coupleAtom';
 
-const CheckCalendar = (props: {
-  navigation?: any;
-  detail?: any;
-  setDaySelected?: any;
-}) => {
-  const { navigation } = props;
-  const { detail, setDaySelected } = props;
+import { coupleState } from '../state/atoms/coupleAtom';
+import { modeState } from '../state/atoms/creatModeAtom';
+
+const CheckCalendar = ({
+  navigation,
+  detail,
+  setDaySelected,
+}: CalendarProps) => {
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
@@ -64,6 +61,7 @@ const CheckCalendar = (props: {
   const selectedMonth = selected.substring(5, 7);
   const selectedDay = selected.substring(8, 10);
   const formattedDate = getFormattedDate(date);
+  const setCreateMode = useSetRecoilState(modeState);
 
   const schedules: SchedulesType[] = [];
 
@@ -130,8 +128,9 @@ const CheckCalendar = (props: {
   }
 
   // 일정 추가 페이지로 넘어가기
-  const handleAddPlan = (id: number | null) => {
-    navigation?.navigate('PlanTitleScreen', { id });
+  const handleAddPlan = (mode: string) => {
+    setCreateMode(mode);
+    navigation.navigate('PlanRoute');
   };
 
   useEffect(() => {
@@ -139,7 +138,6 @@ const CheckCalendar = (props: {
     const month = selectedMonth || currentMonth;
     const day = selectedDay || currentDay;
     const myMemberId = userData.memberId;
-    const partnerMemberId = partnerData.memberId;
     const { coupleId } = coupleData;
 
     handleCheckPlan({ year, month, myMemberId, setScheduleList });
@@ -230,9 +228,7 @@ const CheckCalendar = (props: {
                   rowStyle={styles.rowDividerView}
                   onSelect={(selectedItem, index) => {
                     setSelectedFilter(index);
-                    index === 0
-                      ? handleAddPlan(coupleData.coupleId)
-                      : handleAddPlan(userData.memberId);
+                    index === 0 ? handleAddPlan('date') : handleAddPlan('plan');
                   }}
                   buttonTextAfterSelection={(selectedItem) => {
                     return selectedItem[0];

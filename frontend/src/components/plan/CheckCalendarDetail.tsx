@@ -129,13 +129,15 @@ const CheckCalendarDetail = ({
     });
   };
 
-  // 일정 추가 페이지로 넘어가기
-  const handleAddPlan = (detail: object) => {
-    navigation.navigate('PlanRoute', { detail });
+  // 일정 수정 페이지로 넘어가기
+  const handleEditPlan = (detail: object) => {
+    console.log(detail);
+    navigation.navigate('PlanRoute');
   };
 
+  // 기념일 페이지로 넘어가기
   const handleCheckAnniversary = () => {
-    navigation.navigate('AnniversaryRoute');
+    navigation.navigate('AnniversaryMainScreen');
   };
 
   // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
@@ -263,7 +265,7 @@ const CheckCalendarDetail = ({
                     key={arr.datingId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleAddPlan(arr)}
+                        onEdit={() => handleEditPlan(arr)}
                         onDelete={() => handleDateDelete(arr.datingId)}
                       />
                     )}
@@ -297,7 +299,7 @@ const CheckCalendarDetail = ({
                     key={arr.scheduleId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleAddPlan(arr)}
+                        onEdit={() => handleEditPlan(arr)}
                         onDelete={() => handleDeleteAlert(arr.scheduleId)}
                       />
                     )}

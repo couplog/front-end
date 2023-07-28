@@ -16,7 +16,7 @@ const Footer = ({
   return (
     <View style={styles.footerView}>
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('AnniversaryRoute')}
+        onPress={() => navigation.navigate('AnniversaryMainScreen')}
       >
         <View>
           <View style={styles.textFlex}>

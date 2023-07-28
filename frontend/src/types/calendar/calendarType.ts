@@ -109,3 +109,9 @@ export interface CheckAnniversaryListType extends PlanPropsType {
   coupleId: number | null;
   setAnniversaryList: Dispatch<SetStateAction<never[]>>;
 }
+
+export interface CalendarProps {
+  navigation?: any;
+  detail?: boolean;
+  setDaySelected?: Dispatch<SetStateAction<string>>;
+}
