@@ -115,3 +115,12 @@ export interface CalendarProps {
   detail?: boolean;
   setDaySelected?: Dispatch<SetStateAction<string>>;
 }
+
+export interface DeleteMyPlanProps {
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  memberId: number | null;
+  scheduleId: number | null;
+  handleCheckPlanDetail: () => void;
+  setFocus: Dispatch<SetStateAction<boolean>>;
+}

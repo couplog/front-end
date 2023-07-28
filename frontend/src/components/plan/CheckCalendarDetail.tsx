@@ -1,5 +1,4 @@
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,10 +15,7 @@ import { partnerState } from '../../state/atoms/partnerAtom';
 import Arrow from '../../assets/images/common/arrow.svg';
 import { CheckCalendarDetailType } from '../../types/calendar/calendarType';
 import SwipeButton from '../common/SwipeButton';
-import {
-  handleDeleteDatePlan,
-  handleDeleteMyPlan,
-} from '../../api/plan/deletePlan';
+import { handleDeleteDatePlan } from '../../api/plan/deletePlan';
 import { coupleState } from '../../state/atoms/coupleAtom';
 import {
   handleCheckCouplePlanDetail,
@@ -30,6 +26,7 @@ import {
   DateScheduleDetailType,
   ScheduleDetailType,
 } from '../../types/atom/scheduleDetailType';
+import DeleteAlertModal from './DeleteAlertModal';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -47,6 +44,7 @@ const CheckCalendarDetail = ({
   const memberId = userData.memberId;
   const coupleId = coupleData.coupleId;
   const partnerId = partnerData.memberId;
+  const [showModal, setShowModal] = useState(false);
   const [myScheduleDetail, setMyScheduleDetail] = useState<
     ScheduleDetailType[]
   >([]);
@@ -138,39 +136,6 @@ const CheckCalendarDetail = ({
   // 기념일 페이지로 넘어가기
   const handleCheckAnniversary = () => {
     navigation.navigate('AnniversaryMainScreen');
-  };
-
-  // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
-  // alert 글자 색상 수정하는 부분 구현 못함
-  const handleDeleteAlert = (scheduleId: number | null) => {
-    Alert.alert(
-      '일정 삭제',
-      '반복 일정을 모두 삭제할까요?',
-      [
-        {
-          text: '반복 일정 전체 삭제',
-          onPress: () => {
-            // 새로고침하는 기능 추가해야함
-            scheduleId &&
-              handleDeleteMyPlan(memberId, scheduleId, true).then(() =>
-                handleReload()
-              );
-          },
-          style: 'destructive',
-        },
-        {
-          text: '해당 일정만 삭제',
-          onPress: () => {
-            // 새로고침하는 기능 추가해야함
-            scheduleId &&
-              handleDeleteMyPlan(memberId, scheduleId, false).then(() =>
-                handleReload()
-              );
-          },
-        },
-      ],
-      { cancelable: true }
-    );
   };
 
   // 데이트 일정 삭제
@@ -297,7 +262,7 @@ const CheckCalendarDetail = ({
                     renderRightActions={() => (
                       <SwipeButton
                         onEdit={() => handleEditPlan(arr)}
-                        onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                        onDelete={() => setShowModal(true)}
                       />
                     )}
                     overshootRight={false}
@@ -310,6 +275,14 @@ const CheckCalendarDetail = ({
                       boxColor="#FFDD95"
                       swipeStates={swipeStates}
                       idx={idx}
+                    />
+                    <DeleteAlertModal
+                      showModal={showModal}
+                      setShowModal={setShowModal}
+                      scheduleId={arr.scheduleId}
+                      memberId={memberId}
+                      handleCheckPlanDetail={handleCheckPlanDetail}
+                      setFocus={setFocus}
                     />
                   </Swipeable>
                 );
