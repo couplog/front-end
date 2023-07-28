@@ -12,7 +12,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
 import SelectDropdown from 'react-native-select-dropdown';
-import { StackScreenProps } from '@react-navigation/stack';
 import { userState } from '../state/atoms/userAtom';
 import { getFormattedDate } from '../utils/formattedDate';
 import Plus from '../assets/images/common/plus.svg';

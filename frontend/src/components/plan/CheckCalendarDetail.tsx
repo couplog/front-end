@@ -252,10 +252,7 @@ const CheckCalendarDetail = ({
           idx={0}
         />
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.rowScrollView}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             {coupleScheduleDetail?.length > 0 &&
               (selectedFilter === 1 || selectedFilter === 0) &&
@@ -442,9 +439,6 @@ const styles = StyleSheet.create({
   rowDividerView: {
     height: 32,
     borderBottomColor: '#EDF0F3',
-  },
-  rowScrollView: {
-    height: 250,
   },
   anniversaryScrollView: {
     flexDirection: 'row',
