@@ -41,7 +41,7 @@ export type StackParamList = {
 
   // 일정 생성 페이지 route
   PlanRoute: { id?: number | null; detail?: object };
-  PlanTitleScreen: undefined;
+  PlanTitleScreen: { id?: number | null; detail?: object };
   PlanStartScreen: undefined;
   PlanEndScreen: undefined;
   PlanPlaceContentScreen: undefined;

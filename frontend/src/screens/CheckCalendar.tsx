@@ -18,6 +18,7 @@ import { useRecoilValue } from 'recoil';
 import { Calendar } from 'react-native-calendars';
 import MonthPicker from 'react-native-month-year-picker';
 import SelectDropdown from 'react-native-select-dropdown';
+import { StackScreenProps } from '@react-navigation/stack';
 import { userState } from '../state/atoms/userAtom';
 import { getFormattedDate } from '../utils/formattedDate';
 import Plus from '../assets/images/common/plus.svg';
@@ -34,15 +35,13 @@ import {
 } from '../utils/plan/calendar';
 import { coupleState } from '../state/atoms/coupleAtom';
 
-const CheckCalendar = ({
-  navigation,
-  detail,
-  setDaySelected,
-}: {
+const CheckCalendar = (props: {
   navigation?: any;
-  detail?: boolean;
-  setDaySelected?: Dispatch<SetStateAction<string>>;
+  detail?: any;
+  setDaySelected?: any;
 }) => {
+  const { navigation } = props;
+  const { detail, setDaySelected } = props;
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
@@ -132,7 +131,7 @@ const CheckCalendar = ({
 
   // 일정 추가 페이지로 넘어가기
   const handleAddPlan = (id: number | null) => {
-    navigation.navigate('PlanRoute', { id });
+    navigation?.navigate('PlanTitleScreen', { id });
   };
 
   useEffect(() => {

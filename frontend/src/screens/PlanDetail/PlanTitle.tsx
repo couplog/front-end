@@ -17,9 +17,11 @@ import Footer from '../../components/plan/detail/Footer';
 
 type Props = StackScreenProps<StackParamList, 'PlanTitleScreen'>;
 
-const PlanTitle = ({ navigation }: Props) => {
+const PlanTitle = ({ navigation, route }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
   const [title, setTitle] = useState('');
+  const { id } = route.params;
+  console.log(route.params);
 
   const handleTitleComplete = () => {
     setPlanAtom((prevPlan) => ({
