@@ -22,8 +22,10 @@ import Anniversary from '../assets/images/main/anniversary.svg';
 import OnAnniversary from '../assets/images/main/onAnniversary.svg';
 import BottomTabButton from '../components/design/BottomTabButton';
 import CustomTabIcon from '../components/design/CustomTabIcon';
-import AnniversaryRoute from './AnniversaryRoute';
 import CheckCalendar from '../screens/CheckCalendar';
+import MyPageRoute from './MyPageRoute';
+import AnniversaryMainScreen from '../screens/Anniversary/AnniversaryMainScreen';
+import AnniversaryCreateScreen from '../screens/Anniversary/AnniversaryCreateScreen';
 
 const Stack = createStackNavigator<StackParamList>();
 const BottomTab = createBottomTabNavigator<BottomTabList>();
@@ -71,7 +73,7 @@ const MainScreenBottomTabRouter = () => {
               focused={focused}
             />
           ),
-          tabBarLabel: '기념일',
+          tabBarLabel: '일정',
         })}
       />
       <BottomTab.Screen
@@ -84,8 +86,8 @@ const MainScreenBottomTabRouter = () => {
         }}
       />
       <BottomTab.Screen
-        name={BottomScreens.BottomAnniversaryRoute}
-        component={AnniversaryRoute}
+        name={BottomScreens.BottomAnniversaryScreen}
+        component={AnniversaryMainScreen}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <CustomTabIcon
@@ -100,7 +102,7 @@ const MainScreenBottomTabRouter = () => {
   );
 };
 
-// 메인 라우트
+// Main Route
 const MainRoute = () => {
   return (
     <NavigationContainer theme={navTheme}>
@@ -135,21 +137,22 @@ const MainRoute = () => {
           component={MainScreenBottomTabRouter}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name={RouteScreens.PlanCalendarScreen}
-          component={CheckCalendar}
-          options={{ headerShown: false }}
-        />
         {/* 일정 추가 route */}
         <Stack.Screen
           name={RouteScreens.PlanRoute}
           component={PlanRoute}
           options={{ headerShown: false }}
         />
-        {/* 기념일 route */}
+        {/* 기념일 */}
         <Stack.Screen
-          name={RouteScreens.AnniversaryRoute}
-          component={AnniversaryRoute}
+          name={RouteScreens.AnniversaryCreateScreen}
+          component={AnniversaryCreateScreen}
+          options={{ headerShown: false }}
+        />
+        {/* 마이 페이지 route */}
+        <Stack.Screen
+          name={RouteScreens.MyPageRoute}
+          component={MyPageRoute}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

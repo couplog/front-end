@@ -45,6 +45,10 @@ module.exports = {
     'react/jsx-curly-brace-presence': 'off',
     'prefer-destructuring': 'off',
     'no-underscore-dangle': 'off',
+    'react/no-array-index-key': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'prefer-template': 'off',
+    'import/order': 'off',
   },
   settings: {
     'import/resolver': {

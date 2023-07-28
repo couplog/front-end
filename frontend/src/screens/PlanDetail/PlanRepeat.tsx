@@ -17,14 +17,18 @@ import Footer from '../../components/plan/detail/Footer';
 import RepeatEndOption from '../../components/plan/detail/RepeatEndOption';
 import { planState } from '../../state/atoms/userPlanDetail';
 import { userState } from '../../state/atoms/userAtom';
-import { handleCreatePlan } from '../../api/plan/createPlan';
+import { handleCreateDate, handleCreatePlan } from '../../api/plan/createPlan';
 import { UserPlanDetailProps } from '../../types/atom/userPlanType';
 import { StackParamList } from '../../types/routes/navigationType';
+import { coupleState } from '../../state/atoms/coupleAtom';
+import { modeState } from '../../state/atoms/creatModeAtom';
 
 type Props = StackScreenProps<StackParamList, 'PlanRepeatScreen'>;
 
 const PlanRepeat = ({ navigation }: Props) => {
   const userData = useRecoilValue(userState);
+  const coupleData = useRecoilValue(coupleState);
+  const createMode = useRecoilValue(modeState);
   const [planAtom, setPlanAtom] = useRecoilState(planState);
   const [repeatStart, setRepeatStart] = useState('없음');
   const [repeatCode, setRepeatCode] = useState('N');
@@ -56,16 +60,28 @@ const PlanRepeat = ({ navigation }: Props) => {
     color: repeatStart === '없음' ? '#909090' : '#000000',
   };
 
-  // 일정 생성 기능
+  // 개인 일정 or 데이트 생성 기능
   const handlePlanCreation = async (
     planData: UserPlanDetailProps,
     memberId: number | null
   ) => {
     try {
       const res = await handleCreatePlan(planData, memberId);
-      // 임시 이동 (캘린더 페이지 이동 구현 예정)
-      console.log(res.data.success);
-      navigation.navigate('MainScreen');
+      console.log('개인: ', res.data.success);
+      navigation.navigate('PlanCalendarScreen');
+    } catch (err: any) {
+      Alert.alert(err.response.data.message);
+    }
+  };
+
+  const handleDateCreation = async (
+    planData: UserPlanDetailProps,
+    coupleId: number | null
+  ) => {
+    try {
+      const res = await handleCreateDate(planData, coupleId);
+      console.log('데이트: ', res.data.success);
+      navigation.navigate('PlanCalendarScreen');
     } catch (err: any) {
       Alert.alert(err.response.data.message);
     }
@@ -85,8 +101,10 @@ const PlanRepeat = ({ navigation }: Props) => {
     setPlanAtom(planData);
     console.log(planData);
 
-    // 일정 생성 함수 실행
-    handlePlanCreation(planData, userData.memberId);
+    // 일정 or 데이트 생성 함수 실행
+    createMode === 'plan'
+      ? handlePlanCreation(planData, userData.memberId)
+      : handleDateCreation(planData, coupleData.coupleId);
   };
 
   // 일정 취소
