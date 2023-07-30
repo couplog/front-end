@@ -1,11 +1,7 @@
 import { atom } from 'recoil';
+import { EditScheduleProps } from '../../types/atom/editScheduleType';
 
-interface Props {
-  mode: string;
-  detail: object;
-}
-
-export const editModeState = atom<Props>({
+export const editModeState = atom<EditScheduleProps>({
   key: `userAtom:${Math.random()}`,
   default: {
     mode: '',
