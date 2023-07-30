@@ -2,11 +2,20 @@
 
 #import <React/RCTBundleURLProvider.h>
 
+#import "RNSplashScreen.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"frontend";
+  
+  [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [RNSplashScreen show];
+  // or
+  //[RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootView];
+  return YES;
+
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};

@@ -122,13 +122,13 @@ const Main = ({ navigation }: Props) => {
   return (
     <ImageBackground
       source={backgroundImage}
-      style={{ width: '100%', height: '100%', zIndex: 100 }}
+      style={styles.image}
       resizeMode="cover"
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.margin}>
           {/* Header UI */}
-          <Header />
+          <Header onPress={() => navigation.navigate('MyPageRoute')} />
 
           {/* Day UI */}
           <Profile meetDate={coupleInfo.firstDate} />
@@ -151,5 +151,10 @@ const styles = StyleSheet.create({
   margin: {
     marginLeft: 25,
     marginRight: 25,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    zIndex: 100,
   },
 });

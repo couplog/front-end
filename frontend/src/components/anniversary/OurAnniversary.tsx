@@ -8,7 +8,10 @@ import {
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Swipeable } from 'react-native-gesture-handler';
+import {
+  GestureHandlerRootView,
+  Swipeable,
+} from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import { coupleState } from '../../state/atoms/coupleAtom';
 import { OurAnniversaryComponentProps } from '../../types/main/mainPageTypes';
@@ -87,56 +90,60 @@ const OurAnniversary = ({
         ];
 
         return category === 'OTHER' ? (
-          <Swipeable
-            key={anniversary.id}
-            renderRightActions={() => (
-              <SwipeButton
-                onEdit={() =>
-                  handleEdit(
-                    anniversary.id,
-                    anniversary.content,
-                    anniversary.date,
-                    anniversary.title
-                  )
-                }
-                onDelete={() => handleDelete(anniversary.id)}
-              />
-            )}
-            overshootRight={false}
-            onSwipeableWillOpen={() => handleSwipe(index, true)}
-            onSwipeableWillClose={() => handleSwipe(index, false)}
-          >
-            <TouchableWithoutFeedback onPress={() => handlePress(index)}>
-              <View style={dayScrollStyle}>
-                <View style={anniversaryGlobalStyles.flex}>
-                  <Text style={anniversaryGlobalStyles.dayInfoText}>
-                    {anniversary.title}
-                  </Text>
-                  <Text style={anniversaryGlobalStyles.dateText}>
-                    {format(new Date(anniversary.date), 'yy. MM. dd')}
-                  </Text>
-                </View>
-
-                {/* 내용 / 반복여부  */}
-                {show && (
-                  <View style={anniversaryGlobalStyles.detailView}>
+          <GestureHandlerRootView key={anniversary.id}>
+            <Swipeable
+              renderRightActions={() => (
+                <SwipeButton
+                  onEdit={() =>
+                    handleEdit(
+                      anniversary.id,
+                      anniversary.content,
+                      anniversary.date,
+                      anniversary.title
+                    )
+                  }
+                  onDelete={() => handleDelete(anniversary.id)}
+                />
+              )}
+              overshootRight={false}
+              onSwipeableWillOpen={() => handleSwipe(index, true)}
+              onSwipeableWillClose={() => handleSwipe(index, false)}
+            >
+              <TouchableWithoutFeedback onPress={() => handlePress(index)}>
+                <View style={dayScrollStyle}>
+                  <View style={anniversaryGlobalStyles.flex}>
                     <Text style={anniversaryGlobalStyles.dayInfoText}>
-                      {anniversary.content === ''
-                        ? '내용 없음'
-                        : anniversary.content}
+                      {anniversary.title}
                     </Text>
-                    <Text
-                      style={[anniversaryGlobalStyles.dateText, { bottom: 35 }]}
-                    >
-                      {anniversary.repeatRule === 'YEAR'
-                        ? '매년 반복'
-                        : '반복 없음'}
+                    <Text style={anniversaryGlobalStyles.dateText}>
+                      {format(new Date(anniversary.date), 'yy. MM. dd')}
                     </Text>
                   </View>
-                )}
-              </View>
-            </TouchableWithoutFeedback>
-          </Swipeable>
+
+                  {/* 내용 / 반복여부  */}
+                  {show && (
+                    <View style={anniversaryGlobalStyles.detailView}>
+                      <Text style={anniversaryGlobalStyles.dayInfoText}>
+                        {anniversary.content === ''
+                          ? '내용 없음'
+                          : anniversary.content}
+                      </Text>
+                      <Text
+                        style={[
+                          anniversaryGlobalStyles.dateText,
+                          { bottom: 35 },
+                        ]}
+                      >
+                        {anniversary.repeatRule === 'YEAR'
+                          ? '매년 반복'
+                          : '반복 없음'}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableWithoutFeedback>
+            </Swipeable>
+          </GestureHandlerRootView>
         ) : (
           // 수정/삭제 불가능한 기념일
           <View key={anniversary.id} style={anniversaryGlobalStyles.otherView}>
