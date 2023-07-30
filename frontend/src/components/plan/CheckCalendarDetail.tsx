@@ -1,5 +1,4 @@
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,7 +7,7 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Swipeable } from 'react-native-gesture-handler';
 import CalendarDetailBox from './CalendarDetailBox';
 import { userState } from '../../state/atoms/userAtom';
@@ -16,10 +15,7 @@ import { partnerState } from '../../state/atoms/partnerAtom';
 import Arrow from '../../assets/images/common/arrow.svg';
 import { CheckCalendarDetailType } from '../../types/calendar/calendarType';
 import SwipeButton from '../common/SwipeButton';
-import {
-  handleDeleteDatePlan,
-  handleDeleteMyPlan,
-} from '../../api/plan/deletePlan';
+import { handleDeleteDatePlan } from '../../api/plan/deletePlan';
 import { coupleState } from '../../state/atoms/coupleAtom';
 import {
   handleCheckCouplePlanDetail,
@@ -30,6 +26,8 @@ import {
   DateScheduleDetailType,
   ScheduleDetailType,
 } from '../../types/atom/scheduleDetailType';
+import { editModeState } from '../../state/atoms/createEditModeAtom';
+import AlertModal from '../myPage/AlertModal';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -47,6 +45,7 @@ const CheckCalendarDetail = ({
   const memberId = userData.memberId;
   const coupleId = coupleData.coupleId;
   const partnerId = partnerData.memberId;
+  const [showModal, setShowModal] = useState(false);
   const [myScheduleDetail, setMyScheduleDetail] = useState<
     ScheduleDetailType[]
   >([]);
@@ -56,6 +55,7 @@ const CheckCalendarDetail = ({
   const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
     ScheduleDetailType[]
   >([]);
+  const setCreateEditMode = useSetRecoilState(editModeState);
 
   const filterData = [
     ['전체', '#EDF0F3'],
@@ -130,47 +130,14 @@ const CheckCalendarDetail = ({
   };
 
   // 일정 수정 페이지로 넘어가기
-  const handleEditPlan = (detail: object) => {
-    console.log(detail);
+  const handleEditPlan = (mode: string, detail: object) => {
+    setCreateEditMode({ mode, detail });
     navigation.navigate('PlanRoute');
   };
 
   // 기념일 페이지로 넘어가기
   const handleCheckAnniversary = () => {
     navigation.navigate('AnniversaryMainScreen');
-  };
-
-  // ios에서는 백그라운드 눌러도 alert 창이 안 닫힘
-  // alert 글자 색상 수정하는 부분 구현 못함
-  const handleDeleteAlert = (scheduleId: number | null) => {
-    Alert.alert(
-      '일정 삭제',
-      '반복 일정을 모두 삭제할까요?',
-      [
-        {
-          text: '반복 일정 전체 삭제',
-          onPress: () => {
-            // 새로고침하는 기능 추가해야함
-            scheduleId &&
-              handleDeleteMyPlan(memberId, scheduleId, true).then(() =>
-                handleReload()
-              );
-          },
-          style: 'destructive',
-        },
-        {
-          text: '해당 일정만 삭제',
-          onPress: () => {
-            // 새로고침하는 기능 추가해야함
-            scheduleId &&
-              handleDeleteMyPlan(memberId, scheduleId, false).then(() =>
-                handleReload()
-              );
-          },
-        },
-      ],
-      { cancelable: true }
-    );
   };
 
   // 데이트 일정 삭제
@@ -252,10 +219,7 @@ const CheckCalendarDetail = ({
           idx={0}
         />
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.rowScrollView}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             {coupleScheduleDetail?.length > 0 &&
               (selectedFilter === 1 || selectedFilter === 0) &&
@@ -265,7 +229,7 @@ const CheckCalendarDetail = ({
                     key={arr.datingId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleEditPlan(arr)}
+                        onEdit={() => handleEditPlan('date', arr)}
                         onDelete={() => handleDateDelete(arr.datingId)}
                       />
                     )}
@@ -299,8 +263,8 @@ const CheckCalendarDetail = ({
                     key={arr.scheduleId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleEditPlan(arr)}
-                        onDelete={() => handleDeleteAlert(arr.scheduleId)}
+                        onEdit={() => handleEditPlan('mine', arr)}
+                        onDelete={() => setShowModal(true)}
                       />
                     )}
                     overshootRight={false}
@@ -313,6 +277,14 @@ const CheckCalendarDetail = ({
                       boxColor="#FFDD95"
                       swipeStates={swipeStates}
                       idx={idx}
+                    />
+                    <AlertModal
+                      showModal={showModal}
+                      setShowModal={setShowModal}
+                      scheduleId={arr.scheduleId}
+                      memberId={memberId}
+                      handleCheckPlanDetail={handleCheckPlanDetail}
+                      setFocus={setFocus}
                     />
                   </Swipeable>
                 );
@@ -442,9 +414,6 @@ const styles = StyleSheet.create({
   rowDividerView: {
     height: 32,
     borderBottomColor: '#EDF0F3',
-  },
-  rowScrollView: {
-    height: 250,
   },
   anniversaryScrollView: {
     flexDirection: 'row',
