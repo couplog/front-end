@@ -26,8 +26,8 @@ import {
   DateScheduleDetailType,
   ScheduleDetailType,
 } from '../../types/atom/scheduleDetailType';
-import DeleteAlertModal from './DeleteAlertModal';
 import { editModeState } from '../../state/atoms/createEditModeAtom';
+import AlertModal from '../myPage/AlertModal';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -278,7 +278,7 @@ const CheckCalendarDetail = ({
                       swipeStates={swipeStates}
                       idx={idx}
                     />
-                    <DeleteAlertModal
+                    <AlertModal
                       showModal={showModal}
                       setShowModal={setShowModal}
                       scheduleId={arr.scheduleId}

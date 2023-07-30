@@ -7,8 +7,8 @@ import { StackParamList } from '../../types/routes/navigationType';
 import Header from '../../components/myPage/Header';
 import Profile from '../../components/myPage/Profile';
 import ContentBox from '../../components/myPage/ContentBox';
-import MyPageModal from '../../components/myPage/MyPageModal';
 import { partnerState } from '../../state/atoms/partnerAtom';
+import AlertModal from '../../components/myPage/AlertModal';
 
 type Props = StackScreenProps<StackParamList, 'MyPageScreen'>;
 
@@ -69,7 +69,7 @@ const MyPageScreen = ({ navigation }: Props) => {
           <ContentBox key={index} {...data} />
         ))}
 
-        <MyPageModal
+        <AlertModal
           memberId={userInfo.memberId}
           type={type}
           showModal={showModal}

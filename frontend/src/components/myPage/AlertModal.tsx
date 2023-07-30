@@ -10,13 +10,17 @@ import React from 'react';
 import { coupleDisconnect } from '../../api/myPage/disconnect';
 import { userWithdraw } from '../../api/myPage/withdraw';
 import { MyPageModalProps } from '../../types/myPage/types';
+import { handleDeleteMyPlan } from '../../api/plan/deletePlan';
 
-const MyPageModal = ({
+const AlertModal = ({
   showModal,
   setShowModal,
   type,
   navigation,
   memberId,
+  scheduleId,
+  handleCheckPlanDetail,
+  setFocus,
 }: MyPageModalProps) => {
   const withdraw = type === '탈퇴';
 
@@ -46,6 +50,23 @@ const MyPageModal = ({
     }
   };
 
+  // 삭제 후 새로고침
+  const handleReload = () => {
+    if (handleCheckPlanDetail && setFocus) {
+      handleCheckPlanDetail();
+      setFocus((prev) => !prev);
+      setShowModal(false);
+    }
+  };
+
+  // 삭제 로직
+  const handleDeletePlan = (scheduleId: number | null, repeat: boolean) => {
+    scheduleId &&
+      handleDeleteMyPlan(memberId, scheduleId, repeat).then(() =>
+        handleReload()
+      );
+  };
+
   return (
     <>
       {/* Modal */}
@@ -56,32 +77,60 @@ const MyPageModal = ({
               <View style={styles.modalContent}>
                 {/* Title */}
                 <Text style={styles.title}>
-                  {withdraw ? '회원 탈퇴' : '커플 연결 끊기'}
+                  {scheduleId
+                    ? '일정 삭제'
+                    : withdraw
+                    ? '회원 탈퇴'
+                    : '커플 연결 끊기'}
                 </Text>
                 <Text style={styles.modalText}>
-                  {withdraw
+                  {scheduleId
+                    ? '반복 일정을 모두 삭제할까요?'
+                    : withdraw
                     ? '회원 탈퇴를 하면 상대방과의 연결이\n끊어지며 복구할 수 없습니다.'
                     : '상대방과의 연결을 끊으면 데이터가 모두\n삭제되며 복구할 수 없습니다.'}
                 </Text>
 
                 {/* button */}
-                <TouchableOpacity
-                  activeOpacity={1.0}
-                  style={styles.button}
-                  onPress={withdraw ? handleWithdraw : handleDisconnect}
-                >
-                  <Text style={styles.logoutText}>
-                    {withdraw ? '회원 탈퇴' : '연결 끊기'}
-                  </Text>
-                </TouchableOpacity>
+                {scheduleId ? (
+                  <>
+                    <TouchableOpacity
+                      activeOpacity={1.0}
+                      style={styles.button}
+                      onPress={() => handleDeletePlan(scheduleId, true)}
+                    >
+                      <Text style={styles.logoutText}>반복 일정 전체 삭제</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                  activeOpacity={1.0}
-                  style={styles.button}
-                  onPress={() => setShowModal(false)}
-                >
-                  <Text style={styles.continueText}>취소</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={1.0}
+                      style={styles.button}
+                      onPress={() => handleDeletePlan(scheduleId, false)}
+                    >
+                      <Text style={styles.continueText}>해당 일정만 삭제</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      activeOpacity={1.0}
+                      style={styles.button}
+                      onPress={withdraw ? handleWithdraw : handleDisconnect}
+                    >
+                      <Text style={styles.logoutText}>
+                        {withdraw ? '회원 탈퇴' : '연결 끊기'}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      activeOpacity={1.0}
+                      style={styles.button}
+                      onPress={() => setShowModal(false)}
+                    >
+                      <Text style={styles.continueText}>취소</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -91,7 +140,7 @@ const MyPageModal = ({
   );
 };
 
-export default MyPageModal;
+export default AlertModal;
 
 const styles = StyleSheet.create({
   modalContainer: {
