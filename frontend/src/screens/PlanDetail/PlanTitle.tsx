@@ -24,9 +24,6 @@ const PlanTitle = ({ navigation }: Props) => {
   const [title, setTitle] = useState('');
   const createEditMode = useRecoilValue(editModeState);
 
-  // 넘어오는 일정이 있을 때 확인코드
-  console.log(createEditMode);
-
   const handleTitleComplete = () => {
     setPlanAtom((prevPlan) => ({
       ...prevPlan,
