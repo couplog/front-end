@@ -8,6 +8,8 @@ export const editPlan = (
   scheduleId: number | null | undefined,
   updateRepeat: boolean
 ) => {
+  console.log('updateRepeat: ', updateRepeat);
+
   return request({
     method: 'PUT',
     url: `/api/members/${memberId}/schedules/${scheduleId}?updateRepeat=${updateRepeat}`,
