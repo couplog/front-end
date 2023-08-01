@@ -5,6 +5,15 @@ export const editModeState = atom<EditScheduleProps>({
   key: `userAtom:${Math.random()}`,
   default: {
     mode: '',
-    detail: {},
+    detail: {
+      title: '',
+      location: '',
+      content: '',
+      endDateTime: '',
+      repeatRule: '',
+      startDateTime: '',
+      scheduleId: null,
+      datingId: null,
+    },
   },
 });
