@@ -26,7 +26,7 @@ const ButtonComponent = ({ disabled, text, onPress, font }: ButtonProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        activeOpacity={1.0}
+        activeOpacity={0.5}
         disabled={disabled}
         onPress={onPress}
         style={buttonStyle}
