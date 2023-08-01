@@ -15,7 +15,10 @@ import { partnerState } from '../../state/atoms/partnerAtom';
 import Arrow from '../../assets/images/common/arrow.svg';
 import { CheckCalendarDetailType } from '../../types/calendar/calendarType';
 import SwipeButton from '../common/SwipeButton';
-import { handleDeleteDatePlan } from '../../api/plan/deletePlan';
+import {
+  handleDeleteDatePlan,
+  handleDeleteMyPlan,
+} from '../../api/plan/deletePlan';
 import { coupleState } from '../../state/atoms/coupleAtom';
 import {
   handleCheckCouplePlanDetail,
@@ -144,6 +147,14 @@ const CheckCalendarDetail = ({
     navigation.navigate('AnniversaryMainScreen');
   };
 
+  // 삭제 로직
+  const handleDeletePlan = (scheduleId: number | null) => {
+    scheduleId &&
+      handleDeleteMyPlan(memberId, scheduleId, false).then(() =>
+        handleReload()
+      );
+  };
+
   // 데이트 일정 삭제
   const handleDateDelete = (scheduleId: number | null) => {
     handleDeleteDatePlan(coupleId, scheduleId).then(() => handleReload());
@@ -268,7 +279,11 @@ const CheckCalendarDetail = ({
                     renderRightActions={() => (
                       <SwipeButton
                         onEdit={() => handleEditPlan('mine', arr)}
-                        onDelete={() => setShowModal(true)}
+                        onDelete={() =>
+                          arr.repeatRule === 'N'
+                            ? handleDeletePlan(arr.scheduleId)
+                            : setShowModal(true)
+                        }
                       />
                     )}
                     overshootRight={false}
