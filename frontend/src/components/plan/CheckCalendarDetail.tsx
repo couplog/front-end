@@ -32,6 +32,7 @@ import {
 import { editModeState } from '../../state/atoms/createEditModeAtom';
 import AlertModal from '../myPage/AlertModal';
 import { EditScheduleProps } from '../../types/atom/editScheduleType';
+import { useIsFocused } from '@react-navigation/native';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -43,6 +44,7 @@ const CheckCalendarDetail = ({
   anniversaryList,
   setFocus,
 }: CheckCalendarDetailType) => {
+  const isFocused = useIsFocused();
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
@@ -100,7 +102,15 @@ const CheckCalendarDetail = ({
   useEffect(() => {
     handleCheckPlanDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coupleId, memberId, partnerId, selectedDay, selectedMonth, selectedYear]);
+  }, [
+    coupleId,
+    memberId,
+    partnerId,
+    selectedDay,
+    selectedMonth,
+    selectedYear,
+    isFocused,
+  ]);
 
   // 삭제 후 새로고침
   const handleReload = () => {

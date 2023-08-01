@@ -31,12 +31,14 @@ import {
 } from '../utils/plan/calendar';
 import { coupleState } from '../state/atoms/coupleAtom';
 import { modeState } from '../state/atoms/creatModeAtom';
+import { useIsFocused } from '@react-navigation/native';
 
 const CheckCalendar = ({
   navigation,
   detail,
   setDaySelected,
 }: CalendarProps) => {
+  const isFocused = useIsFocused();
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
@@ -147,6 +149,7 @@ const CheckCalendar = ({
       setAnniversaryList,
     });
   }, [
+    isFocused,
     coupleData,
     currentDay,
     currentMonth,
