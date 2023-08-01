@@ -28,6 +28,7 @@ import {
 } from '../../types/atom/scheduleDetailType';
 import { editModeState } from '../../state/atoms/createEditModeAtom';
 import AlertModal from '../myPage/AlertModal';
+import { EditScheduleProps } from '../../types/atom/editScheduleType';
 
 const CheckCalendarDetail = ({
   navigation,
@@ -130,7 +131,10 @@ const CheckCalendarDetail = ({
   };
 
   // 일정 수정 페이지로 넘어가기
-  const handleEditPlan = (mode: string, detail: object) => {
+  const handleEditPlan = (
+    mode: string,
+    detail: EditScheduleProps['detail']
+  ) => {
     setCreateEditMode({ mode, detail });
     navigation.navigate('PlanRoute');
   };
