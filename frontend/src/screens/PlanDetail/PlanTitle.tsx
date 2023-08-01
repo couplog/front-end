@@ -8,9 +8,8 @@ import {
   TextInput,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useIsFocused } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { StackParamList } from '../../types/routes/navigationType';
 import { planState } from '../../state/atoms/userPlanDetail';
 import Header from '../../components/plan/detail/Header';
@@ -21,7 +20,7 @@ type Props = StackScreenProps<StackParamList, 'PlanTitleScreen'>;
 
 const PlanTitle = ({ navigation }: Props) => {
   const setPlanAtom = useSetRecoilState(planState);
-  const focused = useIsFocused();
+  const reset = useResetRecoilState(editModeState);
   const [title, setTitle] = useState('');
   const createEditMode = useRecoilValue(editModeState);
 
@@ -39,13 +38,17 @@ const PlanTitle = ({ navigation }: Props) => {
 
   // 일정 취소
   const handleCancel = () => {
+    if (createEditMode.mode) reset();
     navigation.navigate('PlanCalendarScreen');
   };
 
-  // 취소 후 다시 렌더링시 title 초기화
+  // 수정 모드일시 setTitle
   useEffect(() => {
-    if (focused) setTitle('');
-  }, [focused]);
+    if (createEditMode.mode) {
+      setTitle(createEditMode.detail.title);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createEditMode.mode]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
