@@ -44,3 +44,10 @@ export interface PasswordInputProps {
   style: any;
   label: string;
 }
+
+export interface PlanModalProps {
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  onPress: () => void;
+  onPressRepeat: () => void;
+}
