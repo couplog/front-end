@@ -1,11 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { editModeState } from '../../../state/atoms/createEditModeAtom';
 
 const Footer = ({ onPress }: { onPress: () => void }) => {
+  const createEditMode = useRecoilValue(editModeState);
+
   return (
     <View style={{ marginBottom: 60 }}>
       <TouchableOpacity onPress={onPress} activeOpacity={1.0}>
-        <Text style={styles.text}>일정 등록 취소</Text>
+        <Text style={styles.text}>
+          {createEditMode.mode ? '일정 수정 취소' : '일정 등록 취소'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
