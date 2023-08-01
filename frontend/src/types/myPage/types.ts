@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 
 export interface MyPageModalProps {
   showModal: boolean;
@@ -23,4 +24,23 @@ export interface ProfileProps {
   partnerName: string;
   birth: string;
   phone: string;
+}
+
+export interface MyPageHeaderProps {
+  password?: boolean;
+  onPress?: () => void;
+  disabled?: boolean;
+}
+
+export interface PasswordInputProps {
+  placeholder: string;
+  placeholderTextColor: string;
+  eyeClick: boolean;
+  secureTextEntry: boolean;
+  onChangeText: Dispatch<SetStateAction<string>>;
+  value: string;
+  onChange?: (event: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+  handleEyeToggle: () => void;
+  style: any;
+  label: string;
 }
