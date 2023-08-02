@@ -45,6 +45,7 @@ const AlertModal = ({
     await removeData('token');
     await removeData('refreshToken');
     await removeData('connection');
+    await removeData('autoLogin');
   };
 
   // plan 페이지 모달
