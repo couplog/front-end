@@ -29,10 +29,14 @@ const MyPageScreen = ({ navigation }: Props) => {
     {
       top: 50,
       title: '개인정보 처리 방침',
-      onPress: () => console.log('개인'),
+      onPress: () => navigation.navigate('AgreeScreen'),
       // 링크 연결 해야함
     },
-    { top: 10, title: '서비스 이용약관', onPress: () => console.log('서비스') }, // 링크 연결
+    {
+      top: 10,
+      title: '서비스 이용약관',
+      onPress: () => navigation.navigate('ServiceInfoScreen'),
+    },
     {
       top: 50,
       user: true,
@@ -56,7 +60,7 @@ const MyPageScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
-        <Header />
+        <Header label="설정" />
 
         <Profile
           myName={userInfo.name}
