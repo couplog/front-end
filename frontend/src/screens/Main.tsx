@@ -64,7 +64,7 @@ const Main = ({ navigation }: Props) => {
         name,
         nickname,
         phone,
-        profileImageUrl,
+        profileImageURL,
       } = response.data.data;
 
       setPartnerInfo({
@@ -74,7 +74,7 @@ const Main = ({ navigation }: Props) => {
         name,
         nickname,
         phone,
-        profileImageUrl,
+        profileImageUrl: profileImageURL,
       });
     } catch (error) {
       console.log(error);
@@ -105,7 +105,7 @@ const Main = ({ navigation }: Props) => {
       name: memberInfo.name,
       nickname: memberInfo.nickname,
       phone: memberInfo.phone,
-      birth: memberInfo.birth,
+      birth: memberInfo.birthDay,
       gender: memberInfo.gender,
       profileImageUrl: memberInfo.profileImageURL,
     };
