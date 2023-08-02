@@ -59,13 +59,9 @@ const ConnectPartner = ({ navigation }: Props) => {
     };
 
     if (memberId !== null) {
-      console.log(
-        `req: {connectCode : ${inviteCode}, firstDate: ${formattedDate}}`
-      );
       // 상대방과 연결하기 API
       handlePostingCode(memberId, userFormData)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           navigation.navigate('MainScreen');
         })
         // 일치하지 않는 코드
@@ -86,7 +82,6 @@ const ConnectPartner = ({ navigation }: Props) => {
 
   // 본인 코드 확인 함수
   const handleCheckCode = async () => {
-    console.log(userInfo);
     if (memberId !== null) {
       const res = await handleGettingCode(memberId);
       setMyCode(res.data.data.connectionCode);

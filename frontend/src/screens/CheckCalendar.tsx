@@ -290,7 +290,6 @@ const CheckCalendar = ({
             </View>
           )}
 
-          {/* 캘린더 주간 제목 색상 및 대문자 설정 아직 구현 못함 */}
           <Calendar
             monthFormat=""
             current={formattedDate}
