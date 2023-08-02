@@ -74,6 +74,10 @@ export interface CheckCalendarDetailType {
   currentDay: string;
   anniversaryList: AnniversaryListtype[];
   setFocus: Dispatch<SetStateAction<boolean>>;
+  handleCheckPlanDetail: () => void;
+  myScheduleDetail: ScheduleDetailType[];
+  partnerScheduleDetail: ScheduleDetailType[];
+  coupleScheduleDetail: DateScheduleDetailType[];
 }
 
 interface AnniversaryListtype {

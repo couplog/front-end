@@ -27,11 +27,18 @@ import CheckCalendarDetail from '../components/plan/CheckCalendarDetail';
 import { month } from '../utils/plan/calendarText';
 import {
   handleCheckAnniversaryList,
+  handleCheckCouplePlanDetail,
+  handleCheckMyPlanDetail,
+  handleCheckPartnerPlanDetail,
   handleCheckPlan,
 } from '../utils/plan/calendar';
 import { coupleState } from '../state/atoms/coupleAtom';
 import { modeState } from '../state/atoms/creatModeAtom';
 import { useIsFocused } from '@react-navigation/native';
+import {
+  DateScheduleDetailType,
+  ScheduleDetailType,
+} from '../types/atom/scheduleDetailType';
 
 const CheckCalendar = ({
   navigation,
@@ -42,6 +49,9 @@ const CheckCalendar = ({
   const userData = useRecoilValue(userState);
   const partnerData = useRecoilValue(partnerState);
   const coupleData = useRecoilValue(coupleState);
+  const memberId = userData.memberId;
+  const coupleId = coupleData.coupleId;
+  const partnerId = partnerData.memberId;
   const today = getFormattedDate(new Date());
   const [focus, setFocus] = useState(false);
   const [selected, setSelected] = useState(today);
@@ -54,6 +64,15 @@ const CheckCalendar = ({
     ['내 일정', '#FFDD95'],
   ];
   const [selectedFilter, setSelectedFilter] = useState(0);
+  const [myScheduleDetail, setMyScheduleDetail] = useState<
+    ScheduleDetailType[]
+  >([]);
+  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState<
+    DateScheduleDetailType[]
+  >([]);
+  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
+    ScheduleDetailType[]
+  >([]);
   const currentYear = today.substring(0, 4);
   const currentMonth = today.substring(5, 7);
   const currentDay = today.substring(8, 10);
@@ -133,6 +152,33 @@ const CheckCalendar = ({
     navigation.navigate('PlanRoute');
   };
 
+  const handleCheckPlanDetail = () => {
+    setMyScheduleDetail([]);
+    setCoupleScheduleDetail([]);
+    setPartnerScheduleDetail([]);
+    handleCheckMyPlanDetail({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+      myMemberId: memberId,
+      setMyScheduleDetail,
+    });
+    handleCheckCouplePlanDetail({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+      coupleId,
+      setCoupleScheduleDetail,
+    });
+    handleCheckPartnerPlanDetail({
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+      partnerMemberId: partnerId,
+      setPartnerScheduleDetail,
+    });
+  };
+
   useEffect(() => {
     const year = selectedYear || currentYear;
     const month = selectedMonth || currentMonth;
@@ -140,6 +186,7 @@ const CheckCalendar = ({
     const myMemberId = userData.memberId;
     const { coupleId } = coupleData;
 
+    handleCheckPlanDetail();
     handleCheckPlan({ year, month, myMemberId, setScheduleList });
     handleCheckAnniversaryList({
       year,
@@ -148,6 +195,7 @@ const CheckCalendar = ({
       coupleId,
       setAnniversaryList,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isFocused,
     coupleData,
@@ -281,6 +329,10 @@ const CheckCalendar = ({
               currentDay={currentDay}
               anniversaryList={anniversaryList}
               setFocus={setFocus}
+              handleCheckPlanDetail={handleCheckPlanDetail}
+              myScheduleDetail={myScheduleDetail}
+              partnerScheduleDetail={partnerScheduleDetail}
+              coupleScheduleDetail={coupleScheduleDetail}
             />
           )}
         </View>

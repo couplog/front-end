@@ -20,15 +20,6 @@ import {
   handleDeleteMyPlan,
 } from '../../api/plan/deletePlan';
 import { coupleState } from '../../state/atoms/coupleAtom';
-import {
-  handleCheckCouplePlanDetail,
-  handleCheckMyPlanDetail,
-  handleCheckPartnerPlanDetail,
-} from '../../utils/plan/calendar';
-import {
-  DateScheduleDetailType,
-  ScheduleDetailType,
-} from '../../types/atom/scheduleDetailType';
 import { editModeState } from '../../state/atoms/createEditModeAtom';
 import AlertModal from '../myPage/AlertModal';
 import { EditScheduleProps } from '../../types/atom/editScheduleType';
@@ -43,6 +34,10 @@ const CheckCalendarDetail = ({
   currentDay,
   anniversaryList,
   setFocus,
+  handleCheckPlanDetail,
+  myScheduleDetail,
+  partnerScheduleDetail,
+  coupleScheduleDetail,
 }: CheckCalendarDetailType) => {
   const isFocused = useIsFocused();
   const userData = useRecoilValue(userState);
@@ -52,15 +47,6 @@ const CheckCalendarDetail = ({
   const coupleId = coupleData.coupleId;
   const partnerId = partnerData.memberId;
   const [showModal, setShowModal] = useState(false);
-  const [myScheduleDetail, setMyScheduleDetail] = useState<
-    ScheduleDetailType[]
-  >([]);
-  const [coupleScheduleDetail, setCoupleScheduleDetail] = useState<
-    DateScheduleDetailType[]
-  >([]);
-  const [partnerScheduleDetail, setPartnerScheduleDetail] = useState<
-    ScheduleDetailType[]
-  >([]);
   const setCreateEditMode = useSetRecoilState(editModeState);
 
   const filterData = [
@@ -75,29 +61,6 @@ const CheckCalendarDetail = ({
   );
 
   const noSchedule = true;
-  const handleCheckPlanDetail = () => {
-    handleCheckMyPlanDetail({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-      myMemberId: memberId,
-      setMyScheduleDetail,
-    });
-    handleCheckCouplePlanDetail({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-      coupleId,
-      setCoupleScheduleDetail,
-    });
-    handleCheckPartnerPlanDetail({
-      year: selectedYear,
-      month: selectedMonth,
-      day: selectedDay,
-      partnerMemberId: partnerId,
-      setPartnerScheduleDetail,
-    });
-  };
 
   useEffect(() => {
     handleCheckPlanDetail();
@@ -254,7 +217,9 @@ const CheckCalendarDetail = ({
                     key={arr.datingId}
                     renderRightActions={() => (
                       <SwipeButton
-                        onEdit={() => handleEditPlan('date', arr)}
+                        onEdit={() => {
+                          handleEditPlan('date', arr);
+                        }}
                         onDelete={() => handleDateDelete(arr.datingId)}
                       />
                     )}
