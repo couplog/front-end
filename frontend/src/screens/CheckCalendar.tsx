@@ -306,9 +306,11 @@ export default CheckCalendar;
 
 const styles = StyleSheet.create({
   marginContainer: {
+    flex: 1,
     paddingTop: 8,
   },
   calendarView: {
+    flex: 1,
     marginLeft: 21,
     marginRight: 21,
   },

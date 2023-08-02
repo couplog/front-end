@@ -357,8 +357,10 @@ export default CheckCalendarDetail;
 
 const styles = StyleSheet.create({
   calendarDetailView: {
+    flex: 1,
     marginTop: 24,
     marginLeft: 5,
+    marginBottom: 15,
   },
   calendarDetailHeaderView: {
     display: 'flex',
