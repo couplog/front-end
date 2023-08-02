@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../assets/images/common/smallBack.svg';
 import { MyPageHeaderProps } from '../../types/myPage/types';
 
-const Header = ({ password, onPress, disabled }: MyPageHeaderProps) => {
+const Header = ({ password, onPress, disabled, label }: MyPageHeaderProps) => {
   const navigation = useNavigation();
 
   return (
@@ -27,7 +27,7 @@ const Header = ({ password, onPress, disabled }: MyPageHeaderProps) => {
         activeOpacity={1.0}
         onPress={onPress}
       >
-        <Text style={styles.text}>{password ? '확인' : '설정'}</Text>
+        <Text style={styles.text}>{label}</Text>
       </TouchableOpacity>
     </View>
   );
