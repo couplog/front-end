@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, View, Modal, StyleSheet, Dimensions } from 'react-native';
+import {
+  Text,
+  View,
+  Modal,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ModalProps } from '../../types/components/modalType';
 import ButtonComponent from '../design/ButtonComponent';
@@ -11,9 +18,14 @@ const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
       <View style={styles.modalBackground}>
         <View style={styles.modal}>
           <View style={styles.closeButton}>
-            <Close onPress={() => setModalVisible(false)} />
+            <TouchableOpacity
+              activeOpacity={1.0}
+              onPress={() => setModalVisible(false)}
+            >
+              <Close />
+            </TouchableOpacity>
           </View>
-          {/* 모달창 디자인에따라 컴포넌트 구조 변경 예정 */}
+
           <View style={styles.textView}>
             <Text style={styles.headFont}>나의 초대코드</Text>
             <Text style={styles.subFont}>{code}</Text>

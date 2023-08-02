@@ -86,7 +86,6 @@ const ConnectPartner = ({ navigation }: Props) => {
 
   // 본인 코드 확인 함수
   const handleCheckCode = async () => {
-    console.log(userInfo);
     if (memberId !== null) {
       const res = await handleGettingCode(memberId);
       setMyCode(res.data.data.connectionCode);
@@ -156,9 +155,9 @@ const ConnectPartner = ({ navigation }: Props) => {
 
         {/* 코드 확인 modal */}
         <View style={styles.checkCodeView}>
-          <Text style={styles.checkCodeFont} onPress={handleCheckCode}>
-            나의 초대코드 확인하기
-          </Text>
+          <TouchableOpacity activeOpacity={1.0} onPress={handleCheckCode}>
+            <Text style={styles.checkCodeFont}>나의 초대코드 확인하기</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
