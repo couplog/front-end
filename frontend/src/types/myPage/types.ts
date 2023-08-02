@@ -30,6 +30,7 @@ export interface MyPageHeaderProps {
   password?: boolean;
   onPress?: () => void;
   disabled?: boolean;
+  label: string;
 }
 
 export interface PasswordInputProps {

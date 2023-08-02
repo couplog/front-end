@@ -27,6 +27,8 @@ export enum RouteScreens {
   MyPageRoute = 'MyPageRoute',
   MyPageScreen = 'MyPageScreen',
   ChangePasswordScreen = 'ChangePasswordScreen',
+  AgreeScreen = 'AgreeScreen',
+  ServiceInfoScreen = 'ServiceInfoScreen',
 }
 
 // 필요한 파라미터가 없는 상태
@@ -61,6 +63,8 @@ export type StackParamList = {
   MyPageRoute: undefined;
   MyPageScreen: undefined;
   ChangePasswordScreen: undefined;
+  AgreeScreen: undefined;
+  ServiceInfoScreen: undefined;
 };
 
 // bottom navigation
