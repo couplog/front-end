@@ -5,7 +5,7 @@ export interface ScheduleDetailType {
   title: string;
   content: string;
   location: string;
-  RepeatRule: string;
+  repeatRule: string;
 }
 
 export interface DateScheduleDetailType {

@@ -25,7 +25,6 @@ const ModalComponent = ({ visible, setModalVisible, code }: ModalProps) => {
               <Close />
             </TouchableOpacity>
           </View>
-
           <View style={styles.textView}>
             <Text style={styles.headFont}>나의 초대코드</Text>
             <Text style={styles.subFont}>{code}</Text>
