@@ -41,6 +41,14 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
     'no-unneeded-ternary': 'off',
+    'object-shorthand': 'off',
+    'react/jsx-curly-brace-presence': 'off',
+    'prefer-destructuring': 'off',
+    'no-underscore-dangle': 'off',
+    'react/no-array-index-key': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'prefer-template': 'off',
+    'import/order': 'off',
   },
   settings: {
     'import/resolver': {

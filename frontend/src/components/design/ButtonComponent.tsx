@@ -20,13 +20,13 @@ const ButtonComponent = ({ disabled, text, onPress, font }: ButtonProps) => {
         ? 'Pretendard-Regular'
         : 'Pretendard-Medium',
     fontSize: font === 'bold' ? 16 : font === 'regular' ? 14 : 12,
-    color: disabled ? '#CCCCCC' : '#000000',
+    color: disabled ? '#CCCCCC' : '#FFFFFF',
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        activeOpacity={1.0}
+        activeOpacity={0.5}
         disabled={disabled}
         onPress={onPress}
         style={buttonStyle}
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#FF9696',
   },
   disabledButtonContainer: {
     backgroundColor: '#FFFFFF',
@@ -59,12 +59,10 @@ const styles = StyleSheet.create({
 
   // 온보딩
   onboardingButtonContainer: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#000000',
-    borderWidth: 1,
-    shadowColor: '#000000',
+    backgroundColor: '#FF9696',
+    shadowColor: '#F20303',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.2,
     shadowRadius: 7,
     elevation: 5,
   },
