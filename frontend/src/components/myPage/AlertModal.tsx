@@ -11,6 +11,7 @@ import { coupleDisconnect } from '../../api/myPage/disconnect';
 import { userWithdraw } from '../../api/myPage/withdraw';
 import { MyPageModalProps } from '../../types/myPage/types';
 import { handleDeleteMyPlan } from '../../api/plan/deletePlan';
+import { removeData } from '../../utils/storage';
 
 const AlertModal = ({
   showModal,
@@ -24,32 +25,30 @@ const AlertModal = ({
 }: MyPageModalProps) => {
   const withdraw = type === '탈퇴';
 
-  // 연결끊기 로직
-  const handleDisconnect = async () => {
+  // 연결끊기 & 회원 탈퇴 로직
+  const handleAction = async (apiFunction: any) => {
     try {
-      const res = await coupleDisconnect(memberId);
+      const res = await apiFunction(memberId);
 
       console.log(res.data);
+
       setShowModal(false);
+      handleRemoveData();
       navigation.navigate('OnboardingScreen');
     } catch (err) {
       console.log(err);
     }
   };
 
-  // 탈퇴 로직
-  const handleWithdraw = async () => {
-    try {
-      const res = await userWithdraw(memberId);
-
-      console.log(res.data);
-      setShowModal(false);
-      navigation.navigate('OnboardingScreen');
-    } catch (err) {
-      console.log(err);
-    }
+  // 탈퇴 후 data 삭제
+  const handleRemoveData = async () => {
+    await removeData('token');
+    await removeData('refreshToken');
+    await removeData('connection');
+    await removeData('autoLogin');
   };
 
+  // plan 페이지 모달
   // 삭제 후 새로고침
   const handleReload = () => {
     if (handleCheckPlanDetail && setFocus) {
@@ -115,7 +114,11 @@ const AlertModal = ({
                     <TouchableOpacity
                       activeOpacity={1.0}
                       style={styles.button}
-                      onPress={withdraw ? handleWithdraw : handleDisconnect}
+                      onPress={() => {
+                        withdraw
+                          ? handleAction(userWithdraw)
+                          : handleAction(coupleDisconnect);
+                      }}
                     >
                       <Text style={styles.logoutText}>
                         {withdraw ? '회원 탈퇴' : '연결 끊기'}

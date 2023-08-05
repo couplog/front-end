@@ -105,7 +105,6 @@ const ConnectPartner = ({ navigation }: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.rootContainer}>
         <SafeAreaView style={styles.container}>
-          <Back style={{ marginTop: 30 }} onPress={() => navigation.goBack()} />
           <Text style={styles.headText}>
             연결할 상대방의{`\n`}초대 코드를 입력해주세요
           </Text>
@@ -151,9 +150,9 @@ const ConnectPartner = ({ navigation }: Props) => {
 
         {/* 코드 확인 modal */}
         <View style={styles.checkCodeView}>
-          <Text style={styles.checkCodeFont} onPress={handleCheckCode}>
-            나의 초대코드 확인하기
-          </Text>
+          <TouchableOpacity activeOpacity={1.0} onPress={handleCheckCode}>
+            <Text style={styles.checkCodeFont}>나의 초대코드 확인하기</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonView}>
           <ButtonComponent
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     fontSize: 24,
     color: '#000000',
-    marginTop: 30,
+    marginTop: 50,
     marginBottom: 30,
   },
   inputView: {

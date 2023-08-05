@@ -95,6 +95,7 @@ const ChangePasswordScreen = ({ navigation }: Props) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.wrapper}>
           <Header
+            label="확인"
             disabled={!isPasswordValid}
             password
             onPress={handlePasswordCheck}

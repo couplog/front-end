@@ -337,8 +337,20 @@ const CheckCalendar = ({
         </View>
 
         {/* picker main 페이지와 생성/수정 페이지 스타일 분기 */}
-        <View style={{ right: detail ? 30 : 0 }}>
-          {show && (
+        {detail ? (
+          <View style={{ right: 30 }}>
+            {show && (
+              <MonthPicker
+                onChange={handleChangeValue}
+                value={date}
+                minimumDate={new Date(1990, 1)}
+                maximumDate={new Date(2025, 5)}
+                locale="en"
+              />
+            )}
+          </View>
+        ) : (
+          show && (
             <MonthPicker
               onChange={handleChangeValue}
               value={date}
@@ -346,8 +358,8 @@ const CheckCalendar = ({
               maximumDate={new Date(2025, 5)}
               locale="en"
             />
-          )}
-        </View>
+          )
+        )}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
