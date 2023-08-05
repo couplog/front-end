@@ -1,20 +1,30 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamList } from '../../types/routes/navigationType';
 import { planState } from '../../state/atoms/userPlanDetail';
 import Footer from '../../components/plan/detail/Footer';
 import Header from '../../components/plan/detail/Header';
+import { editModeState } from '../../state/atoms/createEditModeAtom';
+import { userState } from '../../state/atoms/userAtom';
+import { editDate, editPlan } from '../../api/plan/editPlan';
+import { coupleState } from '../../state/atoms/coupleAtom';
+import RepeatModal from '../../components/plan/detail/RepeatModal';
 
 type Props = StackScreenProps<StackParamList, 'PlanPlaceContentScreen'>;
 
 const PlanPlaceContent = ({ navigation }: Props) => {
-  const setPlanAtom = useSetRecoilState(planState);
+  const [planAtom, setPlanAtom] = useRecoilState(planState);
+  const createEditMode = useRecoilValue(editModeState);
+  const userInfo = useRecoilValue(userState);
+  const coupleInfo = useRecoilValue(coupleState);
   const [place, setPlace] = useState('');
   const [content, setContent] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const reset = useResetRecoilState(planState);
+  const editReset = useResetRecoilState(editModeState);
 
   const handlePlaceContent = () => {
     setPlanAtom((prevPlan) => ({
@@ -28,17 +38,73 @@ const PlanPlaceContent = ({ navigation }: Props) => {
 
   // 일정 취소
   const handelCancel = () => {
-    reset();
+    createEditMode.mode ? editReset() : reset();
     setPlace('');
     setContent('');
 
     navigation.navigate('PlanCalendarScreen');
   };
 
+  // 수정 모드일시
+  useEffect(() => {
+    if (createEditMode.mode) {
+      // 위치
+      setPlace(createEditMode.detail.location);
+      // 내용
+      setContent(createEditMode.detail.content);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createEditMode.mode]);
+
+  // 수정 분기처리
+  const handleEditPlan = () => {
+    if (createEditMode.mode === 'mine') {
+      if (createEditMode.detail.repeatRule !== 'N') {
+        setShowModal(true);
+      } else {
+        handleEditMyPlanOrDate('myPlan', createEditMode.detail.scheduleId);
+      }
+    } else {
+      handleEditMyPlanOrDate('date', createEditMode.detail.datingId);
+    }
+  };
+
+  // 데이트 일정, 나의 일정 수정 타입에 따른 기능
+  const handleEditMyPlanOrDate = async (
+    type: 'myPlan' | 'date',
+    id: number | null | undefined,
+    repeat: boolean = false // 기본값을 false로 설정
+  ) => {
+    const planData = {
+      ...planAtom,
+      location: place,
+      content,
+    };
+
+    try {
+      let res;
+      if (type === 'myPlan') {
+        res = await editPlan(planData, userInfo.memberId, id, repeat);
+      } else {
+        res = await editDate(planData, coupleInfo.coupleId, id);
+      }
+      editReset();
+
+      console.log(type === 'myPlan' ? '개인: ' : '데이트: ', res.data.success);
+      navigation.navigate('PlanCalendarScreen');
+    } catch (err: any) {
+      console.log(err.response.data.message);
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
-        <Header text="다음" disabled={false} onPress={handlePlaceContent} />
+        <Header
+          text={createEditMode.mode ? '수정' : '다음'}
+          disabled={false}
+          onPress={createEditMode.mode ? handleEditPlan : handlePlaceContent}
+        />
 
         {/* 위치 입력 */}
         <View style={styles.inputView}>
@@ -66,6 +132,21 @@ const PlanPlaceContent = ({ navigation }: Props) => {
             multiline
           />
         </View>
+
+        <RepeatModal
+          onPress={() =>
+            handleEditMyPlanOrDate('myPlan', createEditMode.detail.scheduleId)
+          }
+          onPressRepeat={() =>
+            handleEditMyPlanOrDate(
+              'myPlan',
+              createEditMode.detail.scheduleId,
+              true
+            )
+          }
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
       </SafeAreaView>
       <Footer onPress={handelCancel} />
     </View>

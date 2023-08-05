@@ -46,7 +46,7 @@ const CheckCalendarDayComponent = ({
     borderColor: daySelected ? '#667C92' : '#EDF0F3',
     backgroundColor:
       state === 'disabled' ? '#FFFFFF' : daySelected ? '#FD9E89' : '#EDF0F3',
-    borderWidth: state === 'disabled' ? 2 : 0,
+    borderWidth: 2,
   };
 
   // 선택 함수
@@ -81,7 +81,6 @@ const CheckCalendarDayComponent = ({
             default:
               break;
           }
-          // eslint-disable-next-line react/no-array-index-key
           return <React.Fragment key={index}>{content}</React.Fragment>;
         })}
       </View>
