@@ -297,11 +297,11 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
     color: '#000000',
-    height: 46,
+    height: 45,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
-    padding: 15,
+    paddingLeft: 15,
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     marginTop: 15,

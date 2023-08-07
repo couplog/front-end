@@ -273,11 +273,11 @@ const styles = StyleSheet.create({
   numberInput: {
     width: '75%',
     color: '#000000',
-    height: 46,
+    height: 45,
     borderWidth: 1,
     borderColor: '#EDF0F3',
     borderRadius: 8,
-    padding: 15,
+    paddingLeft: 15,
     fontFamily: 'Pretendard-Regular',
     fontSize: 14,
     marginRight: 10,
