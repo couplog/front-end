@@ -179,9 +179,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Pretendard-Regular',
   },
-  eyeIconView: {
-    position: 'absolute',
-    right: 15,
-    top: 12,
-  },
 });
