@@ -21,7 +21,6 @@ import {
   handlePostingCode,
 } from '../api/connectCode/connectCode';
 import { StackParamList } from '../types/routes/navigationType';
-import Back from '../assets/images/register/back.svg';
 
 type Props = StackScreenProps<StackParamList, 'ConnectPartnerScreen'>;
 
@@ -37,11 +36,12 @@ const ConnectPartner = ({ navigation }: Props) => {
   const { memberId } = userInfo;
 
   const validCheck = (code: string) => {
-    const pattern = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6}$/;
+    const pattern =
+      /^(?:[a-zA-Z]{6}|^\d{6}|^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6})$/;
     if (code.length === 0) {
       setErrorText('');
     } else if (!pattern.test(code)) {
-      setErrorText('잘못된 코드 형식입니다. 6자리 숫자, 문자');
+      setErrorText('잘못된 코드 형식입니다. 6자리 숫자 또는 문자 조합');
     } else {
       setErrorText('');
     }
@@ -49,7 +49,7 @@ const ConnectPartner = ({ navigation }: Props) => {
 
   // 버튼 비활성화
   const disableButton =
-    formattedDate.length === 0 || inviteCode.length === 0 || errorText;
+    formattedDate.length === 0 || inviteCode.length === 0 || Boolean(errorText);
 
   // 상대방과 연결하기 버튼
   const handleSubmit = () => {
