@@ -10,6 +10,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { Controller, useForm } from 'react-hook-form';
@@ -240,13 +241,16 @@ const RegisterUserInfo = ({ navigation, route }: Props) => {
   );
 };
 
+const marginBottom = Platform.OS === 'ios' ? 50 : 30;
+const marginTop = Platform.OS === 'ios' ? 25 : 10;
+
 const styles = StyleSheet.create({
   container: {
     marginLeft: 25,
     marginRight: 25,
   },
   inputView: {
-    marginTop: 25,
+    marginTop: marginTop,
   },
   checkBoxView: {
     flexDirection: 'row',
@@ -261,7 +265,7 @@ const styles = StyleSheet.create({
     top: 60,
   },
   buttonView: {
-    marginTop: 50,
+    marginTop: marginBottom,
     marginLeft: 25,
     marginRight: 25,
   },
