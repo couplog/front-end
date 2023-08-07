@@ -62,7 +62,7 @@ const ConnectPartner = ({ navigation }: Props) => {
       // 상대방과 연결하기 API
       handlePostingCode(memberId, userFormData)
         .then(() => {
-          navigation.navigate('MainScreen');
+          navigation.navigate('MainBottomTabScreen');
         })
         // 일치하지 않는 코드
         .catch((err) => {
