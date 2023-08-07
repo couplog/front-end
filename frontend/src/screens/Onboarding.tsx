@@ -16,8 +16,8 @@ const Onboarding = ({ navigation }: Props) => {
   return (
     <ImageBackground
       source={require('../assets/images/onboarding/backgroundStart.png')}
-      resizeMode="contain"
-      style={{ flex: 1 }}
+      resizeMode="cover"
+      style={styles.image}
     >
       <SafeAreaView style={styles.container}>
         <Text style={styles.headFont}>함께 쓰는 커플로그</Text>
@@ -44,6 +44,11 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     flex: 1,
+  },
+  image: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   headFont: {
     marginTop: 90,
