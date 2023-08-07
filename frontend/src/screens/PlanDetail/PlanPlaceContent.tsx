@@ -1,4 +1,13 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -98,62 +107,67 @@ const PlanPlaceContent = ({ navigation }: Props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container}>
-        <Header
-          text={createEditMode.mode ? '수정' : '다음'}
-          disabled={false}
-          onPress={createEditMode.mode ? handleEditPlan : handlePlaceContent}
-        />
-
-        {/* 위치 입력 */}
-        <View style={styles.inputView}>
-          <Text style={styles.inputText}>위치</Text>
-          <TextInput
-            style={styles.placeInputBox}
-            placeholder="위치"
-            placeholderTextColor="#909090"
-            value={place}
-            onChangeText={(text) => setPlace(text)}
-            maxLength={15}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ flex: 1 }}>
+        <SafeAreaView style={styles.container}>
+          <Header
+            text={createEditMode.mode ? '수정' : '다음'}
+            disabled={false}
+            onPress={createEditMode.mode ? handleEditPlan : handlePlaceContent}
           />
-        </View>
 
-        {/* 내용 입력 */}
-        <View style={{ marginTop: 50 }}>
-          <Text style={styles.inputText}>내용</Text>
-          <TextInput
-            style={styles.contentInputBox}
-            placeholder="일정 내용을 입력하세요. (0-80자)"
-            placeholderTextColor="#909090"
-            value={content}
-            onChangeText={(text) => setContent(text)}
-            maxLength={80}
-            multiline
+          {/* 위치 입력 */}
+
+          <View style={styles.inputView}>
+            <Text style={styles.inputText}>위치</Text>
+            <TextInput
+              style={styles.placeInputBox}
+              placeholder="위치"
+              placeholderTextColor="#909090"
+              value={place}
+              onChangeText={(text) => setPlace(text)}
+              maxLength={15}
+            />
+          </View>
+
+          {/* 내용 입력 */}
+          <View style={{ marginTop: 50 }}>
+            <Text style={styles.inputText}>내용</Text>
+            <TextInput
+              style={styles.contentInputBox}
+              placeholder="일정 내용을 입력하세요. (0-80자)"
+              placeholderTextColor="#909090"
+              value={content}
+              onChangeText={(text) => setContent(text)}
+              maxLength={80}
+              multiline
+            />
+          </View>
+
+          <RepeatModal
+            onPress={() =>
+              handleEditMyPlanOrDate('myPlan', createEditMode.detail.scheduleId)
+            }
+            onPressRepeat={() =>
+              handleEditMyPlanOrDate(
+                'myPlan',
+                createEditMode.detail.scheduleId,
+                true
+              )
+            }
+            showModal={showModal}
+            setShowModal={setShowModal}
           />
-        </View>
-
-        <RepeatModal
-          onPress={() =>
-            handleEditMyPlanOrDate('myPlan', createEditMode.detail.scheduleId)
-          }
-          onPressRepeat={() =>
-            handleEditMyPlanOrDate(
-              'myPlan',
-              createEditMode.detail.scheduleId,
-              true
-            )
-          }
-          showModal={showModal}
-          setShowModal={setShowModal}
-        />
-      </SafeAreaView>
-      <Footer onPress={handelCancel} />
-    </View>
+        </SafeAreaView>
+        <Footer onPress={handelCancel} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 export default PlanPlaceContent;
+
+const height = Platform.OS === 'ios' ? 32 : 38;
 
 const styles = StyleSheet.create({
   container: {
@@ -174,10 +188,11 @@ const styles = StyleSheet.create({
   },
   placeInputBox: {
     width: 155,
-    height: 32,
+    height: height,
     backgroundColor: '#EDF0F3',
     borderRadius: 8,
     textAlign: 'center',
+    alignSelf: 'center',
     color: '#000000',
     fontFamily: 'Pretendard-Regular',
   },
