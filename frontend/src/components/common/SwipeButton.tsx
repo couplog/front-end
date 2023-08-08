@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontFamily: 'Pretendard-Regular',
-    fontSize: fontSize,
+    fontSize: 12,
     padding: 16,
   },
   editButton: {

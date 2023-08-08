@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   containerView: {
     display: 'flex',
     flexDirection: 'row',
-    minHeight: 44,
+    minHeight: 50,
     alignItems: 'center',
     marginTop: 12,
     borderColor: '#EDF0F3',
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   colorView: {
     width: 13,
     height: '100%',
-    minHeight: 44,
+    minHeight: 50,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
