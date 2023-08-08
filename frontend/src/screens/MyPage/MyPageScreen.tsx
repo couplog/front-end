@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useRecoilValue } from 'recoil';
@@ -9,6 +9,7 @@ import Profile from '../../components/myPage/Profile';
 import ContentBox from '../../components/myPage/ContentBox';
 import { partnerState } from '../../state/atoms/partnerAtom';
 import AlertModal from '../../components/myPage/AlertModal';
+import Version from '../../components/myPage/Version';
 
 type Props = StackScreenProps<StackParamList, 'MyPageScreen'>;
 
@@ -81,7 +82,7 @@ const MyPageScreen = ({ navigation }: Props) => {
           navigation={navigation}
         />
       </View>
-      <Text style={styles.version}>Ver. 1.0.0</Text>
+      <Version />
     </SafeAreaView>
   );
 };
@@ -94,17 +95,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
   },
   wrapper: {
+    flex: 1,
     marginLeft: 25,
     marginRight: 25,
-  },
-  version: {
-    textAlign: 'center',
-    color: '#909090',
-    fontSize: 12,
-    fontFamily: 'Pretendard-Regular',
-    position: 'absolute',
-    bottom: 45,
-    right: 0,
-    left: 0,
   },
 });
