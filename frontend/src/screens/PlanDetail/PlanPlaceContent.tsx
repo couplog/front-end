@@ -117,7 +117,6 @@ const PlanPlaceContent = ({ navigation }: Props) => {
           />
 
           {/* 위치 입력 */}
-
           <View style={styles.inputView}>
             <Text style={styles.inputText}>위치</Text>
             <TextInput
@@ -192,7 +191,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF0F3',
     borderRadius: 8,
     textAlign: 'center',
-    alignSelf: 'center',
     color: '#000000',
     fontFamily: 'Pretendard-Regular',
   },
