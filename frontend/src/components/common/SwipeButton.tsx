@@ -1,10 +1,4 @@
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { SwipeButtonProps } from '../../types/anniversary/types';
 
@@ -31,8 +25,6 @@ const SwipeButton = ({ onEdit, onDelete }: SwipeButtonProps) => {
 };
 
 export default SwipeButton;
-
-const fontSize = Platform.OS === 'android' ? 10.5 : 12;
 
 const styles = StyleSheet.create({
   buttonContainer: {
