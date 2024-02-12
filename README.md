@@ -42,7 +42,7 @@
 ## 앱 서비스 화면 🖥️
 
 <div>
-<img width="370" height="700" src="/frontend/src/assets/images/start.png">
-<img width="370" height="700" src="/frontend/src/assets/images/main.png">
-<img width="370" height="700" src="/frontend/src/assets/images/plan.png">
-<img width="370" height="700" src="/frontend/src/assets/images/anniversary.png">
+<img width="400" height="800" src="/frontend/src/assets/images/start.webp">
+<img width="400" height="800"src="/frontend/src/assets/images/main.webp">
+<img width="400" height="800" src="/frontend/src/assets/images/calendar.webp">
+<img width="400" height="800" src="/frontend/src/assets/images/anniversary.webp">
